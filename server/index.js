@@ -2,7 +2,7 @@
 const http = require("http"); // http server core module
 const path = require("path");
 const express = require("express"); // web framework external module
-
+const logic = require('./logic');
 // Set process name
 process.title = "networked-aframe-server";
 
@@ -30,12 +30,9 @@ if (process.env.NODE_ENV === "development") {
 // Start Express http server
 const webServer = http.createServer(app);
 const io = require("socket.io")(webServer);
-
 const rooms = {};
-
 io.on("connection", socket => {
   console.log("user connected", socket.id);
-
   let curRoom = null;
 
   socket.on("joinRoom", data => {
@@ -54,10 +51,10 @@ io.on("connection", socket => {
 
     console.log(`${socket.id} joined room ${room}`);
     socket.join(room);
-
     socket.emit("connectSuccess", { joinedTime });
     const occupants = rooms[room].occupants;
     io.in(curRoom).emit("occupantsChanged", { occupants });
+    logic(socket, curRoom);
   });
 
   socket.on("send", data => {

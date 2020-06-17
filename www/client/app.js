@@ -1,0 +1,9 @@
+// import "./libs/aframe.1.0.3.min";
+// import "./libs/build";
+import "./libs/randomiser.component";
+import "./components/spawn-in-circle.component";
+import "./components/gun.component";
+import "./components/forward.component";
+import "./components/remove-in-seconds.component";
+import "./listeners";
+import "./sockets";

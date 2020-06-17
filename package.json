@@ -10,8 +10,8 @@
     "url": "https://github.com/networked-aframe/networked-aframe/issues"
   },
   "scripts": {
-    "build": "browserify src/index.js -o examples/build.js",
-    "dev": "npm run build && npm run serve",
+    "build": "browserify src/index.js -o www/client/libs/build.js",
+    "dev": "cd www && webpack --mode development --watch",
     "serve": "nodemon server --watch server --ignore server/cordova server/public vue",
     "dist": "webpack --config webpack.config.js && webpack -p --config webpack.prod.config.js",
     "lint": "eslint src tests *.js",

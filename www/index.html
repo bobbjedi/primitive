@@ -5,23 +5,28 @@
     <meta name="description" content="Shooter Example — Networked-Aframe">
 
     <script src="./client/libs/aframe.1.0.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
     <script src="./client/libs/build.js"></script>
-    <script>window.NAF || document.write('<script src="./client/libs/networked-aframe.min.js">\x3C/script>')</script>
-    <script src="./client/listeners.js"></script>
-    <script src="./client/libs/randomiser.component.js"></script>
+    <!-- <script src="./client/listeners.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script> -->
+
+    <!-- <script>window.NAF || document.write('<script src="./client/libs/networked-aframe.min.js">\x3C/script>')</script> -->
+    <!-- <script src="./client/libs/randomiser.component.js"></script>
     <script src="./client/components/spawn-in-circle.component.js"></script>
     <script src="./client/components/gun.component.js"></script>
     <script src="./client/components/forward.component.js"></script>
-    <script src="./client/components/remove-in-seconds.component.js"></script>
+    <script src="./client/components/remove-in-seconds.component.js"></script> -->
+    <script src="./build-app.js"></script>
+
+
   </head>
   <body>
+
 
     <a-scene networked-scene="
       room: shooter;
       debug: true;
     ">
-      <a-assets>
+    <a-assets>
 
         <img id="grid" src="https://img.gs/bbdkhfbzkk/stretch/https://i.imgur.com/25P1geh.png" crossorigin="anonymous">
         <img id="sky" src="https://img.gs/bbdkhfbzkk/2048x2048,stretch/https://i.imgur.com/WqlqEkq.jpg" crossorigin="anonymous" />
@@ -30,9 +35,10 @@
 
         <!-- Avatar -->
         <template id="avatar-template">
-          <a-entity class="avatar">
+          <a-entity class="avatar cached" cursor-listener>
             <a-sphere class="head"
               scale="0.45 0.5 0.4"
+              color="green"
             ></a-sphere>
             <a-entity class="face"
               position="0 0.05 0"
@@ -76,7 +82,7 @@
         <!-- Bullet -->
         <template id="bullet-template">
           <a-entity class="bullet">
-            <a-sphere 
+            <a-sphere
               class="bullet-body"
               scale="0.1 0.1 0.1"
               color="#fff"
@@ -95,11 +101,19 @@
         wasd-controls look-controls
         gun="bulletTemplate:#bullet-template"
         >
-      
+
         <a-sphere class="head"
           visible="false"
           random-color
         ></a-sphere>
+        <a-entity
+          cursor="fuse: true; fuseTimeout: 500"
+          position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: black; shader: flat"
+        >
+      </a-entity>
+
       </a-entity>
 
       <a-entity position="0 0 0"
@@ -113,7 +127,7 @@
       <a-entity id="particles" particle-system="preset: snow"></a-entity>
     </a-scene>
 
-  
+
     <script>
       // On mobile remove elements that are resource heavy
       var isMobile = AFRAME.utils.device.isMobile();
@@ -138,5 +152,6 @@
         ]
       });
     </script>
+    <div id="mask-pain" style="display: none; width: 100%; height: 100%; position: fixed; top: 0; left: 0; background-color: brown; opacity: .2; transition: .3s;"></div>
   </body>
 </html>

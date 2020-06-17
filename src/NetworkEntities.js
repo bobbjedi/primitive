@@ -1,6 +1,6 @@
 /* global NAF */
 var ChildEntityCache = require('./ChildEntityCache');
-
+window._aPlayers = {};
 class NetworkEntities {
 
   constructor() {
@@ -21,13 +21,15 @@ class NetworkEntities {
     var el = NAF.schemas.getCachedTemplate(entityData.template);
 
     el.setAttribute('id', 'naf-' + networkId);
-
+    el._creator = entityData.creator;
     this.initPosition(el, entityData.components);
     this.initRotation(el, entityData.components);
     this.addNetworkComponent(el, entityData);
 
     this.registerEntity(networkId, el);
-
+    if(el.classList.contains('cached')){
+        window._aPlayers[el._creator] = el;
+    }
     return el;
   }
 

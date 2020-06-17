@@ -1,5 +1,4 @@
 /* global NAF, io */
-
 class WebRtcPeer {
   constructor(localId, remoteId, sendSignalFunc) {
     this.localId = localId;

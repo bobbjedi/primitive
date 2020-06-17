@@ -4,6 +4,7 @@
  * SocketIO Adapter (socketio)
  * networked-scene: serverURL needs to be ws://localhost:8080 when running locally
  */
+const io = require('socket.io-client');
 class SocketioAdapter {
   constructor() {
     if (io === undefined)
@@ -66,43 +67,44 @@ class SocketioAdapter {
           self.wsUrl = "ws://" + location.host;
         }
       }
-  
+
       NAF.log.write("Attempting to connect to socket.io");
       const socket = self.socket = io(self.wsUrl);
-  
+      window.globalSocket = socket;
       socket.on("connect", () => {
         NAF.log.write("User connected", socket.id);
         self.myId = socket.id;
         self.joinRoom();
       });
-  
+
       socket.on("connectSuccess", (data) => {
         const { joinedTime } = data;
-  
+
         self.myRoomJoinTime = joinedTime;
         NAF.log.write("Successfully joined room", self.room, "at server time", joinedTime);
 
         self.connectSuccess(self.myId);
+        document.dispatchEvent(new Event('socketOnRedy'));
       });
-  
+
       socket.on("error", err => {
         console.error("Socket connection failure", err);
         self.connectFailure();
       });
-  
+
       socket.on("occupantsChanged", data => {
         const { occupants } = data;
         NAF.log.write('occupants changed', data);
         self.receivedOccupants(occupants);
       });
-  
+
       function receiveData(packet) {
         const from = packet.from;
         const type = packet.type;
         const data = packet.data;
         self.messageListener(from, type, data);
       }
-  
+
       socket.on("send", receiveData);
       socket.on("broadcast", receiveData);
     })
@@ -131,6 +133,7 @@ class SocketioAdapter {
   closeStreamConnection(clientId) {
     this.connectedClients = this.connectedClients.filter(c => c != clientId);
     this.closedListener(clientId);
+    delete window._aPlayers[clientId];
   }
 
   getConnectStatus(clientId) {
