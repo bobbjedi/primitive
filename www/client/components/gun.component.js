@@ -7,34 +7,64 @@ AFRAME.registerComponent('gun', {
     },
 
     init: function () {
-        var that = this;
-        document.body.onkeyup = function (e) {
-            if (e.keyCode == that.data.triggerKeyCode) {
-                that.shoot();
+        this.templateHtml = document.querySelector(this.data.bulletTemplate).innerHTML;
+        document.body.onkeyup = e => {
+            if (e.keyCode === this.data.triggerKeyCode) {
+                this.shoot();
             }
-        }
+        };
+
+        document.addEventListener('socketOnRedy', () => {
+            globalSocket.on('render-player-skill', data => {
+                this.renderBullet(data);
+            });
+        });
     },
     shoot: function () {
-        this.createBullet();
+        const tip = document.querySelector('#player');
+        const position = this.getInitialBulletPosition(tip);
+        const rotation = this.getInitialBulletRotation(tip);
+        this.renderBullet({ position, rotation, target: Store.currentTargetSid });
+
+        globalSocket.emit('use-skill', { // отправляем на сервер
+            type: 'bullet',
+            creator: globalSocket.id,
+            target: Store.currentTargetSid,
+            rotation,
+            position
+        });
     },
-    createBullet: function () {
-        var el = document.createElement('a-entity');
-        el.setAttribute('networked', 'template:' + this.data.bulletTemplate);
-        el.setAttribute('remove-in-seconds', 3);
+    // Рисуем локально пулю
+    renderBullet(data) {
+        const {position, rotation, target} = data;
+        const el = document.createElement('a-entity');
+        el.innerHTML = this.templateHtml;
+        el.setAttribute('remove-in-seconds', (target ? 3 : 1));
         el.setAttribute('forward', 'speed:0.3');
-
-        var tip = document.querySelector('#player');
-        el.setAttribute('position', this.getInitialBulletPosition(tip));
-        el.setAttribute('rotation', this.getInitialBulletRotation(tip));
-
-        var scene = document.querySelector('a-scene');
-        scene.appendChild(el);
-        console.log(Store.currentTargetSid);
-        if (Store.currentTargetSid) { // ПОПАЛ!
-            window.globalSocket.emit('i-to-target', {target: Store.currentTargetSid});
+        el.setAttribute('position', position);
+        el.setAttribute('rotation', rotation);
+        document.querySelector('a-scene').appendChild(el);
+        setTimeout(() => this.renderInTarget(data), 200);
+    },
+    // Рисуем попадание скилом
+    renderInTarget(data){
+        console.log(data.target);
+        if (!data.target){
+            return;
+        }
+        if (Store.mySid !== data.target) { // не в меня попали
+            console.log(Store.players);
+            const el = Store.players[data.target].querySelector('.head');
+            const color = el.getAttribute('color');
+            el.setAttribute('color', 'red');
+            setTimeout(() => el.setAttribute('color', 'green'), 200);
+        } else {
+            console.log('В меня!');
+            const pain = document.getElementById('mask-pain').style;
+            pain.display = 'block';
+            setTimeout(() => { pain.display = 'none'; }, 300);
         }
     },
-
     getInitialBulletPosition: function (spawnerEl) {
         var worldPos = new THREE.Vector3();
         worldPos.setFromMatrixPosition(spawnerEl.object3D.matrixWorld);

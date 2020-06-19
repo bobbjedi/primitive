@@ -1,14 +1,14 @@
 module.exports = {
     "parserOptions": {
-        "ecmaVersion": 8,
+        "ecmaVersion": 9,
         "sourceType": "module"
     },
     "rules": {
         "semi": "warn", // обязательно ;
         "semi-spacing": ["error", {"before": false, "after": true}],
-        "indent": ["error", "space"],
+        "indent": ["error", 4],
         "space-infix-ops": "error",// отступы вокруг + - * / = и тд
-        // "eqeqeq": "error", // обязательно === и !== (нельзя == и !=)
+        "eqeqeq": "error", // обязательно === и !== (нельзя == и !=)
         // "no-eq-null": "error", // обязательно === и !== (нельзя == и !=) но тоько в отношении null
         "curly": "error", // проверка шаблонов `${name}`
         // "space-before-function-paren": [ // отступ до и после function
@@ -28,6 +28,7 @@ module.exports = {
         "keyword-spacing": ["error", { "after": true }],
         "comma-spacing": ["error", { "before": false, "after": true }], // отступ после запятой, а перед нельзя
         "no-undef":"error",
+        "array-callback-return": "error", // коллбек методов массива типа arr.map arr.filter должны иметь return в коллбеке
         "no-const-assign":"error",
         "array-callback-return": "error", // коллбек методов массива типа arr.map arr.filter должны иметь return в коллбеке
         "prefer-const": ["error", {
@@ -39,9 +40,14 @@ module.exports = {
         "node": true
     },
     "globals": {
-        "AFRAME":true,
-        "Symbol":true,
-        "Promise":true,
+        "Vue": true,
+        "AFRAME": true,
+        "THREE": true,
+        "globalSocket": true,
+        "Symbol": true,
+        "Promise": true,
+        "FileTransfer": true,
+        "cordova": true
     },
     "plugins": []
 }

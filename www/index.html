@@ -5,6 +5,7 @@
     <meta name="description" content="Shooter Example — Networked-Aframe">
 
     <script src="./client/libs/aframe.1.0.3.min.js"></script>
+    <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script> -->
     <script src="./client/libs/build.js"></script>
     <!-- <script src="./client/listeners.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script> -->
@@ -21,11 +22,15 @@
   </head>
   <body>
 
-
-    <a-scene networked-scene="
+    <a-scene
+    physics="debug: true;gravity:-10; friction: 100;"
+    networked-scene="
       room: shooter;
       debug: true;
     ">
+<!--
+    <a-box id="anchor" position="0 1 0"  body="type:dynamic;angularDamping:1;linearDamping:0" constraint = "target:#floor;"></a-box>
+    <a-box id="anchor" position="2 1 2"  body="type:dynamic;"></a-box> -->
     <a-assets>
 
         <img id="grid" src="https://img.gs/bbdkhfbzkk/stretch/https://i.imgur.com/25P1geh.png" crossorigin="anonymous">
@@ -81,11 +86,10 @@
 
         <!-- Bullet -->
         <template id="bullet-template">
-          <a-entity class="bullet">
+        <a-entity class="bullet">
             <a-sphere
-              class="bullet-body"
-              scale="0.1 0.1 0.1"
-              color="#fff"
+              radius="0.2"
+              random-color
             ></a-sphere>
         </a-entity>
         </template>
@@ -116,7 +120,10 @@
 
       </a-entity>
 
-      <a-entity position="0 0 0"
+      <!-- ПОЛ -->
+      <a-entity
+        id="floor"
+        position="0 0 0"
         geometry="primitive: plane; width: 10000; height: 10000;" rotation="-90 0 0"
         material="src: #grid; repeat: 10000 10000; transparent: true; metalness:0.6; roughness: 0.4; sphericalEnvMap: #sky;"></a-entity>
 
@@ -125,6 +132,7 @@
 
       <a-sky src="#sky" rotation="0 -90 0"></a-sky>
       <a-entity id="particles" particle-system="preset: snow"></a-entity>
+
     </a-scene>
 
 

@@ -1,12 +1,14 @@
-export default {
-    currentTargetSid: null,
-    players: window._aPlayers,
-    mySid: null
-};
-// import Vue from 'vue';
+import Vue from 'vue';
 
-// export default new Vue({
-// 	data: {
-//         currentTargetSid: null
-// 	}
-// });
+export default new Vue({
+    data: {
+        currentTargetSid: null,
+        mySid: null
+    },
+    created(){
+        this.players = window._aPlayers;
+        document.addEventListener('socketOnRedy', () => {
+            this.mySid = window.globalSocket.id;
+        });
+    }
+});
