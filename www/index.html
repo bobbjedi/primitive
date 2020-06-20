@@ -175,10 +175,9 @@
                 <a-entity id="player"
     networked="template:#avatar-template;attachTemplateToLocal:false;"
     camera
-    position="0 1.6 -30"
+    position="0 1.6 -20"
     spawn-in-circle="radius:3"
-    wasd-controls="acceleration:500"
-    look-controls
+    touch-controls
     gun="bulletTemplate:#bullet-template"
 >
 
@@ -255,12 +254,12 @@
 
 <script>
     // On mobile remove elements that are resource heavy
-    var isMobile = AFRAME.utils.device.isMobile();
+    // var isMobile = AFRAME.utils.device.isMobile();
 
-    if (isMobile) {
-        var particles = document.getElementById('particles');
-        particles.parentNode.removeChild(particles);
-    }
+    // if (isMobile) {
+    //     var particles = document.getElementById('particles');
+    //     particles.parentNode.removeChild(particles);
+    // }
 
     // Define custom schema for syncing avatar components
     NAF.schemas.add({

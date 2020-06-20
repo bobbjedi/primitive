@@ -8,4 +8,5 @@ import "./components/remove-in-seconds.component";
 import "./components/hard-body.component";
 import "./logic/tower";
 import "./listeners";
+import "./components/touch-control";
 import "./sockets";
