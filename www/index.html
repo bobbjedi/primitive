@@ -40,25 +40,28 @@
     <img id="boxTexture" src="assets/img/stone-wall.jpg">
     <img id="plants" src="assets/img/stones.jpg">
     <a-asset-item id="sculpture" src="assets/models/sculpture.glb"></a-asset-item>
-    <!-- <template id="hard">
-        <a-entity scale="0.001 0.001 0.001" geometry="primitive: box" material="color: red"></a-entity>
-    </template>
 
-    <a-mixin id="hard-body-el" template="hard" color="blue"></a-mixin> -->
     <template id="tower">
-        <a-box class="hard-body" height="5" width="4" depth="4" opacity="0" color="red">
+        <a-box class="hard-body" height="5" width="4" depth="4" opacity="0">
             <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
-            <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 4 0"></a-gltf-model>
-            <a-sphere color="red" opacity=".5" position="0 9 0" radius="2.5"></a-sphere>
+            <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
+            <a-sphere class="tower-sphere targetable" opacity=".5" position="0 7 0" radius="2.5"></a-sphere>
         </a-box>
     </template>
 </a-assets>
 
 <a-box height="10" color="red" position="0 5 0" opacity="0.5"></a-box>
 
-<a-entity position="10 1 0" template="tower"></a-entity>
-<!-- <a-box class="hard-body" height="2" position="-3.5 1 0" opacity="0.1"></a-box> -->
-<!-- <a-box class="hard-body" height="5" width="5" depth=".1" position="-3.5 2.5 2" rotation="0 45 0" opacity="0.1"></a-box> -->
+<!-- Башни -->
+
+<a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
+<a-entity class="tower" id="tower-red-2" position="-12 1 -73" template="tower" tower="red"></a-entity>
+<a-entity class="tower" id="tower-red-3" position="12 1 -73" template="tower" tower="red"></a-entity>
+
+<a-entity id="tower-blue-1" position="0 1 30" template="tower" tower="blue"></a-entity>
+<a-entity id="tower-blue-2" position="-12 1 73" template="tower" tower="blue"></a-entity>
+<a-entity id="tower-blue-3" position="12 1 73" template="tower" tower="blue"></a-entity>
+
 
 <!-- Боковые стены -->
 <!-- задняя -->
@@ -101,11 +104,11 @@
     <a-assets>
         <!-- Templates -->
 
-        
+
                 <!-- avatar -->
                 <template id="avatar-template">
     <a-entity class="avatar cached" cursor-listener>
-      <a-sphere class="head hard-body"
+      <a-sphere class="head hard-body targetable"
         scale="0.45 0.5 0.4"
         color="green"
       ></a-sphere>
@@ -148,7 +151,7 @@
     </a-entity>
   </template>
 
-        
+
                 <!-- bullet -->
                 <template id="bullet-template">
     <a-entity class="bullet">
@@ -163,7 +166,7 @@
         <!-- /Templates -->
     </a-assets>
 
-    
+
                 <!-- player -->
                 <a-entity id="player"
     networked="template:#avatar-template;attachTemplateToLocal:false;"
@@ -173,19 +176,24 @@
     wasd-controls="acceleration:500"
     look-controls
     gun="bulletTemplate:#bullet-template"
+    collider-check
 >
-
+<!--
     <a-sphere class="head" aabb-collider visible="false" random-color radius=".4"></a-sphere>
+    <a-entity raycaster="objects: .targetable" position="0 -0.9 0" rotation="90 0 0"></a-entity> -->
 
-    <a-entity cursor="fuse: true; fuseTimeout: 500"
+
+    <a-entity
+        cursor="fuse: true; fuseTimeout: 500"
         position="0 0 -1"
         geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-        material="color: black; shader: flat">
+        material="color: black; shader: flat"
+        id="cursor">
     </a-entity>
 
 </a-entity>
 
-    
+
                 <!-- entity -->
                 <!-- <a-assets>
     <img

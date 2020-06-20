@@ -40,8 +40,8 @@ AFRAME.registerComponent('gun', {
         const {position, rotation, target} = data;
         const el = document.createElement('a-entity');
         el.innerHTML = this.templateHtml;
-        el.setAttribute('remove-in-seconds', (target ? 3 : 1));
-        el.setAttribute('forward', 'speed:0.3');
+        el.setAttribute('remove-in-seconds', (!target ? 1 : 1));
+        el.setAttribute('forward', 'speed:.5');
         el.setAttribute('position', position);
         el.setAttribute('rotation', rotation);
         document.querySelector('a-scene').appendChild(el);
@@ -53,10 +53,10 @@ AFRAME.registerComponent('gun', {
             return;
         }
         if (Store.mySid !== data.target) { // не в меня попали
-            const el = Store.players[data.target].querySelector('.head');
-            const color = el.getAttribute('color');
-            el.setAttribute('color', 'red');
-            setTimeout(() => el.setAttribute('color', 'green'), 200);
+            const el = document.getElementById(data.target).querySelector('.targetable');
+            const color = el.getAttribute('color') || 'green';
+            el.setAttribute('color', 'grey');
+            setTimeout(() => el.setAttribute('color', color), 600);
         } else {
             console.log('В меня!');
             const pain = document.getElementById('mask-pain').style;

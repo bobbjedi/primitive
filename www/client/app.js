@@ -6,5 +6,6 @@ import "./components/gun.component";
 import "./components/forward.component";
 import "./components/remove-in-seconds.component";
 import "./components/hard-body.component";
+import "./logic/tower";
 import "./listeners";
 import "./sockets";

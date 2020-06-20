@@ -11,6 +11,17 @@ AFRAME.registerComponent('forward', {
 
         this.worldDirection = worldDirection;
         // console.error(this.worldDirection);
+
+
+        // var el = this.el;
+
+        // var currentPosition = el.getAttribute('position');
+        // var newPosition = this.worldDirection
+        //     .clone()
+        //     .multiplyScalar(5)
+        //     .add(currentPosition);
+        // el.setAttribute('position', newPosition);
+
     },
 
     tick: function () {
