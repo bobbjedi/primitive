@@ -175,10 +175,13 @@
                 <a-entity id="player"
     networked="template:#avatar-template;attachTemplateToLocal:false;"
     camera
-    position="0 1.6 -20"
+    position="0 1.6 -30"
     spawn-in-circle="radius:3"
-    touch-controls
+    wasd-controls="acceleration:500"
+    look-controls
+    touch-controlsX
     gun="bulletTemplate:#bullet-template"
+
 >
 
     <a-sphere class="head" aabb-collider visible="false" random-color radius=".4"></a-sphere>
