@@ -1,0 +1,19 @@
+<a-entity id="player"
+    networked="template:#avatar-template;attachTemplateToLocal:false;"
+    camera
+    position="0 1.6 -30"
+    spawn-in-circle="radius:3"
+    wasd-controls="acceleration:500"
+    look-controls
+    gun="bulletTemplate:#bullet-template"
+>
+
+    <a-sphere class="head" aabb-collider visible="false" random-color radius=".4"></a-sphere>
+
+    <a-entity cursor="fuse: true; fuseTimeout: 500"
+        position="0 0 -1"
+        geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+        material="color: black; shader: flat">
+    </a-entity>
+
+</a-entity>

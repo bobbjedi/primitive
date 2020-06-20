@@ -1,4 +1,5 @@
 import Store from '../Store';
+import $u from '../logic/utills';
 
 AFRAME.registerComponent('gun', {
     schema: {
@@ -22,8 +23,8 @@ AFRAME.registerComponent('gun', {
     },
     shoot: function () {
         const tip = document.querySelector('#player');
-        const position = this.getInitialBulletPosition(tip);
-        const rotation = this.getInitialBulletRotation(tip);
+        const position = $u.getElPosition(tip);
+        const rotation = $u.getElRotation(tip);
         this.renderBullet({ position, rotation, target: Store.currentTargetSid });
 
         globalSocket.emit('use-skill', { // отправляем на сервер
@@ -48,12 +49,10 @@ AFRAME.registerComponent('gun', {
     },
     // Рисуем попадание скилом
     renderInTarget(data){
-        console.log(data.target);
         if (!data.target){
             return;
         }
         if (Store.mySid !== data.target) { // не в меня попали
-            console.log(Store.players);
             const el = Store.players[data.target].querySelector('.head');
             const color = el.getAttribute('color');
             el.setAttribute('color', 'red');
@@ -64,24 +63,5 @@ AFRAME.registerComponent('gun', {
             pain.display = 'block';
             setTimeout(() => { pain.display = 'none'; }, 300);
         }
-    },
-    getInitialBulletPosition: function (spawnerEl) {
-        var worldPos = new THREE.Vector3();
-        worldPos.setFromMatrixPosition(spawnerEl.object3D.matrixWorld);
-        return worldPos;
-    },
-
-    getInitialBulletRotation: function (spawnerEl) {
-        var worldDirection = new THREE.Vector3();
-
-        spawnerEl.object3D.getWorldDirection(worldDirection);
-        worldDirection.multiplyScalar(-1);
-        this.vec3RadToDeg(worldDirection);
-
-        return worldDirection;
-    },
-
-    vec3RadToDeg: function (rad) {
-        rad.set(rad.y * 90, -90 + (-THREE.Math.radToDeg(Math.atan2(rad.z, rad.x))), 0);
     }
 });

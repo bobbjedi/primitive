@@ -1,0 +1,44 @@
+<template id="avatar-template">
+    <a-entity class="avatar cached" cursor-listener>
+      <a-sphere class="head hard-body"
+        scale="0.45 0.5 0.4"
+        color="green"
+      ></a-sphere>
+      <a-entity class="face"
+        position="0 0.05 0"
+      >
+        <a-sphere class="eye"
+          color="#efefef"
+          position="0.16 0.1 -0.35"
+          scale="0.12 0.12 0.12"
+        >
+          <a-sphere class="pupil"
+            color="#000"
+            position="0 0 -1"
+            scale="0.2 0.2 0.2"
+          ></a-sphere>
+        </a-sphere>
+        <a-sphere class="eye"
+          color="#efefef"
+          position="-0.16 0.1 -0.35"
+          scale="0.12 0.12 0.12"
+        >
+          <a-sphere class="pupil"
+            color="#000"
+            position="0 0 -1"
+            scale="0.2 0.2 0.2"
+          ></a-sphere>
+        </a-sphere>
+      </a-entity>
+      <a-entity class="gun">
+        <a-box
+          position="0.51 -0.13 -0.29"
+          scale="0.19 0.23 0.67"
+          color="#000"
+        ></a-box>
+        <a-entity class="gun-tip"
+          position="0.51 -0.10 -0.64"
+        ></a-entity>
+      </a-entity>
+    </a-entity>
+  </template>

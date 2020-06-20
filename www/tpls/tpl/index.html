@@ -1,0 +1,53 @@
+<!-- {{head}} -->
+
+<a-scene
+    physics="debug: true;gravity:-10; friction: 100;"
+    networked-scene="
+      room: shooter;
+      debug: true;
+    ">
+
+<!-- {{map}} -->
+    <a-assets>
+        <!-- Templates -->
+
+        <!-- {{avatar}} -->
+        <!-- {{bullet}} -->
+
+        <!-- /Templates -->
+    </a-assets>
+
+    <!-- {{player}} -->
+    <!-- {{entity}} -->
+
+</a-scene>
+
+
+<script>
+    // On mobile remove elements that are resource heavy
+    var isMobile = AFRAME.utils.device.isMobile();
+
+    if (isMobile) {
+        var particles = document.getElementById('particles');
+        particles.parentNode.removeChild(particles);
+    }
+
+    // Define custom schema for syncing avatar components
+    NAF.schemas.add({
+        template: '#avatar-template',
+        components: [
+            'position',
+            'rotation',
+            {
+                selector: '.head',
+                component: 'material'
+            }
+        ]
+    });
+</script>
+<div id="mask-pain"
+    style="display: none; width: 100%; height: 100%; position: fixed; top: 0; left: 0; background-color: brown; opacity: .2; transition: .3s;">
+</div>
+</body>
+
+</html>
