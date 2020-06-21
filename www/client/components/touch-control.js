@@ -332,6 +332,7 @@ AFRAME.registerComponent('touch-controls', {
             y: evt.touches[this.touchId].pageY
         };
         this.touchStarted = true;
+        window.log.innerHTML += '<div> CAMERA start:' + this.touchId + ' </div>';
     },
 
     /**
@@ -365,6 +366,7 @@ AFRAME.registerComponent('touch-controls', {
      */
     onTouchEnd: function (e) {
         if (e.changedTouches[0].identifier === this.touchId) {
+            window.log.innerHTML += '<div> CAMERA end:' + this.touchId + ' </div>';
             this.touchStarted = false;
             this.touchId = -1;
         };

@@ -249,6 +249,7 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
             y: evt.touches[this.touchId].pageY
         };
         joysticEx.touchStarted = true;
+        window.log.innerHTML += '<div> WSD start:' + this.touchId + ' </div>';
     },
 
     /**
@@ -294,6 +295,7 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
      */
     onTouchEnd: function (e) {
         if (e.changedTouches[0].identifier === this.touchId) {
+            window.log.innerHTML += '<div> WSD end:' + this.touchId + ' </div>';
             joysticEx.touchStarted = false;
             joysticEx.onKeyUp({ code: 'ArrowLeft' });
             joysticEx.onKeyUp({ code: 'ArrowRight' });
