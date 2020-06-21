@@ -322,6 +322,9 @@ AFRAME.registerComponent('touch-controls', {
      * Register touch down to detect touch drag.
      */
     onTouchStart: function (evt) {
+        if (this.touchStarted) {
+            return;
+        }
         if (evt.touches.length !== 1 || !this.data.touchEnabled) { return; }
         this.touchId = evt.touches[evt.touches.length - 1].identifier;
         this.touchStart = {

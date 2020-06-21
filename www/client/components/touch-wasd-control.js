@@ -240,7 +240,7 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
      */
     onTouchStart: function (evt) {
         // if (evt.touches.length !== 1 || !this.data.touchEnabled) { return; }
-        if (evt.touches.length !== 1) {
+        if (evt.touches.length !== 1 || joysticEx.touchStarted) {
             return;
         }
         this.touchId = evt.touches[evt.touches.length - 1].identifier;
@@ -309,3 +309,5 @@ function isEmptyObject(keys) {
     for (key in keys) { return false; }
     return true;
 }
+
+
