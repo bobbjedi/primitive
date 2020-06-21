@@ -340,7 +340,9 @@ AFRAME.registerComponent('touch-controls', {
         var yawObject = this.yawObject;
         var pitchObject = this.pitchObject;
 
-        if (!this.touchStarted || !this.data.touchEnabled) { return; }
+        if (!this.touchStarted || !this.data.touchEnabled || evt.changedTouches[0].identifier !== this.touchId) {
+            return;
+        }
 
         deltaY = 2 * Math.PI * (evt.touches[this.touchId].pageX - this.touchStart.x) / canvas.clientWidth;
         deltaX = 2 * Math.PI * (evt.touches[this.touchId].pageY - this.touchStart.y) / this.el.sceneEl.canvas.clientHeight;
@@ -359,8 +361,10 @@ AFRAME.registerComponent('touch-controls', {
      * Register touch end to detect release of touch drag.
      */
     onTouchEnd: function (e) {
-        console.log('End', e);
-        this.touchStarted = false;
+        if (e.changedTouches[0].identifier === this.touchId) {
+            this.touchStarted = false;
+            this.touchId = -1;
+        };
     },
 
     onExitVR: function () {

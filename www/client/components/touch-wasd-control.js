@@ -243,9 +243,10 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
         if (evt.touches.length !== 1) {
             return;
         }
+        this.touchId = evt.touches[evt.touches.length - 1].identifier;
         joysticEx.touchStart = {
-            x: evt.touches[0].pageX,
-            y: evt.touches[0].pageY
+            x: evt.touches[this.touchId].pageX,
+            y: evt.touches[this.touchId].pageY
         };
         joysticEx.touchStarted = true;
     },
@@ -257,13 +258,13 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
         // var canvas = this.el.sceneEl.canvas;
         var canvas = document.documentElement;
         var deltaY, deltaX;
-        if (!joysticEx.touchStarted || !joysticEx.data.touchEnabled) {
+        if (!joysticEx.touchStarted || !joysticEx.data.touchEnabled || evt.changedTouches[0].identifier !== this.touchId) {
         // if (!joysticEx.touchStarted) {
             return;
         }
 
-        deltaX = 2 * Math.PI * (evt.touches[0].pageX - joysticEx.touchStart.x) / canvas.clientWidth;
-        deltaY = 2 * Math.PI * (evt.touches[0].pageY - joysticEx.touchStart.y) / canvas.clientHeight;
+        deltaX = 2 * Math.PI * (evt.touches[this.touchId].pageX - joysticEx.touchStart.x) / canvas.clientWidth;
+        deltaY = 2 * Math.PI * (evt.touches[this.touchId].pageY - joysticEx.touchStart.y) / canvas.clientHeight;
 
         if (deltaX > 0) {
             joysticEx.onKeyDown({ code: 'ArrowRight' });
@@ -291,12 +292,15 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
     /**
      * Register touch end to detect release of touch drag.
      */
-    onTouchEnd: function () {
-        joysticEx.touchStarted = false;
-        joysticEx.onKeyUp({ code: 'ArrowLeft' });
-        joysticEx.onKeyUp({ code: 'ArrowRight' });
-        joysticEx.onKeyUp({ code: 'ArrowUp' });
-        joysticEx.onKeyUp({ code: 'ArrowDown' });
+    onTouchEnd: function (e) {
+        if (e.changedTouches[0].identifier === this.touchId) {
+            joysticEx.touchStarted = false;
+            joysticEx.onKeyUp({ code: 'ArrowLeft' });
+            joysticEx.onKeyUp({ code: 'ArrowRight' });
+            joysticEx.onKeyUp({ code: 'ArrowUp' });
+            joysticEx.onKeyUp({ code: 'ArrowDown' });
+            this.touchId = -1;
+        };
     },
 });
 
