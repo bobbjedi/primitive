@@ -4,13 +4,19 @@
     position="0 1.6 -50"
     spawn-in-circle="radius:3"
     touch-wasd-controls="acceleration:30"
-    look-controlsX
-    touch-controls
     gun="bulletTemplate:#bullet-template"
 
 >
 
-    <a-sphere class="head" aabb-collider visible="false" random-color radius=".4"></a-sphere>
+    <a-box
+        class="head"
+        hard-body-sensitive = 'elementPosition: #player'
+        visible="false"
+        random-color
+        height="0.4"
+        depth="0.4"
+        width="0.4"
+    ></a-box>
 
     <a-entity
         cursor="fuse: true; fuseTimeout: 500"

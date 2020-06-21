@@ -9,7 +9,9 @@ export default {
             .multiplyScalar(metr)
             .add(el.getAttribute('position'));
     },
-
+    /**
+    * @param {HTMLelement} el
+    */
     getElPosition: function (el) {
         var worldPos = new THREE.Vector3();
         worldPos.setFromMatrixPosition(el.object3D.matrixWorld);

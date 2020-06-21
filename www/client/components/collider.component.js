@@ -1,6 +1,5 @@
 import _ from 'underscore';
-import $u from '../logic/utills';
-import playerCollide from '../logic/player-collisions';
+
 /* global AFRAME, THREE */
 
 /**
@@ -15,7 +14,7 @@ import playerCollide from '../logic/player-collisions';
 
 AFRAME.registerComponent('aabb-collider', {
     schema: {
-        objects: { default: '.hard-body' },
+        objects: { default: '.collide-body' },
         state: { default: 'collided' }
     },
 
@@ -63,8 +62,8 @@ AFRAME.registerComponent('aabb-collider', {
             collisions.forEach(handleHit);
             // No collisions.
             if (collisions.length === 0) {
-                this.lastValidPosition = $u.getElPosition(self.el);
-                self.el.emit('hit', { el: null });
+                // self.el.lastValidPosition = $u.getElPosition(self.el);
+                self.el.emit('notcollide', { el: null });
             }
             // Updated the state of the elements that are not intersected anymore.
             this.collisions.filter(function (el) {
@@ -97,7 +96,8 @@ AFRAME.registerComponent('aabb-collider', {
             }
 
             function handleHit(hitEl) {
-                playerCollide(hitEl, self.lastValidPosition);
+                // playerCollide(hitEl, self.lastValidPosition);
+                self.el.emit('collide', { el: hitEl });
             }
 
             function updateBoundingBox() {

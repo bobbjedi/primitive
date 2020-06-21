@@ -40,8 +40,8 @@ AFRAME.registerComponent('gun', {
         const {position, rotation, target} = data;
         const el = document.createElement('a-entity');
         el.innerHTML = this.templateHtml;
-        el.setAttribute('remove-in-seconds', (!target ? 1 : 1));
-        el.setAttribute('forward', 'speed:.5');
+        el.setAttribute('remove-in-seconds', (!target ? .5 : .5));
+        el.setAttribute('forward', 'speed:2');
         el.setAttribute('position', position);
         el.setAttribute('rotation', rotation);
         document.querySelector('a-scene').appendChild(el);
@@ -54,7 +54,8 @@ AFRAME.registerComponent('gun', {
         }
         if (Store.mySid !== data.target) { // не в меня попали
             const el = document.getElementById(data.target).querySelector('.targetable');
-            const color = el.getAttribute('color') || 'green';
+            const color = el.realColor || el.getAttribute('color') || 'green';
+            el.realColor = color;
             el.setAttribute('color', 'grey');
             setTimeout(() => el.setAttribute('color', color), 600);
         } else {

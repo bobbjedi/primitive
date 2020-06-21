@@ -46,7 +46,7 @@
 
     <a-mixin id="hard-body-el" template="hard" color="blue"></a-mixin> -->
     <template id="tower">
-        <a-box class="hard-body" height="5" width="4" depth="4" opacity="0">
+        <a-box class="hard-body collide-body tower" height="5" width="4" depth="4" opacity="0">
             <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
             <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
             <a-sphere class="tower-sphere targetable" opacity=".5" position="0 7 0" radius="2.5"></a-sphere>
@@ -69,25 +69,25 @@
 
 <!-- Боковые стены -->
 <!-- задняя -->
-<a-box class="hard-body" src="#plants" height="5" repeat="15" width="150" depth=".1" position="0 2.5 100" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="15" width="150" depth=".1" position="0 2.5 100" opacity="1"></a-box>
 <!-- передняя -->
-<a-box class="hard-body" src="#plants" height="5" repeat="15" width="150" depth=".1" position="0 2.5 -100" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="15" width="150" depth=".1" position="0 2.5 -100" opacity="1"></a-box>
 <!-- правая -->
-<a-box class="hard-body" src="#plants" height="5" repeat="100" width="200" depth=".1" position="75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="25" width="200" depth=".1" position="75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
 <!-- левая -->
-<a-box class="hard-body" src="#plants" height="5" repeat="100" width="200" depth=".1" position="-75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="25" width="200" depth=".1" position="-75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
 
 <!-- передняя красная база -->
 
 <a-sphere color="red" radius="10" position="0 0 -90" opacity="0.2"></a-sphere>
 <!-- Стена перед шаром -->
-<a-box class="hard-body" src="#boxTexture" height="2.5" repeat="4" width="15" depth=".1" position="0 1.2 -73"
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="2.5" repeat="4" width="15" depth=".1" position="0 1.2 -73"
     rotation="0 0 0"></a-box>
 <!-- справа -->
-<a-box class="hard-body" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="10 1.2 -90"
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="10 1.2 -90"
     rotation="0 90 0"></a-box>
 <!-- слева -->
-<a-box class="hard-body" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="-10 1.2 -90"
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="-10 1.2 -90"
     rotation="0 90 0"></a-box>
 
 
@@ -95,13 +95,13 @@
 <!-- передняя синяя база -->
 <a-sphere color="blue" radius="10" position="0 0 90" opacity="0.2"></a-sphere>
 <!-- Стена перед шаром -->
-<a-box class="hard-body" src="#boxTexture" height="2.5" repeat="4" width="15" depth=".1" position="0 1.2 73"
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="2.5" repeat="4" width="15" depth=".1" position="0 1.2 73"
     rotation="0 0 0"></a-box>
 <!-- справа -->
-<a-box class="hard-body" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="10 1.2 90"
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="10 1.2 90"
     rotation="0 90 0"></a-box>
 <!-- слева -->
-<a-box class="hard-body" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="-10 1.2 90"
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="2.5" repeat="5" width="25" depth=".1" position="-10 1.2 90"
     rotation="0 90 0"></a-box>
 
 
@@ -112,7 +112,7 @@
                 <!-- avatar -->
                 <template id="avatar-template">
     <a-entity class="avatar cached" cursor-listener>
-      <a-sphere class="head hard-body targetable"
+      <a-sphere class="head  targetable collide-body avatar"
         scale="0.45 0.5 0.4"
         color="green"
       ></a-sphere>
@@ -178,13 +178,19 @@
     position="0 1.6 -50"
     spawn-in-circle="radius:3"
     touch-wasd-controls="acceleration:30"
-    look-controlsX
-    touch-controls
     gun="bulletTemplate:#bullet-template"
 
 >
 
-    <a-sphere class="head" aabb-collider visible="false" random-color radius=".4"></a-sphere>
+    <a-box
+        class="head"
+        hard-body-sensitive = 'elementPosition: #player'
+        visible="false"
+        random-color
+        height="0.4"
+        depth="0.4"
+        width="0.4"
+    ></a-box>
 
     <a-entity
         cursor="fuse: true; fuseTimeout: 500"
@@ -258,11 +264,11 @@
     // On mobile remove elements that are resource heavy
     var isMobile = AFRAME.utils.device.isMobile();
 
-    // if (isMobile) {
+
+    document.getElementById('player').setAttribute(isMobile ? 'touch-controls' : 'look-controls', '');
     //     var particles = document.getElementById('particles');
     //     particles.parentNode.removeChild(particles);
-    // }
-
+    // look-controls
     // Define custom schema for syncing avatar components
     NAF.schemas.add({
         template: '#avatar-template',

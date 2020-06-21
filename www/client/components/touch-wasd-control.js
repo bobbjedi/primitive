@@ -41,6 +41,7 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
     },
 
     init: function () {
+        joysticEx = this;
         // To keep track of the pressed keys.
         this.keys = {};
         this.easing = 1.1;
@@ -55,7 +56,6 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
         this.onVisibilityChange = bind(this.onVisibilityChange, this);
         this.attachVisibilityEventListeners();
         this.addEventListeners();
-        joysticEx = this;
     },
 
     tick: function (time, delta) {
@@ -213,43 +213,39 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
         var code;
         code = event.code || KEYCODE_TO_CODE[event.keyCode];
         delete this.keys[code];
-        console.log('onKeyUp', event.keyCode);
     },
-
 
 
     //TOUCH
     addEventListeners: function () {
         const joystic = document.getElementById('left-touch-joystic');
-
+        joysticEx.targetEl = joystic;
         // Touch events.
         joystic.addEventListener('touchstart', this.onTouchStart);
         joystic.addEventListener('touchmove', this.onTouchMove);
         joystic.addEventListener('touchend', this.onTouchEnd);
     },
     removeEventListeners: function () {
-        const joystic = document.getElementById('left-touch-joystic');
         // Touch events.
-        joystic.removeEventListener('touchstart', this.onTouchStart);
-        joystic.removeEventListener('touchmove', this.onTouchMove);
-        joystic.removeEventListener('touchend', this.onTouchEnd);
+        joysticEx.targetEl.removeEventListener('touchstart', this.onTouchStart);
+        joysticEx.targetEl.removeEventListener('touchmove', this.onTouchMove);
+        joysticEx.targetEl.removeEventListener('touchend', this.onTouchEnd);
     },
 
     /**
      * Register touch down to detect touch drag.
      */
     onTouchStart: function (evt) {
-        // if (evt.touches.length !== 1 || !this.data.touchEnabled) { return; }
-        if (evt.touches.length !== 1 || joysticEx.touchStarted) {
+        if (joysticEx.touchStarted) {
             return;
         }
-        this.touchId = evt.touches[evt.touches.length - 1].identifier;
+        console.log(joysticEx.targetEl);
+        joysticEx.touchId = [].find.call(evt.touches, e => e.target === joysticEx.targetEl).identifier;
         joysticEx.touchStart = {
-            x: evt.touches[this.touchId].pageX,
-            y: evt.touches[this.touchId].pageY
+            x: evt.touches[joysticEx.touchId].pageX,
+            y: evt.touches[joysticEx.touchId].pageY
         };
         joysticEx.touchStarted = true;
-        window.log.innerHTML += '<div> WSD start:' + this.touchId + ' </div>';
     },
 
     /**
@@ -259,13 +255,14 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
         // var canvas = this.el.sceneEl.canvas;
         var canvas = document.documentElement;
         var deltaY, deltaX;
-        if (!joysticEx.touchStarted || !joysticEx.data.touchEnabled || evt.changedTouches[0].identifier !== this.touchId) {
-        // if (!joysticEx.touchStarted) {
+        const selfTouch = Array.from(evt.changedTouches).find(e => e.identifier === joysticEx.touchId);
+        if (!selfTouch) {
+            // if (!joysticEx.touchStarted) {
             return;
         }
 
-        deltaX = 2 * Math.PI * (evt.touches[this.touchId].pageX - joysticEx.touchStart.x) / canvas.clientWidth;
-        deltaY = 2 * Math.PI * (evt.touches[this.touchId].pageY - joysticEx.touchStart.y) / canvas.clientHeight;
+        deltaX = 2 * Math.PI * (selfTouch.pageX - joysticEx.touchStart.x) / canvas.clientWidth;
+        deltaY = 2 * Math.PI * (selfTouch.pageY - joysticEx.touchStart.y) / canvas.clientHeight;
 
         if (deltaX > 0) {
             joysticEx.onKeyDown({ code: 'ArrowRight' });
@@ -294,14 +291,13 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
      * Register touch end to detect release of touch drag.
      */
     onTouchEnd: function (e) {
-        if (e.changedTouches[0].identifier === this.touchId) {
-            window.log.innerHTML += '<div> WSD end:' + this.touchId + ' </div>';
+        if ([].find.call(e.changedTouches, e => e.identifier === joysticEx.touchId)) {
             joysticEx.touchStarted = false;
             joysticEx.onKeyUp({ code: 'ArrowLeft' });
             joysticEx.onKeyUp({ code: 'ArrowRight' });
             joysticEx.onKeyUp({ code: 'ArrowUp' });
             joysticEx.onKeyUp({ code: 'ArrowDown' });
-            this.touchId = -1;
+            this.touchId = false;
         };
     },
 });

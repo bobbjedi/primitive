@@ -27,11 +27,11 @@
     // On mobile remove elements that are resource heavy
     var isMobile = AFRAME.utils.device.isMobile();
 
-    // if (isMobile) {
+
+    document.getElementById('player').setAttribute(isMobile ? 'touch-controls' : 'look-controls', '');
     //     var particles = document.getElementById('particles');
     //     particles.parentNode.removeChild(particles);
-    // }
-
+    // look-controls
     // Define custom schema for syncing avatar components
     NAF.schemas.add({
         template: '#avatar-template',
