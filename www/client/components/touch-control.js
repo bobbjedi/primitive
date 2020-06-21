@@ -323,9 +323,10 @@ AFRAME.registerComponent('touch-controls', {
      */
     onTouchStart: function (evt) {
         if (evt.touches.length !== 1 || !this.data.touchEnabled) { return; }
+        this.touchId = evt.touches[evt.touches.length - 1].identifier;
         this.touchStart = {
-            x: evt.touches[0].pageX,
-            y: evt.touches[0].pageY
+            x: evt.touches[this.touchId].pageX,
+            y: evt.touches[this.touchId].pageY
         };
         this.touchStarted = true;
     },
@@ -341,23 +342,24 @@ AFRAME.registerComponent('touch-controls', {
 
         if (!this.touchStarted || !this.data.touchEnabled) { return; }
 
-        deltaY = 2 * Math.PI * (evt.touches[0].pageX - this.touchStart.x) / canvas.clientWidth;
-        deltaX = 2 * Math.PI * (evt.touches[0].pageY - this.touchStart.y) / this.el.sceneEl.canvas.clientHeight;
+        deltaY = 2 * Math.PI * (evt.touches[this.touchId].pageX - this.touchStart.x) / canvas.clientWidth;
+        deltaX = 2 * Math.PI * (evt.touches[this.touchId].pageY - this.touchStart.y) / this.el.sceneEl.canvas.clientHeight;
 
         // Limit touch orientaion to to yaw (y axis).
         yawObject.rotation.y -= deltaY * 0.5;
         pitchObject.rotation.x -= deltaX * 0.5;
 
         this.touchStart = {
-            x: evt.touches[0].pageX,
-            y: evt.touches[0].pageY
+            x: evt.touches[this.touchId].pageX,
+            y: evt.touches[this.touchId].pageY
         };
     },
 
     /**
      * Register touch end to detect release of touch drag.
      */
-    onTouchEnd: function () {
+    onTouchEnd: function (e) {
+        console.log('End', e);
         this.touchStarted = false;
     },
 
