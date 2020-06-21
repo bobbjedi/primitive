@@ -9,4 +9,5 @@ import "./components/hard-body.component";
 import "./logic/tower";
 import "./listeners";
 import "./components/touch-control";
+import "./components/touch-wasd-control";
 import "./sockets";

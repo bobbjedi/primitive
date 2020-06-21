@@ -14,7 +14,7 @@ AFRAME.registerComponent('gun', {
                 this.shoot();
             }
         };
-
+        window.fire = () => this.shoot(); // кнопка огня
         document.addEventListener('socketOnRedy', () => {
             globalSocket.on('render-player-skill', data => {
                 this.renderBullet(data);

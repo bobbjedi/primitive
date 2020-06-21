@@ -114,13 +114,14 @@ AFRAME.registerComponent('touch-controls', {
      * Add mouse and touch event listeners to canvas.
      */
     addEventListeners: function () {
-        var canvasEl = document.getElementById('left-touch');
+        var sceneEl = this.el.sceneEl;
+        var canvasEl = sceneEl.canvas;
 
-        // // Wait for canvas to load.
-        // if (!canvasEl) {
-        //     sceneEl.addEventListener('render-target-loaded', bind(this.addEventListeners, this));
-        //     return;
-        // }
+        // Wait for canvas to load.
+        if (!canvasEl) {
+            sceneEl.addEventListener('render-target-loaded', bind(this.addEventListeners, this));
+            return;
+        }
 
         // Mouse events.
         canvasEl.addEventListener('mousedown', this.onMouseDown, false);
@@ -137,8 +138,8 @@ AFRAME.registerComponent('touch-controls', {
      * Remove mouse and touch event listeners from canvas.
      */
     removeEventListeners: function () {
-        // var sceneEl = this.el.sceneEl;
-        var canvasEl = document.getElementById('left-touch');
+        var sceneEl = this.el.sceneEl;
+        var canvasEl = sceneEl && sceneEl.canvas;
 
         if (!canvasEl) { return; }
 
@@ -327,7 +328,6 @@ AFRAME.registerComponent('touch-controls', {
             y: evt.touches[0].pageY
         };
         this.touchStarted = true;
-        console.log('Start');
     },
 
     /**
