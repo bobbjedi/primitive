@@ -1,18 +1,17 @@
 <a-entity id="player"
     networked="template:#avatar-template;attachTemplateToLocal:false;"
     camera
-    position="0 1.6 -50"
+    position="0 1.6 -80"
     spawn-in-circle="radius:3"
     touch-wasd-controls="acceleration:30"
     gun="bulletTemplate:#bullet-template"
-
 >
 
     <a-box
         class="head"
         hard-body-sensitive = 'elementPosition: #player'
         visible="false"
-        random-color
+        color="yellow"
         height="0.4"
         depth="0.4"
         width="0.4"

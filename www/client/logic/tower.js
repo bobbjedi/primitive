@@ -5,7 +5,7 @@ AFRAME.registerComponent('tower', {
         const sphere = this.el.querySelector('.tower-sphere');
         sphere.setAttribute('color', this.data);
         sphere.setAttribute('cursor-listener', '');// TODO: если не моя сторона то он в прицеле
-        sphere.id = this.el.id;
+        sphere.targetId = this.el.id;
     },
 
     tick: function () {

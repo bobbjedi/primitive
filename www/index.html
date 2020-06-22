@@ -111,8 +111,9 @@
         
                 <!-- avatar -->
                 <template id="avatar-template">
-    <a-entity class="avatar cached" cursor-listener>
-      <a-sphere class="head  targetable collide-body avatar"
+    <a-entity class="avatar" >
+    <a-sphere class="head targetable collide-body avatar"
+        cursor-listener
         scale="0.45 0.5 0.4"
         color="green"
       ></a-sphere>
@@ -166,6 +167,20 @@
     </a-entity>
 </template>
 
+        
+                <!-- cript -->
+                <template id="cript-template">
+    <a-entity class="cript">
+        <a-box
+            cursor-listener
+            class="cript-body targetable"
+            heigth="0.3"
+            width="0.3"
+            depth="0.3"
+        ></a-box>
+    </a-entity>
+</template>
+
 
         <!-- /Templates -->
     </a-assets>
@@ -175,18 +190,17 @@
                 <a-entity id="player"
     networked="template:#avatar-template;attachTemplateToLocal:false;"
     camera
-    position="0 1.6 -50"
+    position="0 1.6 -80"
     spawn-in-circle="radius:3"
     touch-wasd-controls="acceleration:30"
     gun="bulletTemplate:#bullet-template"
-
 >
 
     <a-box
         class="head"
         hard-body-sensitive = 'elementPosition: #player'
         visible="false"
-        random-color
+        color="yellow"
         height="0.4"
         depth="0.4"
         width="0.4"
@@ -278,7 +292,12 @@
             {
                 selector: '.head',
                 component: 'material'
-            }
+            },
+            {
+                selector: '.head',
+                component: 'target-id'
+            },
+
         ]
     });
 </script>

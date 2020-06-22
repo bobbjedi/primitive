@@ -9,6 +9,7 @@ import "./components/collider.component";
 import "./components/hard-body-sensitive";
 import "./components/touch-control";
 import "./components/touch-wasd-control";
+import "./components/target-id.component";
 import "./logic/tower";
 import "./logic/Cript";
 import "./listeners";

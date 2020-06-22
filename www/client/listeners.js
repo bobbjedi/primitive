@@ -9,9 +9,11 @@ let focus = null;
 AFRAME.registerComponent('cursor-listener', {
     init: function () {
         this.isFocuse = false;
-        this.el.id = this.el._creator || this.el.id; // аватар или шар башни или моб
+        // this.el.targetId = this.el.getAttribute('target-id') || this.el.targetId || this.el._creator || this.el.id; // аватар или шар башни или моб
         focus = document.getElementById('cursor');
         this.el.addEventListener('mouseenter', e => {
+            this.el.targetId = this.el.targetId || this.el.getAttribute('target-id').id;
+            console.log('TARGET>', this.el.targetId);
             this.isFocuse = true;
             currentBodyInFocus = this.el;
             const distance = e.detail.intersection.distance;
@@ -30,7 +32,7 @@ AFRAME.registerComponent('cursor-listener', {
         focus.setAttribute('material', 'color: black; shader: flat');
     },
     throwTarget(){
-        Store.currentTargetSid = this.el.id;
+        Store.currentTargetSid = this.el.targetId;
         focus.setAttribute('material', 'color: green; shader: flat');
     },
     tick(){

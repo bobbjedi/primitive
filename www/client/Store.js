@@ -9,6 +9,7 @@ export default new Vue({
         this.players = window._aPlayers;
         document.addEventListener('socketOnRedy', () => {
             this.mySid = window.globalSocket.id;
+            document.querySelector('#player .head').setAttribute('target-id', 'id:' + this.mySid);
         });
     }
 });
