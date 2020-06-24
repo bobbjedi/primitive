@@ -62,3 +62,4 @@ www/client/libs/build.js
 www/client/libs/build.js
 www/build-app.js
 dist
+db/

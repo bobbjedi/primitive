@@ -5,55 +5,60 @@ const Store = require('./modules/Store');
 module.exports = socket =>{
     socket.on('api', async (data, cb) => {
         const _user = await $u.getUserFromQ({token: data.token});
-        if (!_user) {
-            return cb(error('No user find'));
-        };
-        switch (data.action) {
-        case ('getUser'):
-            cb(_user ? success(_user) : error('Notoken find'));
-            break;
+        // if (!_user) {
+        //     return cb(error('No user find'));
+        // };
+        try {
 
-        case ('login'):
-            const checkUser = await usersDb.findOne({ $and: [{ $or: [{ login: data.login }] }, { password: $u.createPswd(data.password.toString()) }] });
-            if (!checkUser) {
-                cb(error('This login and password not found'));
-                return;
+            switch (data.action) {
+            case ('getUser'):
+                cb(_user ? success(_user) : error('Notoken find'));
+                break;
+
+            case ('login'):
+                const checkUser = await usersDb.findOne({ $and: [{ $or: [{ login: data.login }] }, { password: $u.createPswd(data.password.toString()) }] });
+                if (!checkUser) {
+                    cb(error('This login and password not found'));
+                    return;
+                }
+                cb(success(await assignUser(checkUser)));
+                break;
+
+            case ('registration'):
+                const resCreate = await $u.createUser(data);
+                if (resCreate.error) {
+                    return cb(error(resCreate.error));
+                }
+
+                cb(success(await assignUser(resCreate.result)));
+                break;
+
+            case ('createRoom'):
+                data.creatorName = _user.login;
+                Store.createLobbyRoom(data);
+                cb(success());
+                break;
+
+            case ('joinRoom'):
+                Store.playerJoinToLobbyRoom(_user.login, data._id);
+                cb(success());
+                break;
+
+            case ('leaveRoom'):
+                Store.playerLeaveLobbyRoom(_user.login);
+                cb(success());
+                break;
+
+            case ('getMatchInfo'):
+                cb(success(Store.matches[socket.roomName].matchInfo));
+                break;
+
+            default:
+                cb(error('Error endpoint ' + data.action, socket));
+                break;
             }
-            cb(success(await assignUser(checkUser)));
-            break;
-
-        case ('registration'):
-            const resCreate = await $u.createUser(data);
-            if (resCreate.error) {
-                return cb(error(resCreate.error));
-            }
-
-            cb(success(await assignUser(resCreate.result)));
-            break;
-
-        case ('createRoom'):
-            data.creatorName = _user.login;
-            Store.createLobbyRoom(data);
-            cb(success());
-            break;
-
-        case ('joinRoom'):
-            Store.playerJoinToLobbyRoom(_user.login, data._id);
-            cb(success());
-            break;
-
-        case ('leaveRoom'):
-            Store.playerLeaveLobbyRoom(_user.login);
-            cb(success());
-            break;
-
-        case ('getMatchInfo'):
-            cb(success(Store.matches[socket.roomName].matchInfo));
-            break;
-
-        default:
-            cb(error('Error endpoint ' + data.action, socket));
-            break;
+        } catch (error) {
+            console.log('Api error: ', error);
         }
     });
 };
