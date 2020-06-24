@@ -24,6 +24,7 @@ AFRAME.registerComponent('aabb-collider', {
         this.elMax = new THREE.Vector3();
         this.elMin = new THREE.Vector3();
         this.lastValidPosition = null;
+        document.addEventListener('updateCollideElements', ()=> this.update());
     },
 
     /**
@@ -42,6 +43,7 @@ AFRAME.registerComponent('aabb-collider', {
         }
         // Convert from NodeList to Array
         this.els = Array.prototype.slice.call(objectEls);
+        console.log('Update collide');
     },
 
     tick: (_.throttle(function () {

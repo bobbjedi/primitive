@@ -19,7 +19,6 @@ export default teamsInfo => {
         for (const t in towers) {
             const tower = towers[t];
             const el = document.createElement('a-entity');
-            el.classList.add('tower');
             el.id = tower.id;
             el.setAttribute('position', $u.positionObjectToString(tower.position));
             el.setAttribute('template', 'tower');
@@ -28,4 +27,5 @@ export default teamsInfo => {
             document.querySelector('a-scene').appendChild(el);
         }
     });
+    requestAnimationFrame(()=> document.dispatchEvent(new Event('updateCollideElements')));
 };

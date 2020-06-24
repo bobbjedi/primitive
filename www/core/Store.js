@@ -5,7 +5,7 @@ import renderTowers from '../client/logic/tower';
 
 export default new Vue({
     data: {
-        currentTargetSid: null,
+        currentTargetId: null,
         mySid: null,
         isLoad: false,
         isMatch: false,
@@ -69,9 +69,16 @@ export default new Vue({
                     Vue.nextTick(() => {
                         renderTowers(result);
                         document.querySelector('#player .head').setAttribute('material', 'color:' + this.mySide);
+                        const myTeam = result[this.mySide + 'Team'];
+                        const I = myTeam.players[this.user.login];
+                        document.querySelector('#player').setAttribute('position', I.position || myTeam.spawnPosition);
                     });
                 };
             });
+
+            globalSocket.on('info-match', data => {
+                console.log('info-match', data);
+            }); // переход на матч
         },
         $notify(o){
             console.log(o);
@@ -83,3 +90,11 @@ export default new Vue({
         }
     }
 });
+
+//КОСТЫЛЬ
+setInterval(()=>{
+    document.querySelectorAll('.avatar .head').forEach(el => {
+        el.parentElement.id = el.getAttribute('target-id').id;
+        el.realColor = el.realColor || el.getAttribute('material').color;
+    });
+}, 3000);

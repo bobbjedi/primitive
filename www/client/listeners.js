@@ -15,12 +15,6 @@ AFRAME.registerComponent('cursor-listener', {
             if (!this.el.targetId) {
                 const attributeId = this.el.getAttribute('target-id').id;
                 this.el.targetId = attributeId;
-                // Чтобы можно было найти по id и лепим ему цвет
-                const avatar = this.el.closest('.avatar');
-                if (avatar) {
-                    avatar.id = this.el.targetId;
-                    this.el.realColor = this.el.getAttribute('material').color;
-                }
             }
             console.log('TARGET>', this.el.targetId);
             this.isFocuse = true;
@@ -37,11 +31,11 @@ AFRAME.registerComponent('cursor-listener', {
         });
     },
     leaveTarget(){
-        Store.currentTargetSid = null;
+        Store.currentTargetId = null;
         focus.setAttribute('material', 'color: black; shader: flat');
     },
     throwTarget(){
-        Store.currentTargetSid = this.el.targetId;
+        Store.currentTargetId = this.el.targetId;
         focus.setAttribute('material', 'color: green; shader: flat');
     },
     tick(){

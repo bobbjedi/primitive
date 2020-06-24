@@ -32,6 +32,21 @@ export default {
         return position.x + ' ' + position.y + ' ' + position.z;
     },
 
+    mathRotation(point, target){
+        const sin = (target.x - point.x) / (target.y - point.y);
+        console.log(sin);
+    },
+
+    mathRotationToTarget(position, targetPos){
+        const dX = position.x - targetPos.x;
+        const dZ = position.z - targetPos.z;
+        const dY = position.y - targetPos.y;
+        const l = Math.sqrt(dX * dX + dZ * dZ);
+        const tan = dY / l;
+        const y = Math.atan2(position.x - targetPos.x, position.z - targetPos.z) * 57.29;
+        const x = -tan * 57.29;
+        return { x, y, z: 0 };
+    },
     vec3RadToDeg: function (rad) {
         rad.set(rad.y * 62, -90 + (-THREE.Math.radToDeg(Math.atan2(rad.z, rad.x))), 0);
     }

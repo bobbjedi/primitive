@@ -52,8 +52,8 @@
 <a-box height="10" color="red" position="0 5 0" opacity="0.5"></a-box>
 
 <!-- Башни -->
-<!--
-<a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
+
+<!-- <a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
 <a-entity class="tower" id="tower-red-2" position="-12 1 -73" template="tower" tower="red"></a-entity>
 <a-entity class="tower" id="tower-red-3" position="12 1 -73" template="tower" tower="red"></a-entity>
 
@@ -103,7 +103,7 @@
     <a-assets>
         <!-- Templates -->
 
-
+        
                 <!-- avatar -->
                 <template id="avatar-template">
     <a-entity class="avatar">
@@ -150,7 +150,7 @@
     </a-entity>
   </template>
 
-
+        
                 <!-- bullet -->
                 <template id="bullet-template">
     <a-entity class="bullet">
@@ -161,7 +161,7 @@
     </a-entity>
 </template>
 
-
+        
                 <!-- cript -->
                 <template id="cript-template">
     <a-entity class="cript">
@@ -179,12 +179,12 @@
         <!-- /Templates -->
     </a-assets>
 
-
+    
                 <!-- player -->
                 <a-entity id="player"
     networked="template:#avatar-template;attachTemplateToLocal:false;"
     camera
-    position="0 1.6 -80"
+    position="0 1.8 0"
     spawn-in-circle="radius:3"
     touch-wasd-controls="acceleration:30"
     gun="bulletTemplate:#bullet-template"
@@ -209,7 +209,7 @@
 
 </a-entity>
 
-
+    
                 <!-- entity -->
                 <!-- <a-assets>
     <img

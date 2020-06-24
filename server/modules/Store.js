@@ -71,7 +71,6 @@ module.exports = {
                 lobbyRoom.joined.push(name);
                 if (lobbyRoom.joined.length === lobbyRoom.playersCount){ // Стартуем Матч
                     new Match(lobbyRoom);
-                    // this.rmLobbyRoom(lobbyRoom._id);
                 }
                 this.emitUpdateRooms();
             }
@@ -108,12 +107,13 @@ module.exports = {
      * @param {String} name
      * @param {Object} data
      */
-    updatePlayerMatchData(name, matchId, data){
+    updatePlayerMatchData(name, matchId, {data}){
         try {
+            // console.log(name, matchId, data);
             if (!data.d) {
                 return;
             }
-            // console.log(name, data.d);
+            // console.log(name, matchId, data.d);
             this.matches[matchId] && this.matches[matchId].updateFromUser(name, data.d);
         } catch (e) {
             console.log('updatePlayerMatchData', e);
