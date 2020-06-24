@@ -4,7 +4,7 @@ class Cript {
         const el = document.createElement('a-entity');
         el.id = 'cript-' + side + '-' + id;
         el.setAttribute('template', 'cript-template');
-        el.setAttribute('networked', 'template:#cript-template');
+        el.setAttribute('networked', 'template:#cript-template;networkId:cript-' + side + '-' + id);
         el.setAttribute('cript', side);
         el.setAttribute('forward', 'speed:.01');
         el.setAttribute('position', spawnPosition);
@@ -16,7 +16,7 @@ class Cript {
 //SOCKET!
 
 setTimeout(() => {
-    console.log(new Cript('red', new Date().getTime()));
+    // console.log(new Cript('red', new Date().getTime()));
 }, 6000);
 
 

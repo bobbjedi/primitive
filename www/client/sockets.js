@@ -1,4 +1,4 @@
-import Store from './Store';
+import Store from '../core/Store';
 
 document.addEventListener('socketOnRedy', () => {
     const mySid = Store.mySid = window.globalSocket.id;
@@ -11,7 +11,7 @@ document.addEventListener('socketOnRedy', () => {
             setTimeout(() => el.setAttribute('color', 'green'), 200);
         } else {
             console.log('В меня!');
-            const pain = document.getElementById('mask-pain').style
+            const pain = document.getElementById('mask-pain').style;
             pain.display = 'block';
             setTimeout(() => { pain.display = 'none' }, 300);
         }

@@ -27,10 +27,16 @@
   "repository": "networked-aframe/networked-aframe",
   "dependencies": {
     "buffered-interpolation": "^0.2.5",
+    "element-theme-dark": "^1.0.3",
+    "element-ui": "^2.13.2",
     "express": "^4.17.1",
+    "nedb": "^1.8.0",
+    "sha256": "^0.2.0",
     "socket.io": "^2.3.0",
     "underscore": "^1.10.2",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-loader": "^15.9.0",
+    "vue-template-compiler": "^2.6.11"
   },
   "devDependencies": {
     "@babel/core": "~7.8.3",
@@ -89,13 +95,18 @@
     "web-components",
     "webvr"
   ],
-  "engines": {
-    "node": ">= 8.10.0",
-    "npm": ">= 4.0.5"
-  },
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
-  }
+  },
+  "plugins": [
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ]
+  ]
 }

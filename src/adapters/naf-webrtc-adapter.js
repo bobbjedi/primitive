@@ -27,7 +27,7 @@ class WebRtcPeer {
 
     // If there are errors with Safari implement this:
     // https://github.com/OpenVidu/openvidu/blob/master/openvidu-browser/src/OpenViduInternal/WebRtcPeer/WebRtcPeer.ts#L154
-    
+
     if (options.sendAudio) {
       options.localAudioStream.getTracks().forEach(
         track => self.pc.addTrack(track, options.localAudioStream));
@@ -344,22 +344,22 @@ class WebrtcAdapter {
           self.wsUrl = "ws://" + location.host;
         }
       }
-  
+
       NAF.log.write("Attempting to connect to socket.io");
       const socket = self.socket = io(self.wsUrl);
-  
+
       socket.on("connect", () => {
         NAF.log.write("User connected", socket.id);
         self.myId = socket.id;
         self.joinRoom();
       });
-  
+
       socket.on("connectSuccess", (data) => {
         const { joinedTime } = data;
-  
+
         self.myRoomJoinTime = joinedTime;
         NAF.log.write("Successfully joined room", self.room, "at server time", joinedTime);
-  
+
         if (self.sendAudio) {
           const mediaConstraints = {
             audio: true,
@@ -371,8 +371,8 @@ class WebrtcAdapter {
             self.connectSuccess(self.myId);
             localStream.getTracks().forEach(
               track => {
-                Object.keys(self.peers).forEach(peerId => { 
-                self.peers[peerId].pc.addTrack(track, localStream) 
+                Object.keys(self.peers).forEach(peerId => {
+                self.peers[peerId].pc.addTrack(track, localStream)
               })
             })
           })
@@ -386,18 +386,18 @@ class WebrtcAdapter {
           self.connectSuccess(self.myId);
         }
       });
-  
+
       socket.on("error", err => {
         console.error("Socket connection failure", err);
         self.connectFailure();
       });
-  
+
       socket.on("occupantsChanged", data => {
         const { occupants } = data;
         NAF.log.write('occupants changed', data);
         self.receivedOccupants(occupants);
       });
-  
+
       function receiveData(packet) {
         const from = packet.from;
         const type = packet.type;
@@ -408,7 +408,7 @@ class WebrtcAdapter {
         }
         self.messageListener(from, type, data);
       }
-  
+
       socket.on("send", receiveData);
       socket.on("broadcast", receiveData);
     })
@@ -531,7 +531,8 @@ class WebrtcAdapter {
       from: this.myId,
       type,
       data,
-      broadcasting: true
+      broadcasting: true,
+      globalInfo: window.NAF_global
     };
     this.socket.emit("broadcast", packet);
   }

@@ -175,7 +175,8 @@ class SocketioAdapter {
       from: this.myId,
       type,
       data,
-      broadcasting: true
+      broadcasting: true,
+      globalInfo: window.NAF_global
     };
 
     if (this.socket) {

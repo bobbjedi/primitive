@@ -1,5 +1,6 @@
 /* eslint-disable*/
 const isDev = process.argv[3] === 'development';
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
     entry: {
         app: './client/app.js',
@@ -21,15 +22,20 @@ module.exports = {
             use: {
                 loader: 'html-loader'
             }
+        }, {
+            test: /\.vue$/,
+            loader: 'vue-loader'
         }]
     },
+
     resolve: {
         alias: {
-            // Env: path.resolve(__dirname, "env/"),
-            // Src: path.resolve(__dirname, "src/"),
+            'vue$': 'vue/dist/vue.esm.js'
         }
     },
-    plugins: [],
+    plugins: [
+        new VueLoaderPlugin()
+      ],
     watchOptions: {
         ignored: ['node_modules']
     }
@@ -46,7 +52,7 @@ const tplDir = dirName + 'tpl/';
 const outDir = '../www/';
 
 watch(dirName, { recursive: true }, function (evt, name) {
-  console.log('%s changed.', name);
+    console.log('%s changed.', name);
     rebuild();
 });
 

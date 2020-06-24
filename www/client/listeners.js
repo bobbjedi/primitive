@@ -1,5 +1,5 @@
 import config from '../../config';
-import Store from './Store';
+import Store from '../core/Store';
 import * as _ from 'underscore';
 import $u from './logic/utills';
 
@@ -12,7 +12,16 @@ AFRAME.registerComponent('cursor-listener', {
         // this.el.targetId = this.el.getAttribute('target-id') || this.el.targetId || this.el._creator || this.el.id; // аватар или шар башни или моб
         focus = document.getElementById('cursor');
         this.el.addEventListener('mouseenter', e => {
-            this.el.targetId = this.el.targetId || this.el.getAttribute('target-id').id;
+            if (!this.el.targetId) {
+                const attributeId = this.el.getAttribute('target-id').id;
+                this.el.targetId = attributeId;
+                // Чтобы можно было найти по id и лепим ему цвет
+                const avatar = this.el.closest('.avatar');
+                if (avatar) {
+                    avatar.id = this.el.targetId;
+                    this.el.realColor = this.el.getAttribute('material').color;
+                }
+            }
             console.log('TARGET>', this.el.targetId);
             this.isFocuse = true;
             currentBodyInFocus = this.el;

@@ -1,4 +1,4 @@
-import Store from '../Store';
+import Store from '../../core/Store';
 import $u from '../logic/utills';
 
 AFRAME.registerComponent('gun', {
@@ -52,12 +52,11 @@ AFRAME.registerComponent('gun', {
         if (!data.target){
             return;
         }
-        if (Store.mySid !== data.target) { // не в меня попали
-            const el = document.getElementById(data.target).querySelector('.targetable');
-            const color = el.realColor || el.getAttribute('color') || 'green';
-            el.realColor = color;
-            el.setAttribute('color', 'grey');
-            setTimeout(() => el.setAttribute('color', color), 600);
+        if (Store.user.login !== data.target) { // не в меня попали
+            console.log(data.target);
+            const el = document.getElementById(data.target).querySelector('.colorized-pain');
+            el.setAttribute('material', 'color', 'grey');
+            setTimeout(() => el.setAttribute('material', 'color', el.realColor), 200);
         } else {
             console.log('В меня!');
             const pain = document.getElementById('mask-pain').style;

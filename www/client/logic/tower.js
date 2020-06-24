@@ -1,14 +1,31 @@
+import Store from '../../core/Store';
+
+import $u from './utills';
 AFRAME.registerComponent('tower', {
     schema: {},
-
     init: function () {
         const sphere = this.el.querySelector('.tower-sphere');
-        sphere.setAttribute('color', this.data);
-        sphere.setAttribute('cursor-listener', '');// TODO: если не моя сторона то он в прицеле
+        sphere.setAttribute('material', 'opacity:.5; color:' + this.data);
         sphere.targetId = this.el.id;
-    },
-
-    tick: function () {
-
+        sphere.realColor = this.data;
+        Store.mySide !== this.data && sphere.setAttribute('cursor-listener', ''); // определяем что противник и можно целиться
     }
 });
+
+//<a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
+export default teamsInfo => {
+    ['red', 'blue'].forEach(s => {
+        const { towers } = teamsInfo[s + 'Team'];
+        for (const t in towers) {
+            const tower = towers[t];
+            const el = document.createElement('a-entity');
+            el.classList.add('tower');
+            el.id = tower.id;
+            el.setAttribute('position', $u.positionObjectToString(tower.position));
+            el.setAttribute('template', 'tower');
+            el.setAttribute('tower', s);
+            el.realColor = s;
+            document.querySelector('a-scene').appendChild(el);
+        }
+    });
+};

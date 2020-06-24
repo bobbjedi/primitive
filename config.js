@@ -1,3 +1,4 @@
 export default {
-    distanceOfFire: 28
+    distanceOfFire: 28,
+    idDev: true
 };

@@ -1,5 +1,4 @@
-// import "./libs/aframe.1.0.3.min";
-// import "./libs/build";
+import '../vue-app';
 import "./libs/randomiser.component";
 import "./components/spawn-in-circle.component";
 import "./components/gun.component";
@@ -14,3 +13,10 @@ import "./logic/tower";
 import "./logic/Cript";
 import "./listeners";
 import "./sockets";
+
+
+// On mobile remove elements that are resource heavy
+window.onload = () => {
+    var isMobile = AFRAME.utils.device.isMobile();
+    document.getElementById('player').setAttribute(isMobile ? 'touch-controls' : 'look-controls', '');
+};

@@ -1,18 +1,18 @@
 module.exports = {
-    entry  : './src/index.js',
-    output : {
-        path     : __dirname,
-        filename : './dist/networked-aframe.js'
+    entry: './src/index.js',
+    output: {
+        path: __dirname,
+        filename: './dist/networked-aframe.js'
     },
     mode: 'development',
-    module : {
+    module: {
         rules: [
             {
                 test: /.js$/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: ['@babel/preset-env']
+                        presets: ['@babel/preset-env']
                     }
                 }
             }
