@@ -13,7 +13,7 @@ AFRAME.registerComponent('tower', {
 });
 
 //<a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
-export default teamsInfo => {
+export const renderTowers = teamsInfo => {
     ['red', 'blue'].forEach(s => {
         const { towers } = teamsInfo[s + 'Team'];
         for (const t in towers) {
@@ -29,3 +29,8 @@ export default teamsInfo => {
     });
     requestAnimationFrame(()=> document.dispatchEvent(new Event('updateCollideElements')));
 };
+
+export const destroyTower = tower => {
+    console.log('RM tower', tower.id);
+};
+

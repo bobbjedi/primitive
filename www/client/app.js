@@ -10,7 +10,6 @@ import "./components/touch-control";
 import "./components/touch-wasd-control";
 import "./components/target-id.component";
 import "./logic/tower";
-import "./logic/Cript";
 import "./listeners";
 import "./sockets";
 

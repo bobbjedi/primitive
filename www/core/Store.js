@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import config from '../../config';
 import api from './api';
-import renderTowers from '../client/logic/tower';
+import { renderTowers, destroyTower } from '../client/logic/tower';
+import { renderCripts, renderCript, destroyCript } from '../client/logic/cript';
 
 export default new Vue({
     data: {
@@ -65,20 +66,31 @@ export default new Vue({
             // просим данные
             api('getMatchInfo', {}, ({ success, result }) => {
                 if (success) {
+                    const playerEl = document.getElementById('player');
                     Vue.set(this, 'matchInfo', result);
                     Vue.nextTick(() => {
                         renderTowers(result);
-                        document.querySelector('#player .head').setAttribute('material', 'color:' + this.mySide);
+                        const head = playerEl.querySelector('.head');
+                        head.setAttribute('material', 'color:' + this.mySide);
                         const myTeam = result[this.mySide + 'Team'];
                         const I = myTeam.players[this.user.login];
-                        document.querySelector('#player').setAttribute('position', I.position || myTeam.spawnPosition);
+                        playerEl.setAttribute('position', I.position || myTeam.spawnPosition);
                     });
                 };
             });
 
-            globalSocket.on('info-match', data => {
-                console.log('info-match', data);
+            // globalSocket.on('info-match', renderCripts); // обновляем криптов
+            globalSocket.on('cript-info', renderCript); // обновляем криптов
+            globalSocket.on('destroy', data => {
+                console.log('DESTROY on', data);
+                if (data.type === 'tower') {
+                    destroyTower(data);
+                } else if (data.type === 'cript') {
+                    destroyCript(data);
+                }
             }); // переход на матч
+
+
         },
         $notify(o){
             console.log(o);

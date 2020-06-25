@@ -5,11 +5,15 @@ const _ = require('underscore');
 const $u = require('../helpers/utils');
 
 module.exports = class {
-    constructor({ id, position, side, matchId }) {
+    constructor(data) {
+        const { id, position, side, matchId } = data;
+        this._data = data;
         this.id = id;
         this.position = position;
         this.side = side;
         this.matchId = matchId;
+        this.reaLY = 8.5;
+        this.distanceOfFire = config.distanceOfFire + 3;
 
         this.bullets = 3; // сейчас в обойме
         this.maxBullets = 3; // обьем обоймы
@@ -18,9 +22,10 @@ module.exports = class {
         this.inTargetId = false; // кто сейчас в цели
         this.setIntervalTimer = null;
 
-        this.health = 500;
-        this.def = 20;
-        this.damage = 50;
+        this._data.type = 'tower';
+        this._data.health = 500;
+        this._data.def = 20;
+        this._data.damage = 80;
 
         // this.targets = []; // массив всех врагов
         setTimeout(() => { // делаем задержку чтоб добдаться запрлнения Store
@@ -36,6 +41,8 @@ module.exports = class {
         const targets = [];
         const {oppositTeam} = this;
         Object.keys(oppositTeam.players).forEach(p => targets.push(oppositTeam.players[p]));
+        Object.keys(oppositTeam.towers).forEach(p => targets.push(oppositTeam.towers[p]));
+        Object.keys(oppositTeam.cripts).forEach(p => targets.push(oppositTeam.cripts[p]));
         return targets;
     }
     init() {
@@ -78,7 +85,7 @@ module.exports = class {
     makeShot(enemyId){
         this.inTargetId = enemyId;
         const { x, z } = this.position;
-        this.match.shotInTargetFromServer({ creator: this.id, target: enemyId, type: 'tower', position: { x, y: 7, z } });
+        this.match.shotInTargetFromServer({ creator: this.id, target: enemyId, type: 'tower', position: { x, y: this.reaLY, z } });
         this.bullets--;
         this.isBlockShot = true;
         setTimeout(() => this.isBlockShot = false, this.kd);
@@ -86,7 +93,7 @@ module.exports = class {
     getEnemyInTargetZone(){
         const enemies = [];
         this.targets.forEach(t => {
-            if (math.mathDist3D(t.position, this.position) <= config.distanceOfFire){
+            if (t.position && math.mathDist3D(t.position, this.position) <= this.distanceOfFire){
                 enemies.push(t);
             };
         });
@@ -102,6 +109,32 @@ module.exports = class {
     }
     destroy() {
         clearInterval(this.setIntervalTimer);
+    }
+
+
+    set health(v){
+        this._data.health = v;
+    }
+    get health(){
+        return this._data.health;
+    }
+    set def(v){
+        this._data.def = v;
+    }
+    get def(){
+        return this._data.def;
+    }
+    set damage(v){
+        this._data.damage = v;
+    }
+    get damage(){
+        return this._data.damage;
+    }
+    set inTargetId(v){
+        this._data.inTargetId = v;
+    }
+    get inTargetId(){
+        return this._data.inTargetId;
     }
 };
 /**

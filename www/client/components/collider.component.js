@@ -43,7 +43,7 @@ AFRAME.registerComponent('aabb-collider', {
         }
         // Convert from NodeList to Array
         this.els = Array.prototype.slice.call(objectEls);
-        console.log('Update collide');
+        // console.log('Update collide');
     },
 
     tick: (_.throttle(function () {

@@ -36,11 +36,10 @@ let templateHtmlBullet;
 // Рисуем локально пулю
 const renderBullet = (data) => {
     const {position, rotation, target} = data;
-    console.log(rotation);
     const el = document.createElement('a-entity');
     el.innerHTML = templateHtmlBullet;
-    el.setAttribute('remove-in-seconds', (!target ? .5 : .5));
-    el.setAttribute('forward', 'speed:5');
+    el.setAttribute('remove-in-seconds', (!target ? 2 : 2));
+    el.setAttribute('forward', 'speed:1');
     el.setAttribute('position', position);
     el.setAttribute('rotation', rotation);
     document.querySelector('a-scene').appendChild(el);

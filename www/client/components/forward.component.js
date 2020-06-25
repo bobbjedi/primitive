@@ -11,27 +11,26 @@ AFRAME.registerComponent('forward', {
 
         this.worldDirection = worldDirection;
         // console.error(this.worldDirection);
-
-
-        // var el = this.el;
-
-        // var currentPosition = el.getAttribute('position');
-        // var newPosition = this.worldDirection
-        //     .clone()
-        //     .multiplyScalar(5)
-        //     .add(currentPosition);
-        // el.setAttribute('position', newPosition);
-
+        this.lastRotation = this.getSignRotation();
     },
 
     tick: function () {
+        const rotation = this.getSignRotation();
+        // console.log('SIGN::::::', rotation);
+        if (rotation !== this.lastRotation) {
+            console.log('!!!!!!!!!!!!!', rotation, this.lastRotation);
+            return this.init();
+        }
         var el = this.el;
-
         var currentPosition = el.getAttribute('position');
         var newPosition = this.worldDirection
             .clone()
             .multiplyScalar(this.data.speed)
             .add(currentPosition);
         el.setAttribute('position', newPosition);
+    },
+    getSignRotation(){
+        const rotation = this.el.getAttribute('rotation');
+        return (rotation.x + rotation.y).toFixed(1);
     }
 });

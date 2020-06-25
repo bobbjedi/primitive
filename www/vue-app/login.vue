@@ -57,6 +57,7 @@ export default Vue.component('login', {
                         title: 'Успешно ' + this.status,
                         message: 'Вход совершен'
                     });
+                     globalSocket.emit('my-token', Store.user.token);
                 }
             });
         }

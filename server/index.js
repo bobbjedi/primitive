@@ -82,7 +82,7 @@ io.on("connection", socket => {
             const occupants = rooms[curRoom].occupants;
             socket.to(curRoom).broadcast.emit("occupantsChanged", { occupants });
 
-            if (Object.keys((occupants).length === 0)) {
+            if (Object.keys(occupants).length === 0) {
                 console.log("everybody left room");
                 delete rooms[curRoom];
             }
@@ -108,4 +108,4 @@ webServer.listen(port, () => {
     console.log("listening on http://localhost:" + port);
 });
 
-Store.createLobbyRoom({creatorName: 'Dev', roomName: 'TestName'});
+// Store.createLobbyRoom({creatorName: 'Dev', roomName: 'TestName'});

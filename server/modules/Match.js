@@ -2,12 +2,14 @@ const _ = require('underscore');
 const Store = require('./Store');
 const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
 const Tower = require('./Tower');
+const Cript = require('./Cript');
 
 module.exports = class {
     constructor(lobbyRoom){
         lobbyRoom.matchId = this.matchId = _.uniqueId('match_');
         this.lobbyRoom = lobbyRoom;
         this.Towers = {};
+        this.Cripts = {};
 
         this.redTeam = {
             towers: {},
@@ -29,12 +31,12 @@ module.exports = class {
             }
         };
         this.createTowers();
+        this.createCripts();
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
-        setInterval(()=>{
-            // console.log('>>', this.blueTeam.players['Dev']);
-        }, 2000);
+        setTimeout(()=> this.createCripts(), 30000);
         this.reportPlayersAboutStart();
+        // this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
     }
 
     get matchInfo(){
@@ -51,7 +53,7 @@ module.exports = class {
         return this.blueTeam.players[name] ? this.blueTeam : this.redTeam;
     }
     /**
-     * Получаем команду по нику
+     * Получаем player по нику
      * @param {String} name
      */
     gePlayerByName(name){
@@ -66,18 +68,21 @@ module.exports = class {
     */
     divisionPlayers() {
         try {
+            const {stat} = MATCH_CONSTANTS;
             const players = _.shuffle(this.lobbyRoom.joined);
             this.redTeam.players[players[0]] = {
+                type: 'player',
                 id: players[0],
-                health: 100,
-                def: 10,
-                damage: 100
+                health: stat.health,
+                def: stat.health,
+                damage: stat.damage
             };
             this.blueTeam.players[players[1]] = {
+                type: 'player',
                 id: players[1],
-                health: 100,
-                def: 10,
-                damage: 100
+                health: stat.health,
+                def: stat.health,
+                damage: stat.damage
             };
             // }
         } catch (e) {
@@ -126,6 +131,26 @@ module.exports = class {
             });
         });
     }
+    createCript(s, pos){
+        const points = JSON.parse(JSON.stringify(MATCH_CONSTANTS.cripts[s].points));
+        points.forEach(p => p.x = p.x * pos + _.random(-1, 1));
+        const cript = {
+            id: 'cript_' + _.uniqueId(),
+            position: points.shift(),
+            side: s,
+            matchId: this.matchId,
+            points
+        };
+        this[s + 'Team'].cripts[cript.id] = cript;
+        this.Cripts[cript.id] = new Cript(cript);
+    }
+    createCripts() {
+        this.createCript('red', 1);
+        // this.createCript('blue', 1);
+        // this.createCript('red', -1);
+        // this.createCript('blue', -1);
+    }
+
     /**
     * Выстрел моба или башни - негерация на сервере
     */
@@ -134,8 +159,8 @@ module.exports = class {
         this.damageShot(data); // серверные только в цель
     }
 
-    syncInfoToClients(data){
-        Store.io.to(this.matchId).emit('info-match', data);
+    syncInfoToClients(){
+        Store.io.to(this.matchId).emit('info-match', this.matchInfo); // преимущественно для перемещения мобов
     }
     /**
      * Выстрел с дамагом
@@ -143,21 +168,27 @@ module.exports = class {
      */
     damageShot(data){
         try {
-            const damager = this.gePlayerByName(data.creator) || this.Towers[data.creator];
-            const target = this.gePlayerByName(data.target) || this.Towers[data.target];
+            const damager = this.gePlayerByName(data.creator) || this.Towers[data.creator] || this.Cripts[data.creator];
+            const target = this.gePlayerByName(data.target) || this.Towers[data.target] || this.Cripts[data.target];
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
-            console.log(target.id, '>', target.health);
+            console.log(target.id, target.health);
             if (target.health < 0) {
-                console.log(target.id, 'УБИТ');
+                console.log(target.id, target.side, 'УБИТ');
+
+                const team = this[target.side + 'Team'];
+                delete team.players[target.id];
+                delete team.towers[target.id];
+                delete team.cripts[target.id];
+
+                Store.io.to(this.matchId).emit('destroy', target);
+                target.destroy && target.destroy();
             }
         } catch (e) {
             console.log('damageShot:' + e, e);
         }
-        console.log('DMG:', data);
-
     }
 
-    emitAllPlayers(obj){
-
+    finalMatch() {
+        clearInterval(this.this.syncDataIntervalId);
     }
 };
