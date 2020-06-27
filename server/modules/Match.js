@@ -34,7 +34,7 @@ module.exports = class {
         this.createCripts();
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
-        setInterval(()=> this.createCripts(), 30000);
+        setInterval(()=> this.createCripts(), 60000);
         this.reportPlayersAboutStart();
         // this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
     }
@@ -121,7 +121,8 @@ module.exports = class {
                     id: t.id,
                     position: t.position,
                     side: s,
-                    matchId: this.matchId
+                    matchId: this.matchId,
+                    isBase: t.isBase
                 };
                 this[s + 'Team'].towers[t.id] = tower;
                 this.Towers[t.id] = new Tower(tower);
@@ -146,11 +147,14 @@ module.exports = class {
         this.Cripts[cript.id] = new Cript(cript);
     }
     createCripts() {
-        console.log('CRIPTS CREATE');
-        this.createCript('red', 1);
-        this.createCript('blue', 1);
-        this.createCript('red', -1);
-        this.createCript('blue', -1);
+        const create = () => {
+            this.createCript('red', 1);
+            this.createCript('blue', 1);
+            this.createCript('red', -1);
+            this.createCript('blue', -1);
+        };
+        create();
+        setTimeout(create, 2000);
     }
 
     /**

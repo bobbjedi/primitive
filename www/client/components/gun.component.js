@@ -38,8 +38,8 @@ const renderBullet = (data) => {
     const {position, rotation, target} = data;
     const el = document.createElement('a-entity');
     el.innerHTML = templateHtmlBullet;
-    el.setAttribute('remove-in-seconds', (!target ? 2 : 2));
-    el.setAttribute('forward', 'speed:1');
+    el.setAttribute('remove-in-seconds', 0.07);
+    el.setAttribute('forward', 'speed:4');
     el.setAttribute('position', position);
     el.setAttribute('rotation', rotation);
     document.querySelector('a-scene').appendChild(el);
@@ -51,14 +51,17 @@ const renderInTarget = (data) => {
         return;
     }
     if (Store.user.login !== data.target) { // не в меня попали
-        const el = document.getElementById(data.target).querySelector('.colorized-pain');
-        el.setAttribute('material', 'color', el.realColor);
+        const el = document.getElementById(data.target);
+        if (!el) {
+            return;
+        }
+        const colorizedEl = document.getElementById(data.target).querySelector('.colorized-pain');
+        colorizedEl.setAttribute('material', 'color', colorizedEl.realColor);
         requestAnimationFrame(()=>{
-            el.setAttribute('material', 'color', 'grey');
-            setTimeout(() => el.setAttribute('material', 'color', el.realColor), 150);
+            colorizedEl.setAttribute('material', 'color', 'grey');
+            setTimeout(() => colorizedEl.setAttribute('material', 'color', colorizedEl.realColor), 150);
         });
     } else {
-        console.log('В меня!');
         const pain = document.getElementById('mask-pain').style;
         pain.display = 'block';
         setTimeout(() => { pain.display = 'none'; }, 300);

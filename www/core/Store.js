@@ -82,7 +82,7 @@ export default new Vue({
             // globalSocket.on('info-match', renderCripts); // обновляем криптов
             globalSocket.on('cript-info', renderCript); // обновляем криптов
             globalSocket.on('destroy', data => {
-                console.log('DESTROY on', data);
+                // console.log('DESTROY on', data);
                 if (data.type === 'tower') {
                     destroyTower(data);
                 } else if (data.type === 'cript') {

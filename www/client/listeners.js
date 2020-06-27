@@ -16,7 +16,7 @@ AFRAME.registerComponent('cursor-listener', {
                 const attributeId = this.el.getAttribute('target-id').id;
                 this.el.targetId = attributeId;
             }
-            console.log('TARGET>', this.el.targetId);
+            // console.log('TARGET>', this.el.targetId);
             this.isFocuse = true;
             currentBodyInFocus = this.el;
             const distance = e.detail.intersection.distance;

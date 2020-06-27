@@ -10055,7 +10055,8 @@ class SocketioAdapter {
   }
 
   setServerUrl(wsUrl) {
-    this.wsUrl = wsUrl;
+      console.log(',,,', window.forceWsUrl);
+    this.wsUrl = window.forceWsUrl || wsUrl;
   }
 
   setApp(appName) {

@@ -55,7 +55,7 @@ const joysticComponent = AFRAME.registerComponent('touch-wasd-controls', {
         this.onKeyUp = bind(this.onKeyUp, this);
         this.onVisibilityChange = bind(this.onVisibilityChange, this);
         this.attachVisibilityEventListeners();
-        this.addEventListeners();
+        setTimeout(() => this.addEventListeners(), 1000);
     },
 
     tick: function (time, delta) {

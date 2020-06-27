@@ -6,7 +6,7 @@ const $u = require('../helpers/utils');
 
 module.exports = class {
     constructor(data) {
-        const { id, position, side, matchId } = data;
+        const { id, position, side, matchId} = data;
         this._data = data;
         this.id = id;
         this.position = position;
@@ -23,7 +23,7 @@ module.exports = class {
         this.setIntervalTimer = null;
 
         this._data.type = 'tower';
-        this._data.health = 5;
+        this._data.health = 500;
         this._data.def = 20;
         this._data.damage = 150;
         // this.targets = []; // массив всех врагов

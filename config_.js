@@ -1,6 +1,6 @@
 const modelNedb = require("./server/helpers/modelNedb")
 
 module.exports = {
-    distanceOfFire: 28,
+    distanceOfFire: 20,
     idDev: true
 };

@@ -1,8 +1,16 @@
 <a-asset-item id="sculpture" src="assets/models/sculpture.glb"></a-asset-item>
+<img id="tower-texture" src="assets/img/tower-texture.jpg"></img>
 <template id="tower">
     <a-box class="hard-body collide-body tower" height="5" width="4" depth="4" opacity="0">
         <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
         <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
-        <a-sphere class="tower-sphere colorized-pain" opacity=".5" position="0 7 0" radius="2.5"></a-sphere>
+        <a-sphere animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear;" src="#tower-texture" class="tower-sphere colorized-pain" opacity="1" position="0 7 0" radius="2.5"></a-sphere>
+    </a-box>
+</template>
+
+
+<template id="tower-base">
+    <a-box opacity="0">
+        <a-sphere animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear;" src="#tower-texture" class="tower-sphere colorized-pain" radius="3" position="0 4 0"></a-sphere>
     </a-box>
 </template>

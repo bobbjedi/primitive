@@ -10,22 +10,21 @@ export const renderCripts = _.throttle(teamsInfo => {
             renderCript(cripts[c]);
         }
     });
-    requestAnimationFrame(() => document.dispatchEvent(new Event('updateCollideElements')));
 }, 500);
 
 
 export const destroyCript = data=>{
-    console.log('Destroy cript', data.id);
+    // console.log('Destroy cript', data.id);
     const criptEl = criptsEls[data.id];
     delete criptsEls[data.id];
     criptsEls.realColor = 'black';
     criptEl.querySelector('.colorized-pain').setAttribute('material', 'color:', 'black');
-    criptEl.setAttribute('material', 'opacity', 0.3);
-    const rmPosition = JSON.parse(JSON.stringify(data.position));
-    rmPosition.y = -10;
-    criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rmPosition));
-    criptEl.setAttribute('forward', 'speed:0.0001');
-    setTimeout(() => criptEl.parentNode.removeChild(criptEl), 5000);
+    // criptEl.setAttribute('opacity', 0.3);
+    // const rmPosition = JSON.parse(JSON.stringify(data.position));
+    // rmPosition.y = -10;
+    // criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rmPosition));
+    // criptEl.setAttribute('forward', 'speed:0.01');
+    criptEl.parentNode.removeChild(criptEl);
 };
 
 
@@ -34,16 +33,17 @@ export const renderCript = data => {
         const criptEl = criptsEls[data.id] || createCript(data);
         criptEl.setAttribute('position', data.position);
 
-        let rotationEl = data.nextPoint, speed = 0.016;
+        let rotationTargetEl = data.nextPoint, speed = 0.018;
         if (data.inTargetId){
             const target = data.inTargetId === Store.user.login ? 'player' : data.inTargetId;
             speed = 0;
-            rotationEl = document.getElementById(target).getAttribute('position');
+            const targetEl = document.getElementById(target);
+            rotationTargetEl = targetEl ? targetEl.getAttribute('position') : rotationTargetEl;
         }
-        criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rotationEl));
+        criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rotationTargetEl));
         criptEl.setAttribute('forward', 'speed:' + speed);
     } catch (e) {
-        console.log('FOR cript', e);
+        console.log('FOR cript', data.inTargetId, e);
     }
 };
 
