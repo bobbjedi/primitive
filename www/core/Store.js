@@ -2,7 +2,7 @@ import Vue from 'vue';
 import config from '../../config';
 import api from './api';
 import { renderTowers, destroyTower } from '../client/logic/tower';
-import { renderCripts, renderCript, destroyCript } from '../client/logic/cript';
+import { renderCript, destroyCript } from '../client/logic/cript';
 
 export default new Vue({
     data: {
@@ -58,7 +58,11 @@ export default new Vue({
         updateUser() {
             api('getUser', {token: this.user.token }, ({success, result}) => {
                 this.isLoad = true;
-                success && Vue.set(this, 'user', Object.assign(this.user, result));
+                if (success) {
+                    Vue.set(this, 'user', Object.assign(this.user, result));
+                } else {
+                    this.user.token = null;
+                }
                 document.querySelector('#player .head').setAttribute('target-id', 'id:' + this.user.login);
             });
         },

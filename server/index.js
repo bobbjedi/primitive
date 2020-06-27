@@ -11,7 +11,7 @@ const $u = require('./helpers/utils');
 process.title = "networked-aframe-server";
 
 // Get port or default to 8080
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3003;
 
 // Setup and configure Express http server.
 const app = express();
