@@ -16,9 +16,7 @@ AFRAME.registerComponent('forward', {
 
     tick: function () {
         const rotation = this.getSignRotation();
-        // console.log('SIGN::::::', rotation);
         if (rotation !== this.lastRotation) {
-            console.log('!!!!!!!!!!!!!', rotation, this.lastRotation);
             return this.init();
         }
         var el = this.el;

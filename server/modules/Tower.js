@@ -23,10 +23,9 @@ module.exports = class {
         this.setIntervalTimer = null;
 
         this._data.type = 'tower';
-        this._data.health = 500;
+        this._data.health = 5;
         this._data.def = 20;
-        this._data.damage = 80;
-
+        this._data.damage = 150;
         // this.targets = []; // массив всех врагов
         setTimeout(() => { // делаем задержку чтоб добдаться запрлнения Store
             this.oppositTeam = Store.matches[this.matchId][(this.side === 'red' ? 'blue' : 'red') + 'Team'];
@@ -40,9 +39,9 @@ module.exports = class {
     get targets(){
         const targets = [];
         const {oppositTeam} = this;
-        Object.keys(oppositTeam.players).forEach(p => targets.push(oppositTeam.players[p]));
-        Object.keys(oppositTeam.towers).forEach(p => targets.push(oppositTeam.towers[p]));
-        Object.keys(oppositTeam.cripts).forEach(p => targets.push(oppositTeam.cripts[p]));
+        Object.keys(oppositTeam.players).forEach(p => oppositTeam.players[p].health > 0 && targets.push(oppositTeam.players[p]));
+        Object.keys(oppositTeam.towers).forEach(p => oppositTeam.towers[p].health > 0 && targets.push(oppositTeam.towers[p]));
+        Object.keys(oppositTeam.cripts).forEach(p => oppositTeam.cripts[p].health > 0 && targets.push(oppositTeam.cripts[p]));
         return targets;
     }
     init() {
@@ -93,7 +92,7 @@ module.exports = class {
     getEnemyInTargetZone(){
         const enemies = [];
         this.targets.forEach(t => {
-            if (t.position && math.mathDist3D(t.position, this.position) <= this.distanceOfFire){
+            if (t.position && this.position && math.mathDist3D(t.position, this.position) <= this.distanceOfFire){
                 enemies.push(t);
             };
         });

@@ -34,7 +34,7 @@ module.exports = class {
         this.createCripts();
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
-        setTimeout(()=> this.createCripts(), 30000);
+        setInterval(()=> this.createCripts(), 30000);
         this.reportPlayersAboutStart();
         // this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
     }
@@ -75,14 +75,16 @@ module.exports = class {
                 id: players[0],
                 health: stat.health,
                 def: stat.health,
-                damage: stat.damage
+                damage: stat.damage,
+                side: 'red'
             };
             this.blueTeam.players[players[1]] = {
                 type: 'player',
                 id: players[1],
                 health: stat.health,
                 def: stat.health,
-                damage: stat.damage
+                damage: stat.damage,
+                side: 'blue'
             };
             // }
         } catch (e) {
@@ -105,14 +107,9 @@ module.exports = class {
             const position = d.components['0'];
             const rotation = d.components['1'];
             const player = this.gePlayerByName(userName);
-            // console.log(player);
-            if (d.template === '#avatar-template'){ // игрок
+            if (player && d.template === '#avatar-template'){ // игрок
                 position && (player.position = position);
                 rotation && (player.rotation = rotation);
-                // console.log(player);
-            } else if (d.template === '#cript-template') {
-                // position && (team.players[userName].position = position);
-                // rotation && (team.players[userName].rotation = rotation);
             }
         });
     }
@@ -131,6 +128,10 @@ module.exports = class {
             });
         });
     }
+    /**
+     * @param {String} сторона red|blue
+     * @param {Number} pos 1 или -1 - с какой стороны базы рендерится и по какой полосе идет
+     */
     createCript(s, pos){
         const points = JSON.parse(JSON.stringify(MATCH_CONSTANTS.cripts[s].points));
         points.forEach(p => p.x = p.x * pos + _.random(-1, 1));
@@ -145,14 +146,15 @@ module.exports = class {
         this.Cripts[cript.id] = new Cript(cript);
     }
     createCripts() {
+        console.log('CRIPTS CREATE');
         this.createCript('red', 1);
-        // this.createCript('blue', 1);
-        // this.createCript('red', -1);
-        // this.createCript('blue', -1);
+        this.createCript('blue', 1);
+        this.createCript('red', -1);
+        this.createCript('blue', -1);
     }
 
     /**
-    * Выстрел моба или башни - негерация на сервере
+    * Выстрел моба или башни - генерация на сервере
     */
     shotInTargetFromServer(data){
         Store.io.to(this.matchId).emit('render-bullet', data);
@@ -170,17 +172,21 @@ module.exports = class {
         try {
             const damager = this.gePlayerByName(data.creator) || this.Towers[data.creator] || this.Cripts[data.creator];
             const target = this.gePlayerByName(data.target) || this.Towers[data.target] || this.Cripts[data.target];
+            if (!target) {
+                return console.log(data.target, 'не найден!');
+            }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
-            console.log(target.id, target.health);
             if (target.health < 0) {
                 console.log(target.id, target.side, 'УБИТ');
 
                 const team = this[target.side + 'Team'];
-                delete team.players[target.id];
-                delete team.towers[target.id];
-                delete team.cripts[target.id];
 
-                Store.io.to(this.matchId).emit('destroy', target);
+                delete this.Towers[target.id];
+                delete team.cripts[target.id];
+                // delete team.towers[target.id];
+                delete this.Cripts[target.id];
+
+                target._data && Store.io.to(this.matchId).emit('destroy', target._data);
                 target.destroy && target.destroy();
             }
         } catch (e) {

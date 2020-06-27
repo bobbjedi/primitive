@@ -34,22 +34,19 @@
     <!-- <img id="boxTexture" src="https://i.imgur.com/mYmmbrp.jpg"> -->
     <img id="boxTexture" src="assets/img/stone-wall.jpg">
     <img id="plants" src="assets/img/stones.jpg">
-    <a-asset-item id="sculpture" src="assets/models/sculpture.glb"></a-asset-item>
+
     <!-- <template id="hard">
         <a-entity scale="0.001 0.001 0.001" geometry="primitive: box" material="color: red"></a-entity>
     </template>
 
     <a-mixin id="hard-body-el" template="hard" color="blue"></a-mixin> -->
-    <template id="tower">
-        <a-box class="hard-body collide-body tower" height="5" width="4" depth="4" opacity="0">
-            <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
-            <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
-            <a-sphere class="tower-sphere colorized-pain" opacity=".5" position="0 7 0" radius="2.5"></a-sphere>
-        </a-box>
-    </template>
+
 </a-assets>
 
-<a-box height="10" color="red" position="0 5 0" opacity="0.5"></a-box>
+<!-- <a-box height="10" color="red" position="0 5 0" opacity="0.5"></a-box> -->
+<a-entity height="10" position="0 5 0" opacity="0.5">
+
+</a-entity>
 
 <!-- Башни -->
 
@@ -163,15 +160,79 @@
 
         
                 <!-- cript -->
-                <template id="cript-template">
+                <!-- <a-asset-item id="cript-model-obj" src="assets/models/p3-devon-character.obj"></a-asset-item>
+<a-asset-item id="cript-model-mtl" src="assets/models/p3-devon-character.mtl"></a-asset-item>
+<template id="cript-template">
     <a-entity class="cript">
         <a-box
             class="cript-body colorized-pain"
             heigth="0.3"
             width="0.3"
             depth="0.3"
-        ></a-box>
+            opacity="0"
+            >
+            <a-obj-model src="#cript-model-obj" mtl="#cript-model-mtl" ></a-obj-model>
+            <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
+    </a-box>
     </a-entity>
+</template> -->
+
+<img id="cript-texture" src="assets/img/cript-texture.jpg">
+<template id="cript-template">
+    <a-entity class="cript" scale=".8 .8 .8">
+    <a-sphere radius=".45" class="cript-head colorized-pain"
+        scale="1 0.9 1"
+        position="0 .4 0"
+      >
+    <a-cylinder color="black" radius="0.1" height="0.1" rotation="90 0 0" position="-0.15 0 -0.45"></a-cylinder>
+    <a-cylinder color="black" radius="0.1" height="0.1" rotation="90 0 0" position="0.15 0 -0.45"></a-cylinder>
+    </a-sphere>
+
+
+      <a-cylinder material="color:#ff6161;" height="1.2" radius="0.3"></a-cylinder>
+      <a-sphere material="color:#ff6161;" radius="0.3" position="0 -0.6 0"></a-sphere>
+      <a-sphere color="red" radius="0.3" position="0 0.6 0"></a-sphere>
+
+<!--
+      <a-entity class="face"
+        position="0 0.05 0"
+      >
+        <a-sphere class="eye"
+          color="#efefef"
+          position="0.16 0.1 -0.35"
+          scale="0.12 0.12 0.12"
+        >
+          <a-sphere class="pupil"
+            color="#000"
+            position="0 0 -1"
+            scale="0.2 0.2 0.2"
+          ></a-sphere>
+        </a-sphere>
+        <a-sphere class="eye"
+          color="#efefef"
+          position="-0.16 0.1 -0.35"
+          scale="0.12 0.12 0.12"
+        >
+          <a-sphere class="pupil"
+            color="#000"
+            position="0 0 -1"
+            scale="0.2 0.2 0.2"
+          ></a-sphere>
+        </a-sphere>
+      </a-entity> -->
+
+    </a-entity>
+  </template>
+
+        
+                <!-- tower -->
+                <a-asset-item id="sculpture" src="assets/models/sculpture.glb"></a-asset-item>
+<template id="tower">
+    <a-box class="hard-body collide-body tower" height="5" width="4" depth="4" opacity="0">
+        <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
+        <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
+        <a-sphere class="tower-sphere colorized-pain" opacity=".5" position="0 7 0" radius="2.5"></a-sphere>
+    </a-box>
 </template>
 
 

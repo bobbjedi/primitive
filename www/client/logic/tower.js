@@ -13,6 +13,7 @@ AFRAME.registerComponent('tower', {
 });
 
 //<a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
+const towersEls = {};
 export const renderTowers = teamsInfo => {
     ['red', 'blue'].forEach(s => {
         const { towers } = teamsInfo[s + 'Team'];
@@ -25,12 +26,22 @@ export const renderTowers = teamsInfo => {
             el.setAttribute('tower', s);
             el.realColor = s;
             document.querySelector('a-scene').appendChild(el);
+            towersEls[tower.id] = el;
+            console.log('isAlive', tower.isAlive);
+            if (tower.health <= 0) {
+                setTimeout(() => destroyTower(tower), 1000);
+            }
         }
     });
     requestAnimationFrame(()=> document.dispatchEvent(new Event('updateCollideElements')));
 };
 
 export const destroyTower = tower => {
-    console.log('RM tower', tower.id);
+    const sphere = towersEls[tower.id].querySelector('.tower-sphere');
+    console.log('sphere', sphere);
+    sphere.removeAttribute('cursor-listener');
+    sphere.realColor = 'black';
+    sphere.setAttribute('material', 'color:', 'black');
+    console.log('sphere', sphere);
 };
 

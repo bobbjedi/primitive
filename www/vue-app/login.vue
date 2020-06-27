@@ -22,7 +22,7 @@ import api from '../core/api';
 export default Vue.component('login', {
     data() {
         return {
-            isLoginned: false,
+            isLoginned: true,
             repeatPassword: '',
             user: Store.user,
             checked: false

@@ -1,7 +1,6 @@
 import $u from '../logic/utills';
 import Store from '../../core/Store';
 import * as _ from 'underscore';
-import { cripts } from '../../../server/modules/MATCH_CONSTANTS';
 
 const criptsEls = {}; // кеш
 export const renderCripts = _.throttle(teamsInfo => {
@@ -17,6 +16,16 @@ export const renderCripts = _.throttle(teamsInfo => {
 
 export const destroyCript = data=>{
     console.log('Destroy cript', data.id);
+    const criptEl = criptsEls[data.id];
+    delete criptsEls[data.id];
+    criptsEls.realColor = 'black';
+    criptEl.querySelector('.colorized-pain').setAttribute('material', 'color:', 'black');
+    criptEl.setAttribute('material', 'opacity', 0.3);
+    const rmPosition = JSON.parse(JSON.stringify(data.position));
+    rmPosition.y = -10;
+    criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rmPosition));
+    criptEl.setAttribute('forward', 'speed:0.0001');
+    setTimeout(() => criptEl.parentNode.removeChild(criptEl), 5000);
 };
 
 
@@ -42,7 +51,6 @@ export const renderCript = data => {
 const createCript = data => {
     const el = document.createElement('a-entity');
     el.id = data.id;
-    console.log($u.positionObjectToString(data.position));
     el.setAttribute('position', $u.positionObjectToString(data.position));
     el.setAttribute('template', 'cript-template');
     document.querySelector('a-scene').appendChild(el);

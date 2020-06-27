@@ -5,12 +5,12 @@ const Store = require('./Store');
 
 module.exports = class extends Tower {
     init(){
-        this._data.health = 100;
-
         this.reaLY = 1.2;
         this.points = this._data.points;
         this.distanceOfFire = config.distanceOfFire;
+
         this._data.type = 'cript';
+        this._data.health = 100;
 
         this.setIntervalTimer = setInterval(() => {
             this.checkShot();
