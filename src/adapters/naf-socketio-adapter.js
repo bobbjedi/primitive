@@ -5,6 +5,7 @@
  * networked-scene: serverURL needs to be ws://localhost:8080 when running locally
  */
 const io = require('socket.io-client');
+console.log('SocketioAdapter: ' + !!io);
 class SocketioAdapter {
   constructor() {
     if (io === undefined)
@@ -57,7 +58,9 @@ class SocketioAdapter {
 
   connect() {
     const self = this;
-
+    console.log('deviceready>>>>');
+    document.addEventListener('deviceready', function() {
+    console.log('ONdeviceready>>>>');
     this.updateTimeOffset()
     .then(() => {
       if (!self.wsUrl || self.wsUrl === "/") {
@@ -107,6 +110,7 @@ class SocketioAdapter {
 
       socket.on("send", receiveData);
       socket.on("broadcast", receiveData);
+    })
     })
   }
 

@@ -66,3 +66,4 @@ db/
 plugins/
 platforms/
 hooks/
+www/*.html
