@@ -68,3 +68,4 @@ hooks/
 www/*.html
 www/index.html
 www/3x3.html
+www/client/libs/build.js
