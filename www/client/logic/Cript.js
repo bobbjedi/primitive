@@ -33,7 +33,7 @@ export const renderCript = data => {
         const criptEl = criptsEls[data.id] || createCript(data);
         criptEl.setAttribute('position', data.position);
 
-        let rotationTargetEl = data.nextPoint, speed = 0.018;
+        let rotationTargetEl = data.nextPoint, speed = 1;
         if (data.inTargetId){
             const target = data.inTargetId === Store.user.login ? 'player' : data.inTargetId;
             speed = 0;
