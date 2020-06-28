@@ -2,6 +2,34 @@
                 <!-- head -->
                 <html>
   <head>
+
+    <script>
+        const {log, info, error} = console;
+        console.log = (...arg) => {
+            setTimeout(()=>{
+                document.getElementById('_log').innerHTML += 'LOG: ' + arg + '<br>';
+                log.call(console, ...arg);
+            }, 500);
+            };
+            console.error = (...arg) => {
+                setTimeout(()=>{
+                document.getElementById('_log').innerHTML += 'ERROR: ' + arg + '<br>';
+                log.call(console, ...arg);
+            }, 500);
+            };
+            console.warn = (...arg) => {
+                setTimeout(()=>{
+                document.getElementById('_log').innerHTML += 'WARN: ' + arg + '<br>';
+                log.call(console, ...arg);
+            }, 500);
+            };
+            console.info = (...arg) => {
+                setTimeout(()=>{
+                document.getElementById('_log').innerHTML += 'INFO: ' + arg + '<br>';
+                log.call(console, ...arg);
+            }, 500);
+            };
+        </script>
     <meta charset="utf-8">
     <title>Shooter Example — Networked-Aframe</title>
     <meta name="description" content="Shooter Example — Networked-Aframe">
@@ -11,6 +39,11 @@
     <script src="./client/libs/build.js"></script>
     <script src="./client/components/envroinment.component.js"></script>
     <access origin="https://msg.royal-flush.poker/" />
+
+
+   <script>window.forceWsUrl = 'https://msg.royal-flush.poker';</script>
+
+
     <!-- <script src="./client/listeners.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script> -->
 
@@ -21,12 +54,13 @@
     <script src="./client/components/forward.component.js"></script>
     <script src="./client/components/remove-in-seconds.component.js"></script> -->
 
-    <script>window.forceWsUrl = 'https://msg.royal-flush.poker'</script>
     <script src="./build-app.js"></script>
 
   </head>
   <body>
-      <div id="_log" style="position: fixed; top: 100px; left: 0; color: red;z-index: 100000000000000000;"></div>
+    <div id="_log"
+        style="height: 300px; overflow-y:auto; position:fixed; top: 200px; left: 0; color: red;z-index: 100000000000000000;">
+    </div>
 
 
 <a-scene physics="debug: true;gravity:-10; friction: 100;">
