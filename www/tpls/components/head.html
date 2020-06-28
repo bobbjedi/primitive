@@ -2,48 +2,16 @@
   <head>
     <meta charset="utf-8">
 
-
-<script>
-// return;
-const { log, info, error } = console;
-console.log = (...arg) => {
-    setTimeout(() => {
-        document.getElementById('_log').innerHTML += 'LOG: ' + arg + '<br>';
-        log.call(console, ...arg);
-    }, 500);
-};
-console.error = (...arg) => {
-    setTimeout(() => {
-        document.getElementById('_log').innerHTML += 'ERROR: ' + arg + '<br>';
-        log.call(console, ...arg);
-    }, 500);
-};
-console.warn = (...arg) => {
-    setTimeout(() => {
-        document.getElementById('_log').innerHTML += 'WARN: ' + arg + '<br>';
-        log.call(console, ...arg);
-    }, 500);
-};
-console.info = (...arg) => {
-    setTimeout(() => {
-        document.getElementById('_log').innerHTML += 'INFO: ' + arg + '<br>';
-        log.call(console, ...arg);
-    }, 500);
-};
-
-</script>
-
     <title>Shooter Example — Networked-Aframe</title>
     <meta name="description" content="Shooter Example — Networked-Aframe">
     <link href="./assets/styles/common.css" rel="stylesheet" type="text/css" />
-    <script src="./client/libs/aframe.1.0.3.min.js"></script>
-    <script src="./client/libs/build.js"></script>
-    <script src="./client/components/envroinment.component.js"></script>
-    <access origin="https://msg.royal-flush.poker/" />
+    <script src="./assets/libs/aframe.1.0.3.min.js"></script>
+    <script src="./assets/libs/build.js"></script>
+    <!-- <access origin="https://msg.royal-flush.poker/" /> -->
 
 
    <!-- <script>window.forceWsUrl = 'https://msg.royal-flush.poker';</script> -->
-   <script src="./build-app.js"></script>
+   <script src="./assets/build-app.js"></script>
   </head>
   <body>
     <!-- <div id="_log" style="height: 300px; overflow-y:auto; position:fixed; top: 200px; left: 0; color: red;z-index: 100000000000000000;"></div> -->

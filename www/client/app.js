@@ -1,5 +1,5 @@
 import '../vue-app';
-import "./libs/randomiser.component";
+import "./components/randomiser.component";
 import "./components/spawn-in-circle.component";
 import "./components/gun.component";
 import "./components/forward.component";
@@ -9,6 +9,7 @@ import "./components/hard-body-sensitive";
 import "./components/touch-control";
 import "./components/touch-wasd-control";
 import "./components/target-id.component";
+import "./components/envroinment.component.js";
 import "./logic/tower";
 import "./listeners";
 import "./sockets";

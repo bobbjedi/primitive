@@ -69,3 +69,5 @@ www/*.html
 www/index.html
 www/3x3.html
 www/client/libs/build.js
+www/assets/build-app.js
+www/assets/libs/build.js

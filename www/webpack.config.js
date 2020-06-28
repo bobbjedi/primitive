@@ -7,7 +7,7 @@ module.exports = {
     },
     output: {
         path: __dirname,
-        filename: 'build-app.js'
+        filename: 'assets/build-app.js'
     },
     devtool: isDev && 'eval-source-map',
     module: {
