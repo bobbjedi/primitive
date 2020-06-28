@@ -15,7 +15,7 @@ export default new Vue({
         config
     },
     created(){
-        this.isMatch = location.href.includes('x');
+        this.isMatch = location.href.includes('html?match-id=');
         this.logOut();
         this.user.token = localStorage.getItem('token') || false;
         this.players = window._aPlayers;
@@ -35,7 +35,12 @@ export default new Vue({
             if (this.isMatch) {
                 this.matchInit();
             } else {
-                globalSocket.on('go-match', link => location.assign(link)); // переход на матч
+                globalSocket.on('go-match', link => {
+                    if (location.href.includes('index')) { // .apk
+                        return location.href = location.href.replace('/index.html', link);
+                    }
+                    location.assign(link);
+                });
             }
         });
     },
