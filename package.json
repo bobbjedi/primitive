@@ -27,6 +27,7 @@
   "repository": "networked-aframe/networked-aframe",
   "dependencies": {
     "buffered-interpolation": "^0.2.5",
+    "cordova-plugin-aframe": "0.0.1",
     "element-theme-dark": "^1.0.3",
     "element-ui": "^2.13.2",
     "express": "^4.17.1",

@@ -1,12 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.phonegap.helloworld" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
 
-    <name>Primitive World</name>
+    <name>Primitive WorldO</name>
     <description>Hello World sample application that responds to the deviceready event.</description>
     <author email="devswbot@gmail.com">DevNeo</author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
+
     <plugin name="cordova-plugin-aframe" source="npm"/>
+    <plugin name="cordova-plugin-android-permissions"/>
+
     <platform name="ios">
         <icon src="res/icon/ios/icon-1024.png" width="1024" height="1024"/>
         <icon src="res/icon/ios/icon-small.png" width="29" height="29"/>

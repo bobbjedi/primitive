@@ -63,5 +63,6 @@ www/client/libs/build.js
 www/build-app.js
 dist
 db/
+plugins/
 platforms/
 hooks/
