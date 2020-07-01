@@ -5,7 +5,9 @@
     <description>Hello World sample application that responds to the deviceready event.</description>
     <author email="devswbot@gmail.com">DevNeo</author>
     <content src="index.html" />
+
     <preference name="DisallowOverscroll" value="true" />
+    <preference name="fullscreen" value="true" />
 
     <platform name="ios">
         <icon src="res/icon/ios/icon-1024.png" width="1024" height="1024"/>
@@ -104,6 +106,9 @@
         <splash src="res/screen/windows/splashscreenphone.png" target="SplashScreenPhone"/>
     </platform>
     -->
+    <!-- <plugin name="cordova-plugin-statusbar" source="npm" />
+    <plugin name="cordova-plugin-console" source="npm" /> -->
+
    <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
