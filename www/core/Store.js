@@ -115,7 +115,11 @@ export default new Vue({
 //КОСТЫЛЬ
 setInterval(()=>{
     document.querySelectorAll('.avatar .head').forEach(el => {
-        el.parentElement.id = el.getAttribute('target-id').id;
-        el.realColor = el.realColor || el.getAttribute('material').color;
+        const el_ = el.getAttribute('target-id');
+        if (el_) {
+            el.parentElement.id = el_.id;
+            el.realColor = el.realColor || el.getAttribute('material').color;
+        }
+
     });
 }, 3000);

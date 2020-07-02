@@ -24,6 +24,7 @@ module.exports = class extends Cript {
             const defender = isRed ? _.last(myDefenders) : myDefenders[0];
             const returnPosition = copy(this.position);
             returnPosition.z = defender.position.z;
+            returnPosition.x = defender.position.x + _.random(-.5, .5);
             if (defender.type === 'tower') {
                 returnPosition.z += isRed ? 3 : -3; // перед башней
             } else {

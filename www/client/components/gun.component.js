@@ -1,4 +1,4 @@
-import * as copy from 'deep-copy';
+import copy from 'deep-copy';
 import Store from '../../core/Store';
 import $u from '../logic/utills';
 

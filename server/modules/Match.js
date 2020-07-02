@@ -36,7 +36,7 @@ module.exports = class {
         this.createCripts();
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
-        setInterval(()=> this.createCripts(), 60000);
+        this.cripCreateTimeout = setInterval(() => this.createCripts(), 60000);
         this.reportPlayersAboutStart();
         // this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
     }
@@ -98,8 +98,10 @@ module.exports = class {
             };
             const {playersCount} = this.lobbyRoom;
 
-            createPlayer(players.shift(), 'red');
-            return createPlayer('zzxc', 'blue', 1);
+            // createPlayer(players.shift(), 'red');
+            // return createPlayer('zzxc', 'blue', 1);
+
+
             if (playersCount === 1) {
                 createPlayer(players.shift(), 'red');
             }
@@ -206,7 +208,7 @@ module.exports = class {
                 return console.log(data.target, 'не найден!');
             }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
-
+            target.isCPU && target.uGetDamage(damager); // говорим CPU от кого получил дамаг и надо на него переключиться
             if (target.health < 0) {
                 console.log(target.id, target.side, 'УБИТ');
 
@@ -218,7 +220,7 @@ module.exports = class {
 
                 target._data && Store.io.to(this.matchId).emit('destroy', target._data);
                 target.destroy && target.destroy();
-                this.isLose(target.side) && this.finalMatch(target.side);
+                this.isLose(target.side) && this.finalMatch(target.side); // проверяем снос башен
             }
         } catch (e) {
             console.log('damageShot:' + e, e);
@@ -236,9 +238,11 @@ module.exports = class {
     finalMatch(loseTeam) {
         console.log('LoseTeam!', loseTeam);
         clearInterval(this.syncDataIntervalId);
+        clearInterval(this.cripCreateTimeout);
         Object.keys(this.Towers).forEach(id => this.Towers[id].destroy());
         Object.keys(this.Cripts).forEach(id => this.Cripts[id].destroy());
-        Object.keys(this.redTeam.players).forEach(id => this.redTeam.players[id].destroy());
-        Object.keys(this.blueTeam.players).forEach(id => this.blue.players[id].destroy());
+        Object.keys(this.CPUs).forEach(id => this.CPUs[id].destroy());
+        // Object.keys(this.redTeam.players).forEach(id => this.redTeam.players[id].destroy());
+        // Object.keys(this.blueTeam.players).forEach(id => this.blue.players[id].destroy());
     }
 };

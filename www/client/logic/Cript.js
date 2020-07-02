@@ -1,7 +1,7 @@
 import $u from '../logic/utills';
 import Store from '../../core/Store';
 import * as _ from 'underscore';
-import * as copy from 'deep-copy';
+import copy from 'deep-copy';
 
 const criptsEls = {}; // кеш
 export const renderCripts = _.throttle(teamsInfo => {
@@ -27,12 +27,11 @@ export const destroyCript = data=>{
 export const renderCript = data => {
     try {
         const criptEl = criptsEls[data.id] || createCript(data);
-        criptEl.setAttribute('position', data.position);
-
-        let rotationTargetEl = data.nextPoint, speed = data.speedPerSecond;
+        const pos = data.position;
+        criptEl.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: ${data.delayReportClient * 1000}; easing: linear;`);
+        let rotationTargetEl = data.nextPoint;
         if (data.inTargetId){
             const target = data.inTargetId === Store.user.login ? 'player' : data.inTargetId;
-            speed = 0;
             const targetEl = document.getElementById(target);
             rotationTargetEl = targetEl ? targetEl.getAttribute('position') : rotationTargetEl;
             if (data.inTargetId.includes('tower')) {
@@ -41,20 +40,18 @@ export const renderCript = data => {
             }
         }
         const rotation = $u.mathRotationToTarget(data.position, rotationTargetEl);
-        // data.isCPU && console.log('rotationTargetEl>', data.position, rotationTargetEl, rotation);
-        if (_.isNaN(rotation.x)) {
-            console.log('NANAN');
-            rotation.x = criptEl.lastValidX;
+        if (data.isCPU && _.isNaN(rotation.x)) { // для CPU актуально
+            // rotation.x = criptEl.lastValidX;
+            rotation.x = 0;
+            if (data.side === 'red') {
+                console.log('NAN', rotation);
+                rotation.y = 180;
+            }
         } else {
-            criptEl.lastValidX = rotation.x;
+            // criptEl.lastValidX = rotation.x;
+            // console.log(data.side, criptEl.lastValidX);
         }
-        //     criptEl.lastValitRotation = rotation;
-        // } else {
-        //     rotation = criptEl.lastValitRotation;
-        // }
-        // console.log(rotation);
         criptEl.setAttribute('rotation', rotation);
-        criptEl.setAttribute('forward', 'speed:' + speed);
     } catch (e) {
         console.log('FOR cript', data.inTargetId, e);
     }
@@ -64,8 +61,10 @@ export const renderCript = data => {
 const createCript = data => {
     const el = document.createElement('a-entity');
     el.id = data.id;
-    el.setAttribute('position', $u.positionObjectToString(data.position));
+    const pos = data.position;
+    el.setAttribute('position', pos);
     el.setAttribute('template', (data.isCPU ? 'avatar-template' : 'cript-template'));
+    el.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: 300; easing: linear;`);
     document.querySelector('a-scene').appendChild(el);
     criptsEls[data.id] = el;
 
