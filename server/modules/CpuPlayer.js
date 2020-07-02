@@ -1,7 +1,7 @@
 const Cript = require('./Cript');
 const _ = require('underscore');
 const config = require('../../config_');
-
+const copy = require('deep-copy');
 module.exports = class extends Cript {
     startCriptLife(){
         this.distanceOfFire = config.distanceOfFire;
@@ -22,7 +22,7 @@ module.exports = class extends Cript {
             }
             myDefenders.sort((d1, d2) => d1.position.z - d2.position.z);
             const defender = isRed ? _.last(myDefenders) : myDefenders[0];
-            const returnPosition = JSON.parse(JSON.stringify(this.position));
+            const returnPosition = copy(this.position);
             returnPosition.z = defender.position.z;
             if (defender.type === 'tower') {
                 returnPosition.z += isRed ? 3 : -3; // перед башней

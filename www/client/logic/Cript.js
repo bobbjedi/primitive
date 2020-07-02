@@ -1,6 +1,7 @@
 import $u from '../logic/utills';
 import Store from '../../core/Store';
 import * as _ from 'underscore';
+import * as copy from 'deep-copy';
 
 const criptsEls = {}; // кеш
 export const renderCripts = _.throttle(teamsInfo => {
@@ -35,7 +36,7 @@ export const renderCript = data => {
             const targetEl = document.getElementById(target);
             rotationTargetEl = targetEl ? targetEl.getAttribute('position') : rotationTargetEl;
             if (data.inTargetId.includes('tower')) {
-                rotationTargetEl = JSON.parse(JSON.stringify(rotationTargetEl));
+                rotationTargetEl = copy(rotationTargetEl);
                 rotationTargetEl.y = 8;
             }
         }

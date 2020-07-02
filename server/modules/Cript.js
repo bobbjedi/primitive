@@ -3,7 +3,9 @@ const math = require('../helpers/math');
 const config = require('../../config_');
 const Store = require('./Store');
 const _ = require('underscore');
+const copy = require('deep-copy');
 const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
+
 module.exports = class extends Tower {
     init(){
         this.distanceOfFire = config.distanceOfFire - 2.5;
@@ -25,7 +27,7 @@ module.exports = class extends Tower {
     }
     positionInit(){
         this._data.health = 100;
-        const points = JSON.parse(JSON.stringify(MATCH_CONSTANTS.cripts[this._data.side].points));
+        const points = copy(MATCH_CONSTANTS.cripts[this._data.side].points);
         points.forEach(p => p.x = p.x * (this._data.pos || 1) + _.random(-1, 1));
         this.position = points.shift();
         this.points = points;

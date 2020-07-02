@@ -1,3 +1,4 @@
+import * as copy from 'deep-copy';
 import Store from '../../core/Store';
 import $u from '../logic/utills';
 
@@ -77,7 +78,7 @@ document.addEventListener('socketOnRedy', () => {
                 const id = data.target === Store.user.login ? 'player' : data.target;
                 let positionTargert = document.getElementById(id).getAttribute('position');
                 if (id.includes('tower')) {
-                    positionTargert = JSON.parse(JSON.stringify(positionTargert));
+                    positionTargert = copy(positionTargert);
                     positionTargert.y = 8;
                 }
                 data.rotation = $u.mathRotationToTarget(data.position, positionTargert);
