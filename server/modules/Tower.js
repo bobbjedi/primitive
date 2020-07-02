@@ -23,12 +23,13 @@ module.exports = class {
         this.setIntervalTimer = null;
 
         this._data.type = 'tower';
-        this._data.health = 500;
+        this._data.health = 50;
         this._data.def = 20;
         this._data.damage = 150;
         // this.targets = []; // массив всех врагов
         setTimeout(() => { // делаем задержку чтоб добдаться запрлнения Store
             this.oppositTeam = Store.matches[this.matchId][(this.side === 'red' ? 'blue' : 'red') + 'Team'];
+            this.myTeam = Store.matches[this.matchId][(this.side === 'blue' ? 'blue' : 'red') + 'Team'];
             this.init();
         }, 1000);
     }
@@ -72,8 +73,8 @@ module.exports = class {
         if (!enemyId) {
             enemyId = _.shuffle(enemys)[0].id;
         }
-
         return this.makeShot(enemyId);
+
         // console.log(this.id, this.targets);
         // проверяем чужих игроков и криптов в округе
     }
@@ -84,7 +85,7 @@ module.exports = class {
     makeShot(enemyId){
         this.inTargetId = enemyId;
         const { x, z } = this.position;
-        this.match.shotInTargetFromServer({ creator: this.id, target: enemyId, type: 'tower', position: { x, y: this.reaLY, z } });
+        this.match.shotInTargetFromServer({ creator: this.id, target: enemyId, type: this._data.type, position: { x, y: this.reaLY, z } });
         this.bullets--;
         this.isBlockShot = true;
         setTimeout(() => this.isBlockShot = false, this.kd);

@@ -38,8 +38,8 @@ const renderBullet = (data) => {
     const {position, rotation, target} = data;
     const el = document.createElement('a-entity');
     el.innerHTML = templateHtmlBullet;
-    el.setAttribute('remove-in-seconds', 0.07);
-    el.setAttribute('forward', 'speed:4');
+    el.setAttribute('remove-in-seconds', .2);
+    el.setAttribute('forward', 'speed:100');
     el.setAttribute('position', position);
     el.setAttribute('rotation', rotation);
     document.querySelector('a-scene').appendChild(el);
@@ -75,7 +75,12 @@ document.addEventListener('socketOnRedy', () => {
         try {
             if (!data.rotation) { // серверный выстрел
                 const id = data.target === Store.user.login ? 'player' : data.target;
-                data.rotation = $u.mathRotationToTarget(data.position, document.getElementById(id).getAttribute('position'));
+                let positionTargert = document.getElementById(id).getAttribute('position');
+                if (id.includes('tower')) {
+                    positionTargert = JSON.parse(JSON.stringify(positionTargert));
+                    positionTargert.y = 8;
+                }
+                data.rotation = $u.mathRotationToTarget(data.position, positionTargert);
             }
             renderBullet(data);
         } catch (e) {

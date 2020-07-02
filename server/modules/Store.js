@@ -16,22 +16,23 @@ module.exports = {
     * @param {String} roomName
     */
     createLobbyRoom({playersCount, creatorName, roomName, format}){
-        if (this.getPlayerLobbyRoomByName(creatorName)) { // уже в какой-то комнате иди уже создал
+        if (this.getPlayerLobbyRoomByName(creatorName)) { // уже в какой-то комнате или уже создал
             return;
         };
+        console.log({playersCount, creatorName, roomName, format});
         playersCount = playersCount || 2;
         format = format || '3x3';
-        console.log({playersCount, creatorName, roomName, format});
         const room = {
             _id: 'lobby_room_' + _.uniqueId(),
             creatorName,
             playersCount,
             roomName,
             format,
-            joined: [creatorName]
+            joined: []
         };
         this.lobbyRooms.push(room);
-        this.emitUpdateRooms();
+        console.log('Room create', room._id);
+        this.playerJoinToLobbyRoom(room.creatorName, room._id);
     },
     /**
      *  @param {String} name
@@ -66,6 +67,7 @@ module.exports = {
             if (this.getPlayerLobbyRoomByName(name)) { // уже в какой-то комнате
                 return;
             };
+            console.log('playerJoinToLobbyRoom', name, _id);
             const lobbyRoom = this.getLobbyRoomById(_id);
             if (lobbyRoom && lobbyRoom.joined.length < lobbyRoom.playersCount) {
                 lobbyRoom.joined.push(name);

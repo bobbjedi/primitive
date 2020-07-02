@@ -14,16 +14,11 @@ export const renderCripts = _.throttle(teamsInfo => {
 
 
 export const destroyCript = data=>{
-    // console.log('Destroy cript', data.id);
+    console.log('Destroy cript', data.id);
     const criptEl = criptsEls[data.id];
     delete criptsEls[data.id];
     criptsEls.realColor = 'black';
     criptEl.querySelector('.colorized-pain').setAttribute('material', 'color:', 'black');
-    // criptEl.setAttribute('opacity', 0.3);
-    // const rmPosition = JSON.parse(JSON.stringify(data.position));
-    // rmPosition.y = -10;
-    // criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rmPosition));
-    // criptEl.setAttribute('forward', 'speed:0.01');
     criptEl.parentNode.removeChild(criptEl);
 };
 
@@ -33,14 +28,31 @@ export const renderCript = data => {
         const criptEl = criptsEls[data.id] || createCript(data);
         criptEl.setAttribute('position', data.position);
 
-        let rotationTargetEl = data.nextPoint, speed = 1;
+        let rotationTargetEl = data.nextPoint, speed = data.speedPerSecond;
         if (data.inTargetId){
             const target = data.inTargetId === Store.user.login ? 'player' : data.inTargetId;
             speed = 0;
             const targetEl = document.getElementById(target);
             rotationTargetEl = targetEl ? targetEl.getAttribute('position') : rotationTargetEl;
+            if (data.inTargetId.includes('tower')) {
+                rotationTargetEl = JSON.parse(JSON.stringify(rotationTargetEl));
+                rotationTargetEl.y = 8;
+            }
         }
-        criptEl.setAttribute('rotation', $u.mathRotationToTarget(data.position, rotationTargetEl));
+        const rotation = $u.mathRotationToTarget(data.position, rotationTargetEl);
+        // data.isCPU && console.log('rotationTargetEl>', data.position, rotationTargetEl, rotation);
+        if (_.isNaN(rotation.x)) {
+            console.log('NANAN');
+            rotation.x = criptEl.lastValidX;
+        } else {
+            criptEl.lastValidX = rotation.x;
+        }
+        //     criptEl.lastValitRotation = rotation;
+        // } else {
+        //     rotation = criptEl.lastValitRotation;
+        // }
+        // console.log(rotation);
+        criptEl.setAttribute('rotation', rotation);
         criptEl.setAttribute('forward', 'speed:' + speed);
     } catch (e) {
         console.log('FOR cript', data.inTargetId, e);
@@ -52,7 +64,7 @@ const createCript = data => {
     const el = document.createElement('a-entity');
     el.id = data.id;
     el.setAttribute('position', $u.positionObjectToString(data.position));
-    el.setAttribute('template', 'cript-template');
+    el.setAttribute('template', (data.isCPU ? 'avatar-template' : 'cript-template'));
     document.querySelector('a-scene').appendChild(el);
     criptsEls[data.id] = el;
 

@@ -3,6 +3,7 @@ const Store = require('./Store');
 const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
 const Tower = require('./Tower');
 const Cript = require('./Cript');
+const CpuPlayer = require('./CpuPlayer');
 
 module.exports = class {
     constructor(lobbyRoom){
@@ -10,6 +11,7 @@ module.exports = class {
         this.lobbyRoom = lobbyRoom;
         this.Towers = {};
         this.Cripts = {};
+        this.CPUs = {};
 
         this.redTeam = {
             towers: {},
@@ -68,25 +70,50 @@ module.exports = class {
     */
     divisionPlayers() {
         try {
-            const {stat} = MATCH_CONSTANTS;
+            const { stat } = MATCH_CONSTANTS;
             const players = _.shuffle(this.lobbyRoom.joined);
-            this.redTeam.players[players[0]] = {
-                type: 'player',
-                id: players[0],
-                health: stat.health,
-                def: stat.health,
-                damage: stat.damage,
-                side: 'red'
+            console.log('players>', players);
+            const createPlayer = (id, side, isCPU) => {
+                id = id || 'cpu_' + _.uniqueId();
+
+                const player = this[side + 'Team'].players[id] = {
+                    id,
+                    isCPU,
+                    side,
+                    type: 'player',
+                    health: stat.health,
+                    def: stat.health,
+                    damage: stat.damage,
+                    position: MATCH_CONSTANTS[side + 'PalyersSpawn'],
+                    matchId: this.matchId,
+                };
+                this[side + 'Team'].players[id] = player;
+                isCPU && (this.CPUs[id] = new CpuPlayer(player));
             };
-            this.blueTeam.players[players[1]] = {
-                type: 'player',
-                id: players[1],
-                health: stat.health,
-                def: stat.health,
-                damage: stat.damage,
-                side: 'blue'
+            const createTeamPlayers = (side, count, isCPU) => {
+                let countCreate = 0;
+                while (count > countCreate++) {
+                    createPlayer(players.shift(), side, isCPU);
+                }
             };
-            // }
+            const {playersCount} = this.lobbyRoom;
+
+            createPlayer(players.shift(), 'red');
+            return createPlayer('zzxc', 'blue', 1);
+            if (playersCount === 1) {
+                createPlayer(players.shift(), 'red');
+            }
+            else if (playersCount === 2) {
+                createPlayer(players.shift(), 'red');
+                createPlayer(players.shift(), 'blue');
+            } else if (playersCount === 3) {
+                createTeamPlayers('red', 3);
+            } else {
+                createTeamPlayers('red', 3);
+                createTeamPlayers('blue', 3);
+            }
+            createTeamPlayers('red', 3 - Object.keys(this.redTeam.players).length, true);
+            createTeamPlayers('blue', 3 - Object.keys(this.blueTeam.players).length, true);
         } catch (e) {
             console.log('divisionPlayers:' + e, e);
         }
@@ -122,7 +149,8 @@ module.exports = class {
                     position: t.position,
                     side: s,
                     matchId: this.matchId,
-                    isBase: t.isBase
+                    isBase: t.isBase,
+                    type: 'tower'
                 };
                 this[s + 'Team'].towers[t.id] = tower;
                 this.Towers[t.id] = new Tower(tower);
@@ -134,14 +162,12 @@ module.exports = class {
      * @param {Number} pos 1 или -1 - с какой стороны базы рендерится и по какой полосе идет
      */
     createCript(s, pos){
-        const points = JSON.parse(JSON.stringify(MATCH_CONSTANTS.cripts[s].points));
-        points.forEach(p => p.x = p.x * pos + _.random(-1, 1));
         const cript = {
             id: 'cript_' + _.uniqueId(),
-            position: points.shift(),
+            pos,
             side: s,
             matchId: this.matchId,
-            points
+            type: 'cript'
         };
         this[s + 'Team'].cripts[cript.id] = cript;
         this.Cripts[cript.id] = new Cript(cript);
@@ -174,31 +200,45 @@ module.exports = class {
      */
     damageShot(data){
         try {
-            const damager = this.gePlayerByName(data.creator) || this.Towers[data.creator] || this.Cripts[data.creator];
-            const target = this.gePlayerByName(data.target) || this.Towers[data.target] || this.Cripts[data.target];
+            const damager = this.CPUs[data.creator] || this.gePlayerByName(data.creator) || this.Towers[data.creator] || this.Cripts[data.creator];
+            const target = this.CPUs[data.target] || this.gePlayerByName(data.target) || this.Towers[data.target] || this.Cripts[data.target];
             if (!target) {
                 return console.log(data.target, 'не найден!');
             }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
+
             if (target.health < 0) {
                 console.log(target.id, target.side, 'УБИТ');
 
                 const team = this[target.side + 'Team'];
 
                 delete this.Towers[target.id];
-                delete team.cripts[target.id];
-                // delete team.towers[target.id];
                 delete this.Cripts[target.id];
+                delete team.cripts[target.id]; // криптов сносим окончательно
 
                 target._data && Store.io.to(this.matchId).emit('destroy', target._data);
                 target.destroy && target.destroy();
+                this.isLose(target.side) && this.finalMatch(target.side);
             }
         } catch (e) {
             console.log('damageShot:' + e, e);
         }
     }
+    /**
+     * Проверяем пориграла-ли команда
+     * @param {String} s
+     */
+    isLose(s) {
+        const towers = this[s + 'Team'].towers;
+        return Object.keys(towers).find(id => towers[id].isBase && towers[id].health <= 0);
+    }
 
-    finalMatch() {
-        clearInterval(this.this.syncDataIntervalId);
+    finalMatch(loseTeam) {
+        console.log('LoseTeam!', loseTeam);
+        clearInterval(this.syncDataIntervalId);
+        Object.keys(this.Towers).forEach(id => this.Towers[id].destroy());
+        Object.keys(this.Cripts).forEach(id => this.Cripts[id].destroy());
+        Object.keys(this.redTeam.players).forEach(id => this.redTeam.players[id].destroy());
+        Object.keys(this.blueTeam.players).forEach(id => this.blue.players[id].destroy());
     }
 };
