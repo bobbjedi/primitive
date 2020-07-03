@@ -1,34 +1,38 @@
-import $u from '../logic/utills';
+import $u from './utills';
 import Store from '../../core/Store';
 import * as _ from 'underscore';
 import copy from 'deep-copy';
 
-const criptsEls = {}; // кеш
-export const renderCripts = _.throttle(teamsInfo => {
+const warriorsEls = {}; // кеш
+export const renderWarriors = _.throttle(teamsInfo => {
     ['red', 'blue'].forEach(s => {
-        const { cripts } = teamsInfo[s + 'Team'];
-        for (const c in cripts) {
-            renderCript(cripts[c]);
+        const { warriors } = teamsInfo[s + 'Team'];
+        for (const c in warriors) {
+            renderWarrior(warriors[c]);
         }
     });
 }, 500);
 
 
-export const destroyCript = data=>{
-    console.log('Destroy cript', data.id);
-    const criptEl = criptsEls[data.id];
-    delete criptsEls[data.id];
-    criptsEls.realColor = 'black';
-    criptEl.querySelector('.colorized-pain').setAttribute('material', 'color:', 'black');
-    criptEl.parentNode.removeChild(criptEl);
+export const destroyWarrior = data=>{
+    console.log('Destroy warrior', data.id);
+    const warriorEl = warriorsEls[data.id];
+    delete warriorsEls[data.id];
+    warriorsEls.realColor = 'black';
+    warriorEl.querySelector('.colorized-pain').setAttribute('material', 'color:', 'black');
+    warriorEl.parentNode.removeChild(warriorEl);
 };
 
 
-export const renderCript = data => {
+export const renderWarrior = data => {
     try {
-        const criptEl = criptsEls[data.id] || createCript(data);
+        if (data.id === Store.user.login) {
+            return;
+        }
+        // console.log(data);
+        const warriorEl = warriorsEls[data.id] || createWarrior(data);
         const pos = data.position;
-        criptEl.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: ${data.delayReportClient * 1000}; easing: linear;`);
+        warriorEl.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: ${data.delayReportClient}; easing: linear;`);
         let rotationTargetEl = data.nextPoint;
         if (data.inTargetId){
             const target = data.inTargetId === Store.user.login ? 'player' : data.inTargetId;
@@ -39,34 +43,30 @@ export const renderCript = data => {
                 rotationTargetEl.y = 8;
             }
         }
-        const rotation = $u.mathRotationToTarget(data.position, rotationTargetEl);
+
+        const rotation = data.rotation || $u.mathRotationToTarget(data.position, rotationTargetEl); // data.rotation только у реальных игроков
+
         if (data.isCPU && _.isNaN(rotation.x)) { // для CPU актуально
-            // rotation.x = criptEl.lastValidX;
             rotation.x = 0;
-            if (data.side === 'red') {
-                console.log('NAN', rotation);
-                rotation.y = 180;
-            }
-        } else {
-            // criptEl.lastValidX = rotation.x;
-            // console.log(data.side, criptEl.lastValidX);
+            data.side === 'red' && (rotation.y = 180);
         }
-        criptEl.setAttribute('rotation', rotation);
+
+        warriorEl.setAttribute('rotation', rotation);
     } catch (e) {
-        console.log('FOR cript', data.inTargetId, e);
+        console.log('FOR warrior', data.inTargetId, e);
     }
 };
 
 
-const createCript = data => {
+const createWarrior = data => {
     const el = document.createElement('a-entity');
     el.id = data.id;
     const pos = data.position;
     el.setAttribute('position', pos);
-    el.setAttribute('template', (data.isCPU ? 'avatar-template' : 'cript-template'));
+    el.setAttribute('template', (data.type === 'player' ? 'avatar-template' : 'cript-template'));
     el.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: 300; easing: linear;`);
     document.querySelector('a-scene').appendChild(el);
-    criptsEls[data.id] = el;
+    warriorsEls[data.id] = el;
 
     requestAnimationFrame(() => {
         const colorized = el.querySelector('.colorized-pain');

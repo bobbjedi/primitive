@@ -2,12 +2,13 @@ const Store = require('./Store');
 const config = require('../../config_');
 const math = require('../helpers/math');
 const _ = require('underscore');
-const $u = require('../helpers/utils');
+const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
+const copy = require('deep-copy');
 
 module.exports = class {
     constructor(data) {
         const { id, position, side, matchId} = data;
-        this._data = data;
+        this.public = data;
         this.id = id;
         this.position = position;
         this.side = side;
@@ -22,11 +23,7 @@ module.exports = class {
         this.inTargetId = false; // кто сейчас в цели
         this.setIntervalTimer = null;
 
-        this._data.type = 'tower';
-        this._data.health = 50;
-        this._data.def = 20;
-        this._data.damage = 150;
-        // this.targets = []; // массив всех врагов
+        this.stat = this.public.stat = copy(MATCH_CONSTANTS.stat[this.public.type]);
         setTimeout(() => { // делаем задержку чтоб добдаться запрлнения Store
             this.oppositTeam = Store.matches[this.matchId][(this.side === 'red' ? 'blue' : 'red') + 'Team'];
             this.myTeam = Store.matches[this.matchId][(this.side === 'blue' ? 'blue' : 'red') + 'Team'];
@@ -46,6 +43,7 @@ module.exports = class {
         return targets;
     }
     init() {
+        this.updateStat();
         this.setIntervalTimer = setInterval(() => {
             this.checkShot();
             this.reBullet();
@@ -85,7 +83,7 @@ module.exports = class {
     makeShot(enemyId){
         this.inTargetId = enemyId;
         const { x, z } = this.position;
-        this.match.shotInTargetFromServer({ creator: this.id, target: enemyId, type: this._data.type, position: { x, y: this.reaLY, z } });
+        this.match.shotInTargetFromServer({ creator: this.id, target: enemyId, type: this.public.type, position: { x, y: this.reaLY, z } });
         this.bullets--;
         this.isBlockShot = true;
         setTimeout(() => this.isBlockShot = false, this.kd);
@@ -110,31 +108,37 @@ module.exports = class {
     destroy() {
         clearInterval(this.setIntervalTimer);
     }
-
+    updateStat(){
+        this.health = this.stat.health;
+        this.def = this.stat.def;
+        this.damage = this.stat.damage;
+        // this.public.speedPerSecond = this.stat.speedPerSecond;
+        // console.log(this.public.type, this.public.speedPerSecond);
+    }
 
     set health(v){
-        this._data.health = v;
+        this.public.health = v;
     }
     get health(){
-        return this._data.health;
+        return this.public.health;
     }
     set def(v){
-        this._data.def = v;
+        this.public.def = v;
     }
     get def(){
-        return this._data.def;
+        return this.public.def;
     }
     set damage(v){
-        this._data.damage = v;
+        this.public.damage = v;
     }
     get damage(){
-        return this._data.damage;
+        return this.public.damage;
     }
     set inTargetId(v){
-        this._data.inTargetId = v;
+        this.public.inTargetId = v;
     }
     get inTargetId(){
-        return this._data.inTargetId;
+        return this.public.inTargetId;
     }
 };
 /**

@@ -4,6 +4,8 @@ const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
 const Tower = require('./Tower');
 const Cript = require('./Cript');
 const CpuPlayer = require('./CpuPlayer');
+const config_ = require('../../config_');
+const copy = require('deep-copy');
 
 module.exports = class {
     constructor(lobbyRoom){
@@ -70,7 +72,6 @@ module.exports = class {
     */
     divisionPlayers() {
         try {
-            const { stat } = MATCH_CONSTANTS;
             const players = _.shuffle(this.lobbyRoom.joined);
             console.log('players>', players);
             const createPlayer = (id, side, isCPU) => {
@@ -81,16 +82,21 @@ module.exports = class {
                     isCPU,
                     side,
                     type: 'player',
-                    health: stat.health,
-                    def: stat.health,
-                    damage: stat.damage,
                     position: MATCH_CONSTANTS[side + 'PalyersSpawn'],
                     matchId: this.matchId,
+                    delayReportClient: !isCPU ? config_.playersSync : 0
                 };
+
                 this[side + 'Team'].players[id] = player;
-                isCPU && (this.CPUs[id] = new CpuPlayer(player));
+                if (isCPU) {
+                    this.CPUs[id] = new CpuPlayer(player);
+                } else {
+                    player.__proto__ = palyerProto;
+                    player.init();
+                };
             };
             const createTeamPlayers = (side, count, isCPU) => {
+                console.log('!Q', count);
                 let countCreate = 0;
                 while (count > countCreate++) {
                     createPlayer(players.shift(), side, isCPU);
@@ -99,8 +105,9 @@ module.exports = class {
             const {playersCount} = this.lobbyRoom;
 
             // createPlayer(players.shift(), 'red');
-            // return createPlayer('zzxc', 'blue', 1);
-
+            // createPlayer(players.shift(), 'blue');
+            // createPlayer('zzxc', 'blue', 1);
+            // return;
 
             if (playersCount === 1) {
                 createPlayer(players.shift(), 'red');
@@ -132,15 +139,14 @@ module.exports = class {
      * @param {Object} data
      */
     updateFromUser(userName, data){
-        data.forEach(d => {
-            const position = d.components['0'];
-            const rotation = d.components['1'];
+        try {
             const player = this.gePlayerByName(userName);
-            if (player && d.template === '#avatar-template'){ // игрок
-                position && (player.position = position);
-                rotation && (player.rotation = rotation);
-            }
-        });
+            player.position = data.position;
+            player.rotation = data.rotation;
+            Store.io.to(this.matchId).emit('warrior-info', player);
+        } catch (e) {
+            console.log('updateFromUser: ' + e, e);
+        }
     }
 
     createTowers(){
@@ -209,7 +215,8 @@ module.exports = class {
             }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
             target.isCPU && target.uGetDamage(damager); // говорим CPU от кого получил дамаг и надо на него переключиться
-            if (target.health < 0) {
+            console.log(target.id, target.health);
+            if (target.health <= 0) {
                 console.log(target.id, target.side, 'УБИТ');
 
                 const team = this[target.side + 'Team'];
@@ -218,7 +225,7 @@ module.exports = class {
                 delete this.Cripts[target.id];
                 delete team.cripts[target.id]; // криптов сносим окончательно
 
-                target._data && Store.io.to(this.matchId).emit('destroy', target._data);
+                target.public && Store.io.to(this.matchId).emit('destroy', target.public);
                 target.destroy && target.destroy();
                 this.isLose(target.side) && this.finalMatch(target.side); // проверяем снос башен
             }
@@ -245,4 +252,14 @@ module.exports = class {
         // Object.keys(this.redTeam.players).forEach(id => this.redTeam.players[id].destroy());
         // Object.keys(this.blueTeam.players).forEach(id => this.blue.players[id].destroy());
     }
+};
+
+// прототип для живых игроков
+const palyerProto = {
+    init() {
+        this.public = {};
+        this.stat = copy(MATCH_CONSTANTS.stat.player);
+        this.updateStat();
+    },
+    updateStat: Tower.prototype.updateStat,
 };

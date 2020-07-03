@@ -1,0 +1,43 @@
+#player-panel-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: .7em;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+#player-panel-root .avatar{
+    border-radius: 50%;
+    border: 1px solid #444;
+    display: block;
+    width: 30px;
+    height: 30px;
+}
+
+#player-panel-root .my-avatar {
+    width: 50px;
+    height: 50px;
+}
+
+.line-hp, .line-exp {
+    height: 8px;
+    margin: 4px 2px;
+    width: 98%;
+    border: 1px solid wheat;
+}
+
+.line-hp{
+    background-color: tomato;
+}
+.line-exp{
+    background-color: teal;
+}
+
+.line-hp-exp{
+    width: 150px;
+}

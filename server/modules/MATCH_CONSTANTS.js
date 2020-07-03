@@ -2,9 +2,24 @@ module.exports = {
     redPalyersSpawn: '0 1.6 -50',
     bluePalyersSpawn: '0 1.6 50',
     stat: {
-        health: 100,
-        def: 10,
-        damage: 100
+        tower: {
+            health: 500,
+            def: 25,
+            damage: 120
+        },
+        cript: {
+            health: 100,
+            def: 10,
+            damage: 50,
+            speedPerSecond: 1
+        },
+        player: {
+            health: 100,
+            def: 15,
+            damage: 100,
+            speedPerSecond: 2.5
+        }
+
     },
     towers: {
         red: [{

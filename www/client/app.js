@@ -17,6 +17,8 @@ import "./sockets";
 
 // On mobile remove elements that are resource heavy
 window.onload = () => {
-    var isMobile = AFRAME.utils.device.isMobile();
+    const matchId = location.search.split('match-id=')[1];
+    document.getElementsByTagName('a-scene')[0].setAttribute('networked-scene', `room: ${matchId}; debug: true;`);
+    const isMobile = AFRAME.utils.device.isMobile();
     document.getElementById('player').setAttribute(isMobile ? 'touch-controls' : 'look-controls', '');
 };

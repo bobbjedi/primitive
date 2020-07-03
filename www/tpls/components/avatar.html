@@ -1,13 +1,17 @@
+
+<img id="avatar-texture" src="assets/img/png-avatar.jpg">
+
 <template id="avatar-template">
     <a-entity class="avatar">
     <a-sphere class="head colorized-pain collide-body"
+        src="#avatar-texture"
         cursor-listener
         scale="0.45 0.5 0.4"
       ></a-sphere>
-      <a-entity class="face"
+      <!-- <a-entity class="face"
         position="0 0.05 0"
-      >
-        <a-sphere class="eye"
+      > -->
+        <!-- <a-sphere class="eye"
           color="#efefef"
           position="0.16 0.1 -0.35"
           scale="0.12 0.12 0.12"
@@ -17,8 +21,8 @@
             position="0 0 -1"
             scale="0.2 0.2 0.2"
           ></a-sphere>
-        </a-sphere>
-        <a-sphere class="eye"
+        </a-sphere> -->
+        <!-- <a-sphere class="eye"
           color="#efefef"
           position="-0.16 0.1 -0.35"
           scale="0.12 0.12 0.12"
@@ -28,8 +32,8 @@
             position="0 0 -1"
             scale="0.2 0.2 0.2"
           ></a-sphere>
-        </a-sphere>
-      </a-entity>
+        </a-sphere> -->
+      <!-- </a-entity> -->
       <a-entity class="gun">
         <a-box
           position="0.51 -0.13 -0.29"

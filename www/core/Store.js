@@ -2,7 +2,8 @@ import Vue from 'vue';
 import config from '../../config';
 import api from './api';
 import { renderTowers, destroyTower } from '../client/logic/tower';
-import { renderCript, destroyCript } from '../client/logic/cript';
+import { renderWarrior, destroyWarrior } from '../client/logic/warrior';
+import clientVue from '../client/client-vue';
 
 export default new Vue({
     data: {
@@ -12,7 +13,8 @@ export default new Vue({
         isMatch: false,
         user: {},
         matchInfo: {},
-        config
+        config,
+        myTeam: {}
     },
     created(){
         this.isMatch = location.href.includes('html?match-id=');
@@ -72,6 +74,7 @@ export default new Vue({
             });
         },
         matchInit() {
+            clientVue();
             // просим данные
             api('getMatchInfo', {}, ({ success, result }) => {
                 if (success) {
@@ -82,20 +85,22 @@ export default new Vue({
                         const head = playerEl.querySelector('.head');
                         head.setAttribute('material', 'color:' + this.mySide);
                         const myTeam = result[this.mySide + 'Team'];
+                        Vue.set(this, 'myTeam', myTeam);
                         const I = myTeam.players[this.user.login];
                         playerEl.setAttribute('position', I.position || myTeam.spawnPosition);
+                        playerEl.setAttribute('rotation', I.rotation || '0 0 0');
                     });
                 };
             });
-
-            // globalSocket.on('info-match', renderCripts); // обновляем криптов
-            globalSocket.on('cript-info', renderCript); // обновляем криптов
+            broadcaster();
+            // globalSocket.on('info-match', renderWarriors); // обновляем криптов
+            globalSocket.on('warrior-info', renderWarrior); // обновляем криптов
             globalSocket.on('destroy', data => {
                 // console.log('DESTROY on', data);
                 if (data.type === 'tower') {
                     destroyTower(data);
                 } else if (data.type === 'cript') {
-                    destroyCript(data);
+                    destroyWarrior(data);
                 }
             }); // переход на матч
 
@@ -123,3 +128,19 @@ setInterval(()=>{
 
     });
 }, 3000);
+
+
+const broadcaster = () => {
+    const player = document.getElementById('player');
+    let predSign = 0;
+    setInterval(()=>{
+        const position = player.getAttribute('position');
+        const rotation = player.getAttribute('rotation');
+        const sign = (position.x + position.z + rotation.x + rotation.z).toFixed(1);
+        if (sign === predSign) {
+            return;
+        }
+        predSign = sign;
+        globalSocket.emit('my-data', {position, rotation});
+    }, config.playersSync);
+};

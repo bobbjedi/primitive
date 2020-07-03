@@ -73,6 +73,8 @@ io.on("connection", socket => {
         socket.to(curRoom).broadcast.emit("broadcast", data);
     });
 
+    socket.on('my-data', data => Store.updatePlayerMatchData(socket.userName, curRoom, data)); // апдейт данных
+
     socket.on("disconnect", () => {
         console.log('disconnected: ', socket.id, curRoom);
         if (rooms[curRoom]) {

@@ -109,14 +109,9 @@ module.exports = {
      * @param {String} name
      * @param {Object} data
      */
-    updatePlayerMatchData(name, matchId, {data}){
+    updatePlayerMatchData(name, matchId, data){
         try {
-            // console.log(name, matchId, data);
-            if (!data.d) {
-                return;
-            }
-            // console.log(name, matchId, data.d);
-            this.matches[matchId] && this.matches[matchId].updateFromUser(name, data.d);
+            this.matches[matchId] && this.matches[matchId].updateFromUser(name, data);
         } catch (e) {
             console.log('updatePlayerMatchData', e);
         }

@@ -2,23 +2,20 @@ const Cript = require('./Cript');
 const _ = require('underscore');
 const config = require('../../config_');
 const copy = require('deep-copy');
+
 module.exports = class extends Cript {
     startCriptLife(){
         this.distanceOfFire = config.distanceOfFire;
         this.reaLY = 1.6;
-        this._data.speedPerSecond = 5;
-        this._data.delayReportClient = .3;
-        this._data.health *= 2;
-        this._data.damage *= 2;
-        this._data.type = 'cpu';
-        this._data.isCpu = true;
-        console.log('CREATE CPU');
+        // this.public.speedPerSecond = 2.5;
+        this.public.isCpu = true;
+        // this.updateStat();
     }
     checkGo(){
         try {
-            if (!this.firstPointIsGet) {
-                return this.step();
-            }
+            // if (!this.firstPointIsGet) {
+            //     return this.step();
+            // }
             // считаем точку ныкания
             const {myDefenders, side} = this;
             const isRed = side === 'red';
@@ -35,9 +32,8 @@ module.exports = class extends Cript {
             } else {
                 returnPosition.z += isRed ? -1.5 : +1.5; // за криптом
             }
-            // console.log(this._data.position, returnPosition);
+            // console.log(this.public.position, returnPosition);
             this.returnPosition = returnPosition;
-
             if (this.inTargetId && !this.returnPosition) { // в бою, не идем
                 return;
             }
@@ -54,7 +50,7 @@ module.exports = class extends Cript {
         return defenders;
     }
     destroy() {
-        console.log('DESTROY CPU', this._data.id);
+        console.log('DESTROY CPU', this.public.id);
         this.positionInit();
     }
 };

@@ -1,0 +1,14 @@
+<div id="player-panel-root">
+    <span>
+        <!-- Список команды -->
+        <div class="row player-row" v-if="me">
+            <img class="avatar my-avatar" :src="'assets/img/avatar.jpg'">
+            <div class="line-hp-exp">
+                <div :class="'center txt-' + me.side">{{user.login}}</div>
+                <div class="line-hp">{{me.public}}</div>
+                <div class="line-exp"></div>
+            </div>
+        </div>
+        <div class="row"></div>
+    </span>
+</div>
