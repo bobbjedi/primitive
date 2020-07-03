@@ -5,10 +5,16 @@
             <img class="avatar my-avatar" :src="'assets/img/avatar.jpg'">
             <div class="line-hp-exp">
                 <div :class="'center txt-' + me.side">{{user.login}}</div>
-                <div class="line-hp">{{me.public}}</div>
-                <div class="line-exp"></div>
+                <div class="line-hp">{{me.health}} / {{me.stat.health}}</div>
+                <div class="line-exp">{{me.health}} / {{me.stat.health}}</div>
             </div>
         </div>
-        <div class="row"></div>
+        <div class="row" v-for="nik, i in myTeam.playersName" v-if="nik !== me.id">
+            <img class="avatar" :src="'assets/img/avatar.jpg'">
+            <div class="line-hp-exp">
+                <div :class="'center txt-' + me.side">{{nik}}</div>
+                <div class="line-hp">{{myTeam.players[nik].health}} / {{myTeam.players[nik].stat.health}}</div>
+            </div>
+        </div>
     </span>
 </div>

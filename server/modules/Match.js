@@ -40,7 +40,7 @@ module.exports = class {
         Store.matches[this.matchId] = this;
         this.cripCreateTimeout = setInterval(() => this.createCripts(), 60000);
         this.reportPlayersAboutStart();
-        // this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
+        this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
     }
 
     get matchInfo(){
@@ -200,7 +200,7 @@ module.exports = class {
     }
 
     syncInfoToClients(){
-        Store.io.to(this.matchId).emit('info-match', this.matchInfo); // преимущественно для перемещения мобов
+        Store.io.to(this.matchId).emit('current-match-info', this.matchInfo); // преимущественно для перемещения мобов
     }
     /**
      * Выстрел с дамагом
