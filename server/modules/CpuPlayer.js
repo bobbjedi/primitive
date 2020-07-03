@@ -8,13 +8,18 @@ module.exports = class extends Cript {
         this.reaLY = 1.6;
         this._data.speedPerSecond = 5;
         this._data.delayReportClient = .3;
+        this._data.health *= 2;
+        this._data.damage *= 2;
         this._data.type = 'cpu';
         this._data.isCpu = true;
         console.log('CREATE CPU');
     }
     checkGo(){
         try {
-        // считаем точку ныкания
+            if (!this.firstPointIsGet) {
+                return this.step();
+            }
+            // считаем точку ныкания
             const {myDefenders, side} = this;
             const isRed = side === 'red';
             if (!myDefenders.length){

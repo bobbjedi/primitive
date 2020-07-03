@@ -31,6 +31,7 @@ module.exports = class extends Tower {
         points.forEach(p => p.x = p.x * (this._data.pos || 1) + _.random(-1, 1));
         this.position = points.shift();
         this.points = points;
+        this.firstPointIsGet = false;
     }
     startCriptLife(){
 
@@ -57,6 +58,7 @@ module.exports = class extends Tower {
                     this.position = this.returnPosition;
                     return;
                 }
+                this.firstPointIsGet = true; // определяем что первая точка достигнута
                 return this.position = this.points.shift(); // пересчелкиваем следующую
             }
             const next = math.nextPosition({ from: this.position, to: nextPoint, dist: METR_PER_ITER });
