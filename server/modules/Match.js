@@ -15,6 +15,8 @@ module.exports = class {
         this.Cripts = {};
         this.CPUs = {};
 
+        this.currentTimeLvl = 1;
+
         this.redTeam = {
             towers: {},
             cripts: {},
@@ -39,6 +41,7 @@ module.exports = class {
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
         this.cripCreateTimeout = setInterval(() => this.createCripts(), 60000);
+        this.cripCreateTimeout = setInterval(() => this.updateMatchLvl(), config_.matchLvlUpdateDelay * 60000);
         this.reportPlayersAboutStart();
         this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
     }
@@ -217,7 +220,7 @@ module.exports = class {
             target.isCPU && target.uGetDamage(damager); // говорим CPU от кого получил дамаг и надо на него переключиться
             console.log(target.id, target.health);
             if (target.health <= 0) {
-                console.log(target.id, target.side, 'УБИТ');
+                console.log(target.id, target.side, 'УБИТ, prize:', target.public.lvl, target.prizeExpForKillMe);
 
                 const team = this[target.side + 'Team'];
 
@@ -241,7 +244,13 @@ module.exports = class {
         const towers = this[s + 'Team'].towers;
         return Object.keys(towers).find(id => towers[id].isBase && towers[id].health <= 0);
     }
-
+    /**
+     * Апдейтим лвл и апаем башни в ручную
+     */
+    updateMatchLvl(){
+        this.currentTimeLvl++;
+        //TODO: БАШНИ АП!!
+    }
     finalMatch(loseTeam) {
         console.log('LoseTeam!', loseTeam);
         clearInterval(this.syncDataIntervalId);

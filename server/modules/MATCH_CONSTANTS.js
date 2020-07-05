@@ -5,19 +5,24 @@ module.exports = {
         tower: {
             health: 500,
             def: 25,
-            damage: 120
+            damage: 120,
+            basePrizeExp: 200
         },
         cript: {
             health: 100,
             def: 10,
             damage: 50,
+            basePrizeExp: 100,
             speedPerSecond: 1
         },
         player: {
+            basePrizeExp: 500,
             health: 100,
             def: 15,
             damage: 100,
-            speedPerSecond: 2.5
+            speedPerSecond: 2.5,
+            exp_1lvl: 100,
+            expCoef: 150
         }
 
     },

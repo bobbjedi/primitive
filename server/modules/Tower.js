@@ -23,10 +23,12 @@ module.exports = class {
         this.inTargetId = false; // кто сейчас в цели
         this.setIntervalTimer = null;
 
+
         this.stat = this.public.stat = copy(MATCH_CONSTANTS.stat[this.public.type]);
         setTimeout(() => { // делаем задержку чтоб добдаться запрлнения Store
             this.oppositTeam = Store.matches[this.matchId][(this.side === 'red' ? 'blue' : 'red') + 'Team'];
             this.myTeam = Store.matches[this.matchId][(this.side === 'blue' ? 'blue' : 'red') + 'Team'];
+            this.public.lvl = Store.matches[matchId].currentTimeLvl; // текущий лвл матча
             this.init();
         }, 1000);
     }
@@ -114,6 +116,10 @@ module.exports = class {
         this.damage = this.stat.damage;
         // this.public.speedPerSecond = this.stat.speedPerSecond;
         // console.log(this.public.type, this.public.speedPerSecond);
+    }
+
+    get prizeExpForKillMe(){
+        return this.stat.basePrizeExp * this.public.lvl;
     }
 
     set health(v){

@@ -7,9 +7,12 @@ module.exports = class extends Cript {
     startCriptLife(){
         this.distanceOfFire = config.distanceOfFire;
         this.reaLY = 1.6;
-        // this.public.speedPerSecond = 2.5;
+
         this.public.isCpu = true;
-        // this.updateStat();
+
+        this.public.lvl = 1;
+        this.public.exp = 0;
+        this.predExpLvl = this.stat.exp_1lvl; // прошлый уровень экспы
     }
     checkGo(){
         try {
@@ -41,6 +44,10 @@ module.exports = class extends Cript {
         } catch (e) {
             console.log('checkGo CPU: ' + e);
         }
+    }
+
+    get nextLvlExp() {
+        return this.predExpLvl * this.stat.expCoef * this.public.lvl;
     }
     get myDefenders(){
         const defenders = [];
