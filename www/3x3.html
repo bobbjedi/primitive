@@ -28,6 +28,7 @@
     <img id="boxTexture" src="assets/img/stone-wall_g.jpg">
     <img id="plants" src="assets/img/stones.jpg">
     <img id="wine" src="assets/img/texture-wine.jpg">
+    <img id="breck" src="assets/img/stone-wall_.jpg">
 
     <!-- <template id="hard">
         <a-entity scale="0.001 0.001 0.001" geometry="primitive: box" material="color: red"></a-entity>
@@ -55,48 +56,135 @@
 
 <!-- Боковые стены -->
 <!-- задняя -->
-<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="20" width="150" depth=".1" position="0 2.5 100" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="20" width="150" depth=".1"
+    position="0 2.5 100" opacity="1"></a-box>
 <!-- передняя -->
-<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="20" width="150" depth=".1" position="0 2.5 -100" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="20" width="150" depth=".1"
+    position="0 2.5 -100" opacity="1"></a-box>
 <!-- правая -->
-<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="28" width="200" depth=".1" position="75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="28" width="200" depth=".1"
+    position="75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
 <!-- левая -->
-<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="28" width="200" depth=".1" position="-75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
+<a-box class="hard-body collide-body wall" src="#plants" height="5" repeat="28" width="200" depth=".1"
+    position="-75 2.5 0" rotation="0 90 0" opacity="1"></a-box>
 
 <!-- передняя красная база -->
 
 <!-- Стена перед шаром -->
-<a-box class="hard-body collide-body wall" src="#boxTexture" height="4" repeat="4" width="15" depth=".2" position="0 1.2 -73"
-    rotation="0 0 0"></a-box>
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="3" repeat="4" width="15" depth=".2"
+    position="0 1.2 -73" rotation="0 0 0"></a-box>
 <!-- справа -->
-<a-box class="hard-body collide-body wall" src="#boxTexture" height="4" repeat="5" width="25" depth=".2" position="10 1.2 -90"
-    rotation="0 90 0"></a-box>
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="6" repeat="5" width="25" depth=".2"
+    position="10 1.2 -90" rotation="0 90 0"></a-box>
 <!-- слева -->
-<a-box class="hard-body collide-body wall" src="#boxTexture" height="4" repeat="5" width="25" depth=".2" position="-10 1.2 -90"
-    rotation="0 90 0"></a-box>
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="6" repeat="5" width="25" depth=".2"
+    position="-10 1.2 -90" rotation="0 90 0"></a-box>
 
 
 
 <!-- передняя синяя база -->
 <!-- Стена перед шаром -->
-<a-box class="hard-body collide-body wall" src="#boxTexture" height="4" repeat="4" width="15" depth=".2" position="0 1.2 73"
+<a-box class="hard-body collide-body wall" src="#wine" height="3" repeat="4" width="15" depth=".2" position="0 1.2 73"
     rotation="0 0 0"></a-box>
 <!-- справа -->
-<a-box class="hard-body collide-body wall" src="#boxTexture" height="4" repeat="5" width="25" depth=".2" position="10 1.2 90"
+<a-box class="hard-body collide-body wall" src="#wine" height="6" repeat="5" width="25" depth=".2" position="10 1.2 90"
     rotation="0 90 0"></a-box>
 <!-- слева -->
-<a-box class="hard-body collide-body wall" src="#boxTexture" height="4" repeat="5" width="25" depth=".2" position="-10 1.2 90"
+<a-box class="hard-body collide-body wall" src="#wine" height="6" repeat="5" width="25" depth=".2" position="-10 1.2 90"
     rotation="0 90 0"></a-box>
 
 
 
+<!-- ДОП ПОСТРОЙКИ -->
+<!-- Стена с мобом сбоку от красной 1-->
+<a-box class="hard-body collide-body wall" src="#wine" height="6" repeat="5" width="24" depth=".8"
+    position="60 1.2 -84" rotation="0 90 0"></a-box>
+<!-- Стена с мобом сбоку от красной 2-->
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="6" repeat="5" width="23" depth=".8"
+    position="-60 1.2 -86" rotation="0 90 0"></a-box>
 
-    <!-- Стена с мобом сбоку от красной 1-->
-    <a-box class="hard-body collide-body wall" src="#wine" height="4" repeat="5" width="24" depth=".8" position="60 1.2 -84"
+
+<!-- Стена с мобом сбоку от синей 1-->
+<a-box class="hard-body collide-body wall" src="#wine" height="6" repeat="5" width="24" depth=".8" position="60 1.2 84"
     rotation="0 90 0"></a-box>
-    <!-- Стена с мобом сбоку от красной 2-->
-    <a-box class="hard-body collide-body wall" src="#wine" height="4" repeat="5" width="23" depth=".8" position="-60 1.2 -86"
+<!-- Стена с мобом сбоку от синей 2-->
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="6" repeat="5" width="18" depth=".8" position="-60 1.2 80"
     rotation="0 90 0"></a-box>
+
+
+
+    <!-- Sands -->
+<a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="4" width="35" depth="6" position="-42 0 60"
+    rotation="0 90 0"></a-box>
+<a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="5" width="65" depth="6" position="-42 0 0"
+    rotation="0 90 0"></a-box>
+<a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="4" width="35" depth="6" position="-42 0 -60"
+    rotation="0 90 0"></a-box>
+
+
+<a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="5" width="23" depth=".5"
+    position="-51 0 27"></a-box>
+
+<a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="2" width="15" depth=".5"
+    position="-51 0 -29"></a-box>
+
+<a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="2" width="17" depth=".5"
+    position="-66.5 0 -33"></a-box>
+
+
+    <!-- RB box -->
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="8" repeat="4" width="18" depth=".5"
+    position="-62.5 0 -15"></a-box>
+
+    <a-box class="hard-body collide-body wall" src="#boxTexture" height="8" repeat="4" width="18" depth=".5"
+    position="-62.5 0 15"></a-box>
+
+<a-box class="hard-body collide-body wall" src="#boxTexture" height="8" repeat="4" width="30" depth=".1"
+    position="-71.451 0 0"  rotation="0 90 0"></a-box>
+
+
+
+    <a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="3" width="24" depth=".5"
+    position="-53 0 50"></a-box>
+
+    <a-box class="hard-body collide-body wall" src="#breck" height="8" repeat="1" width="5" depth=".5"
+    position="-73 0 50"></a-box>
+
+    <a-box class="hard-body collide-body wall" src="#boxTexture" height="8" repeat="3" width="15" depth=".5"
+    position="-68 0 -65"></a-box>
+    <!-- Green -->
+
+<a-cylinder class="hard-body collide-body" src="#wine" radius="23" scale="1 1 0.15" rotation="0 90 0" repeat="15"
+    height="8" position="42 0 62"></a-cylinder>
+
+<a-cylinder class="hard-body collide-body" src="#wine" radius="30" scale="1 1 0.1" rotation="0 90 0" repeat="15"
+    height="8" position="42 0 0"></a-cylinder>
+
+<a-cylinder class="hard-body collide-body" src="#wine" radius="23" scale="1 1 0.15" rotation="0 90 0" repeat="15"
+    height="8" position="42 0 -60"></a-cylinder>
+
+
+    <!-- GREEN RB box -->
+<a-cylinder class="hard-body collide-body" src="#wine" radius="14" scale="1 1 0.2" rotation="0 0 0" repeat="10"
+    height="8" position="55 0 25"></a-cylinder>
+
+<a-cylinder class="hard-body collide-body" src="#wine" radius="14" scale="1 1 0.2" rotation="0 0 0" repeat="10"
+    height="8" position="55 0 -25"></a-cylinder>
+
+
+<a-box class="hard-body collide-body wall" src="#wine" height="8" repeat="5" width="26" depth=".4" position="65 0 -2"
+    rotation="0 90 0"></a-box>
+
+<a-box class="hard-body collide-body wall" src="#wine" height="8" repeat="3" width="15" depth=".4" position="57.7 0 11"
+    rotation="0 0 0"></a-box>
+
+
+    <!-- green perem -->
+<a-box class="hard-body collide-body wall" src="#wine" height="8" repeat="2" width="10" depth=".4" position="70 0 -54"
+    rotation="0 0 0"></a-box>
+
+<a-box class="hard-body collide-body wall" src="#wine" height="8" repeat="3" width="20" depth=".4" position="65 0 54"
+    rotation="0 0 0"></a-box>
 
     <a-assets>
         <!-- Templates -->
@@ -110,6 +198,7 @@
     <a-entity class="avatar">
     <a-sphere class="head colorized-pain collide-body"
         src="#avatar-texture"
+        offset="-0.2 0"
         scale="0.45 0.5 0.4"
       ></a-sphere>
       <!-- <a-entity class="face"
@@ -291,7 +380,8 @@
 
 
 
-<a-entity environment="preset: arches; playArea: 100; seed: 1; dressingAmount: 8; fog:0; ground:hills;"></a-entity>
+<a-entity environment="preset: arches; playArea: 100; seed: 1; dressingAmount: 8; fog:0.7; ground:hills;"></a-entity>
+<!-- <a-entity environment="preset: arches; playArea: 100; seed: 1; dressingAmount: 12; fog:0; ground:hills;"></a-entity> -->
 
 <a-cylinder class="hard-body collide-body" radius="4" color="green" opacity="0" position="19.21 1 6.4" ></a-cylinder>
 <a-cylinder class="hard-body collide-body" radius="3.23" color="green" opacity="0" position="-8.3 1 -60" ></a-cylinder>
@@ -307,6 +397,7 @@
 <a-cylinder class="hard-body collide-body" radius="5.5" color="blue" opacity="0" position="59.42 1 -69.60" ></a-cylinder>
 <a-cylinder class="hard-body collide-body" radius="6" color="blue" opacity="0" position="-71.1 1 35.3" ></a-cylinder>
 <a-cylinder class="hard-body collide-body" radius="4" color="green" opacity="0" position="-70.5 1 34.34" ></a-cylinder>
+<a-cylinder class="hard-body collide-body" radius="6" color="green" opacity="0" position="61.5 1 23.7" ></a-cylinder>
 
 
 

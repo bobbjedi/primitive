@@ -6,7 +6,7 @@ module.exports = {
             basePrizeExp: 200,
             health: 300,
             def: 25,
-            damage: 30,
+            damage: 80,
         },
         cript: {
             basePrizeExp: 100,

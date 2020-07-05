@@ -26,6 +26,7 @@ module.exports = class extends Cript {
             //     return this.step();
             // }
             // считаем точку ныкания
+
             const {myDefenders, side} = this;
             const isRed = side === 'red';
             if (!myDefenders.length){
@@ -37,6 +38,10 @@ module.exports = class extends Cript {
             returnPosition.z = defender.position.z;
             returnPosition.x = defender.position.x + _.random(-.5, .5);
             if (defender.type === 'tower') {
+                if (this.inTargetId && this.health > this.stat.health / 5) {
+                    // shot if is target
+                    return;
+                }
                 returnPosition.z += isRed ? 3 : -3; // перед башней
             } else {
                 returnPosition.z += isRed ? -1.5 : +1.5; // за криптом
@@ -54,9 +59,9 @@ module.exports = class extends Cript {
 
     destroy(kilerId) {
         this.sendPrizeForMyDead(kilerId);
-        this.public.nextRespawnTime = $u.unix() + this.stat.respawnTime;
-        console.log('TIMEOUT', this.stat.respawnTime);
-        setTimeout(() => this.respawn(), this.stat.respawnTime * 1000);
+        const timeOut = this.stat.respawnTime + this.public.lvl * 5;
+        this.public.nextRespawnTime = $u.unix() + timeOut;
+        setTimeout(() => this.respawn(), timeOut * 1000);
         if (!this.public.isCPU) {
             this.public.position = this.myTeam.spawnPosition;
             Store.socketsByName[this.public.id].emit('u-was-killed', { position: this.myTeam.spawnPosition});
@@ -98,7 +103,7 @@ module.exports = class extends Cript {
 
 
     get nextLvlExp() {
-        return Math.round(this.predExpLvl * this.public.lvl * 0.7);
+        return Math.round(this.predExpLvl * this.public.lvl * 0.4);
     }
 
     get myDefenders(){
