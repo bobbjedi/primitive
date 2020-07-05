@@ -14,7 +14,8 @@ export default new Vue({
         matchInfo: {},
         config,
         myTeam: {},
-        mySide: ''
+        mySide: '',
+        isDead: false
     },
     created(){
         this.isMatch = location.href.includes('html?match-id=');
@@ -46,10 +47,18 @@ export default new Vue({
             }
         });
     },
+    watch: {
+        isDead(v) {
+            console.log('Isdead', v);
+        }
+    },
     computed: {
         isLogged(){
             return this.user.token && this.user.token !== 'false';
         },
+        me(){
+            return this.myTeam.players && this.myTeam.players[this.user.login];
+        }
         // mySide(){
         //     return this.matchInfo.redTeam && (this.matchInfo.redTeam.playersName.includes(this.user.login) ? 'red' : 'blue');
         // }

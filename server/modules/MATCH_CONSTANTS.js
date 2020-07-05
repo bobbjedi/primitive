@@ -1,28 +1,29 @@
 module.exports = {
-    redPalyersSpawn: '0 1.6 -50',
-    bluePalyersSpawn: '0 1.6 50',
+    redPalyersSpawn: '0 1.6 -90',
+    bluePalyersSpawn: '0 1.6 90',
     stat: {
         tower: {
-            health: 500,
+            basePrizeExp: 200,
+            health: 300,
             def: 25,
-            damage: 120,
-            basePrizeExp: 200
+            damage: 30,
         },
         cript: {
+            basePrizeExp: 100,
             health: 100,
             def: 10,
-            damage: 50,
-            basePrizeExp: 100,
+            damage: 30,
             speedPerSecond: 1
         },
         player: {
-            basePrizeExp: 500,
+            basePrizeExp: 200,
             health: 100,
             def: 15,
             damage: 100,
             speedPerSecond: 2.5,
-            exp_1lvl: 100,
-            expCoef: 150
+            exp_1lvl: 300,
+            respawnTime: 30,
+            expCoef: 1
         }
 
     },

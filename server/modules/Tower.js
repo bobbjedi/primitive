@@ -25,10 +25,16 @@ module.exports = class {
 
 
         this.stat = this.public.stat = copy(MATCH_CONSTANTS.stat[this.public.type]);
+
+        this.def = this.stat.def;
+        this.damage = this.stat.damage;
+        this.health = this.stat.health;
+        this.speedPerSecond = this.stat.speedPerSecond;
+
         setTimeout(() => { // делаем задержку чтоб добдаться запрлнения Store
-            this.oppositTeam = Store.matches[this.matchId][(this.side === 'red' ? 'blue' : 'red') + 'Team'];
-            this.myTeam = Store.matches[this.matchId][(this.side === 'blue' ? 'blue' : 'red') + 'Team'];
-            this.public.lvl = Store.matches[matchId].currentTimeLvl; // текущий лвл матча
+            this.oppositTeam = this.match[(this.side === 'red' ? 'blue' : 'red') + 'Team'];
+            this.myTeam = this.match[(this.side === 'blue' ? 'blue' : 'red') + 'Team'];
+            this.public.lvl = this.match.currentTimeLvl; // текущий лвл матча
             this.init();
         }, 1000);
     }
@@ -45,7 +51,7 @@ module.exports = class {
         return targets;
     }
     init() {
-        this.updateStat();
+        // this.updateStat();
         this.setIntervalTimer = setInterval(() => {
             this.checkShot();
             this.reBullet();
@@ -65,13 +71,16 @@ module.exports = class {
         if (this.inTargetId){ // проверяем кто в фокусе
             const stillFocusEnemy = enemys.find(e => e.id === this.inTargetId);
             if (stillFocusEnemy){ // все еще доступен
-                // console.log('stillFocusEnemy', stillFocusEnemy.id);
                 enemyId = stillFocusEnemy.id;
             }
         }
         // если сбежал или не было, то выбираем мишень
         if (!enemyId) {
-            enemyId = _.shuffle(enemys)[0].id;
+            enemyId = (
+                enemys.find(e => e.type === 'tower')
+                || enemys.find(e => e.type === 'cript')
+                || enemys.find(e => e.type === 'player')
+            ).id;
         }
         return this.makeShot(enemyId);
 
@@ -107,15 +116,42 @@ module.exports = class {
         this.isBlockReBullet = true;
         setTimeout(() => this.isBlockReBullet = false, this.kd * 2.5);
     }
-    destroy() {
+    destroy(killerId) {
         clearInterval(this.setIntervalTimer);
+        this.sendPrizeForMyDead(killerId);
     }
-    updateStat(){
-        this.health = this.stat.health;
-        this.def = this.stat.def;
-        this.damage = this.stat.damage;
-        // this.public.speedPerSecond = this.stat.speedPerSecond;
-        // console.log(this.public.type, this.public.speedPerSecond);
+    // updateStat(){
+    //     this.def = this.stat.def;
+    //     this.damage = this.stat.damage;
+    //     this.speedPerSecond = this.stat.speedPerSecond;
+    // }
+    // те кто будет награжден за мое убийство
+    get prizedTargets(){
+        const {oppositTeam} = this;
+        const enemies = [];
+        oppositTeam.playersName.forEach(id => {
+            const hero = this.match.Heroes[id];
+            if (hero.position && this.position && math.mathDist3D(hero.position, this.position) <= this.distanceOfFire * 2) {
+                enemies.push(hero);
+            };
+        });
+        return enemies;
+    }
+    sendPrizeForMyDead(killerId){
+        console.log('DESTROY  ', this.id);
+        this.public.isDead = true;
+        let prize = this.prizeExpForKillMe;
+        const killer = this.match.Heroes[killerId];
+        if (killer) {
+            console.log('killer:', killer.id);
+            const killerBonus = prize * .33;
+            killer.setExp(killerBonus);
+            prize -= killerBonus;
+        }
+        const players = this.prizedTargets;
+        console.log('PRIZED:', players.map(t => t.id));
+        const prizeForPlayer = prize / players.length;
+        this.prizedTargets.forEach(p => p.setExp(prizeForPlayer));
     }
 
     get prizeExpForKillMe(){

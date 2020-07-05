@@ -17,6 +17,9 @@ AFRAME.registerComponent('gun', {
         window.fire = () => this.shoot(); // кнопка огня
     },
     shoot: function () {
+        if (Store.isDead) {
+            return console.warn('Isdead cant shoot');
+        }
         const tip = document.querySelector('#player');
         const position = $u.getElPosition(tip);
         const rotation = $u.getElRotation(tip);

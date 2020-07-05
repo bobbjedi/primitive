@@ -10,21 +10,16 @@ module.exports = class extends Tower {
     init(){
         this.distanceOfFire = config.distanceOfFire - 2.5;
         this.reaLY = 1.2;
-        this.public.speedPerSecond = this.stat.speedPerSecond;
+        // this.public.speedPerSecond = this.stat.speedPerSecond;
         this.public.delayReportClient = 300;
         this.points = this.public.points;
+        this.health = this.stat.health;
         this.positionInit();
         this.startCriptLife();
 
-        this.setIntervalTimer = setInterval(() => {
-            this.checkShot();
-            this.reBullet();
-            this.checkGo();
-            Store.io.to(this.matchId).emit('warrior-info', this.public);
-        }, this.public.delayReportClient);
     }
     positionInit(){
-        this.updateStat();
+        // this.updateStat();
         const points = copy(MATCH_CONSTANTS.cripts[this.public.side].points);
         points.forEach(p => p.x = p.x * (this.public.pos || 1) + _.random(-1, 1));
         this.position = points.shift();
@@ -32,7 +27,15 @@ module.exports = class extends Tower {
         this.firstPointIsGet = false;
     }
     startCriptLife(){
-
+        this.setIntervalTimer = setInterval(() => {
+            if (this.public.isDead) {
+                return;
+            }
+            this.checkShot();
+            this.reBullet();
+            this.checkGo();
+            Store.io.to(this.matchId).emit('warrior-info', this.public);
+        }, this.public.delayReportClient);
     }
     // Проверка идти дальше
     checkGo(){
@@ -72,10 +75,10 @@ module.exports = class extends Tower {
     get position(){
         return this.public.position;
     }
-    // set speedPerSecond(v){
-    //     this.public.speedPerSecond = v;
-    // }
-    // get speedPerSecond(){
-    //     return this.public.speedPerSecond;
-    // }
+    set speedPerSecond(v){
+        this.public.speedPerSecond = v;
+    }
+    get speedPerSecond(){
+        return this.public.speedPerSecond;
+    }
 };

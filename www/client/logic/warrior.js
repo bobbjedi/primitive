@@ -73,6 +73,7 @@ const createWarrior = data => {
         colorized.setAttribute('material', 'color:' + data.side);
         colorized.realColor = data.side;
         colorized.targetId = data.id;
+        console.log(data.id, Store.mySide !== data.side);
         Store.mySide !== data.side && colorized.setAttribute('cursor-listener', ''); // определяем что противник и можно целиться
     });
 

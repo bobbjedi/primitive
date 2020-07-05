@@ -2,17 +2,23 @@ const Cript = require('./Cript');
 const _ = require('underscore');
 const config = require('../../config_');
 const copy = require('deep-copy');
+const Store = require('./Store');
+const $u = require('../helpers/utils');
+const math = require('../helpers/math');
 
 module.exports = class extends Cript {
     startCriptLife(){
         this.distanceOfFire = config.distanceOfFire;
         this.reaLY = 1.6;
 
-        this.public.isCpu = true;
+        // this.public.isCpu = true;
 
         this.public.lvl = 1;
         this.public.exp = 0;
         this.predExpLvl = this.stat.exp_1lvl; // прошлый уровень экспы
+        this.public.nextLvlExp = this.nextLvlExp;
+
+        this.public.isCPU && super.startCriptLife(); // для ботов сратуем криптовый таймаут
     }
     checkGo(){
         try {
@@ -46,18 +52,60 @@ module.exports = class extends Cript {
         }
     }
 
-    get nextLvlExp() {
-        return this.predExpLvl * this.stat.expCoef * this.public.lvl;
+    destroy(kilerId) {
+        this.sendPrizeForMyDead(kilerId);
+        this.public.nextRespawnTime = $u.unix() + this.stat.respawnTime;
+        console.log('TIMEOUT', this.stat.respawnTime);
+        setTimeout(() => this.respawn(), this.stat.respawnTime * 1000);
+        if (!this.public.isCPU) {
+            this.public.position = this.myTeam.spawnPosition;
+            Store.socketsByName[this.public.id].emit('u-was-killed', { position: this.myTeam.spawnPosition});
+        } else {
+            this.positionInit();
+        }
     }
+
+    respawn(){
+        this.public.isDead = false;
+        this.health = this.stat.health;
+        !this.public.isCPU && Store.socketsByName[this.public.id].emit('u-was-respawn', { position: this.myTeam.spawnPosition});
+    }
+
+    // Получил экспу
+    setExp(exp){
+        console.log('EXP', this.id, exp);
+        this.public.exp += exp;
+        if (this.public.exp > this.nextLvlExp) {
+            this.public.exp = this.public.exp - this.nextLvlExp;
+            this.lvlUp();
+        }
+        this.public.exp = Math.round(this.public.exp);
+    }
+
+    lvlUp(){
+        this.public.lvl++;
+        this.predExpLvl = this.public.nextLvlExp;
+        this.public.nextLvlExp = this.nextLvlExp;
+
+        // TODO: стату вырастить автоматически для мобов и для игнроков в ручную
+        this.stat.health = Math.round(this.stat.health * 1.1);
+        this.def = Math.round(this.def * 1.1);
+        this.damage = Math.round(this.damage * 1.2);
+        this.speedPerSecond = Math.round(this.speedPerSecond * 1.1);
+        this.health = this.stat.health;
+        console.log('LVL UP', this.public);
+    }
+
+
+    get nextLvlExp() {
+        return Math.round(this.predExpLvl * this.public.lvl * 0.7);
+    }
+
     get myDefenders(){
         const defenders = [];
         const {myTeam} = this;
         Object.keys(myTeam.towers).forEach(p => myTeam.towers[p].health > 0 && defenders.push(myTeam.towers[p]));
         Object.keys(myTeam.cripts).forEach(p => p !== this.id && myTeam.cripts[p].position && myTeam.cripts[p].health > 0 && defenders.push(myTeam.cripts[p]));
         return defenders;
-    }
-    destroy() {
-        console.log('DESTROY CPU', this.public.id);
-        this.positionInit();
     }
 };

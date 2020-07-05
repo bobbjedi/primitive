@@ -1,5 +1,6 @@
 const _ = require('underscore');
 const Store = require('./Store');
+const $u = require('../helpers/utils');
 const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
 const Tower = require('./Tower');
 const Cript = require('./Cript');
@@ -13,7 +14,7 @@ module.exports = class {
         this.lobbyRoom = lobbyRoom;
         this.Towers = {};
         this.Cripts = {};
-        this.CPUs = {};
+        this.Heroes = {};
 
         this.currentTimeLvl = 1;
 
@@ -41,13 +42,15 @@ module.exports = class {
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
         this.cripCreateTimeout = setInterval(() => this.createCripts(), 60000);
-        this.cripCreateTimeout = setInterval(() => this.updateMatchLvl(), config_.matchLvlUpdateDelay * 60000);
+        this.updateMatchLvlTimeout = setInterval(() => this.updateMatchLvl(), config_.matchLvlUpdateDelay * 60000);
         this.reportPlayersAboutStart();
         this.syncDataIntervalId = setInterval(() => this.syncInfoToClients(), 500); // синхронизация в обычном режиме
+        this.updateHealthHealTimeout = setInterval(() => this.updateHealthHeal(), config_.selfHeal * 1000); // самохил небольшой
     }
 
     get matchInfo(){
         return {
+            serverTime: $u.unix(),
             redTeam: this.redTeam,
             blueTeam: this.blueTeam,
         };
@@ -91,15 +94,10 @@ module.exports = class {
                 };
 
                 this[side + 'Team'].players[id] = player;
-                if (isCPU) {
-                    this.CPUs[id] = new CpuPlayer(player);
-                } else {
-                    player.__proto__ = palyerProto;
-                    player.init();
-                };
+
+                this.Heroes[id] = new CpuPlayer(player);
             };
             const createTeamPlayers = (side, count, isCPU) => {
-                console.log('!Q', count);
                 let countCreate = 0;
                 while (count > countCreate++) {
                     createPlayer(players.shift(), side, isCPU);
@@ -144,6 +142,9 @@ module.exports = class {
     updateFromUser(userName, data){
         try {
             const player = this.gePlayerByName(userName);
+            if (player.isDead) {
+                return console.log('isDead and move', player.id); // перемещение убитого
+            }
             player.position = data.position;
             player.rotation = data.rotation;
             Store.io.to(this.matchId).emit('warrior-info', player);
@@ -211,15 +212,16 @@ module.exports = class {
      */
     damageShot(data){
         try {
-            const damager = this.CPUs[data.creator] || this.gePlayerByName(data.creator) || this.Towers[data.creator] || this.Cripts[data.creator];
-            const target = this.CPUs[data.target] || this.gePlayerByName(data.target) || this.Towers[data.target] || this.Cripts[data.target];
-            if (!target) {
-                return console.log(data.target, 'не найден!');
+            const damager = this.Heroes[data.creator] || this.Towers[data.creator] || this.Cripts[data.creator];
+            const target = this.Heroes[data.target] || this.Towers[data.target] || this.Cripts[data.target];
+            if (!target || target.public.isDead) {
+                return console.log(data.target, 'не найден или мертв!');
             }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
             target.isCPU && target.uGetDamage(damager); // говорим CPU от кого получил дамаг и надо на него переключиться
-            console.log(target.id, target.health);
+            // console.log(target.id, target.health);
             if (target.health <= 0) {
+                target.health = 0;
                 console.log(target.id, target.side, 'УБИТ, prize:', target.public.lvl, target.prizeExpForKillMe);
 
                 const team = this[target.side + 'Team'];
@@ -228,9 +230,9 @@ module.exports = class {
                 delete this.Cripts[target.id];
                 delete team.cripts[target.id]; // криптов сносим окончательно
 
-                target.public && Store.io.to(this.matchId).emit('destroy', target.public);
-                target.destroy && target.destroy();
-                this.isLose(target.side) && this.finalMatch(target.side); // проверяем снос башен
+                Store.io.to(this.matchId).emit('destroy', target.public);
+                target.destroy(damager.id);
+                this.isLose(target.side) && this.finalMatch(target.side); // проверяем снос всех башен и окончагие матча
             }
         } catch (e) {
             console.log('damageShot:' + e, e);
@@ -249,26 +251,31 @@ module.exports = class {
      */
     updateMatchLvl(){
         this.currentTimeLvl++;
-        //TODO: БАШНИ АП!!
+        Object.keys(this.Towers).forEach(id => {
+            const tower = this.Towers[id];
+            tower.def *= 1.05;
+            tower.damage *= 1.05;
+            tower.stat.basePrizeExp *= 1.1;
+            console.log('TOWER LVL UP', tower.public);
+        });
+    }
+
+    updateHealthHeal(){
+        Object.keys(this.Heroes).forEach(id => {
+            this.Heroes[id].health = this.Heroes[id].health + this.Heroes[id].stat.health * 0.008;
+            this.Heroes[id].health = Math.min(this.Heroes[id].health, this.Heroes[id].stat.health);
+        });
     }
     finalMatch(loseTeam) {
         console.log('LoseTeam!', loseTeam);
         clearInterval(this.syncDataIntervalId);
         clearInterval(this.cripCreateTimeout);
+        clearInterval(this.updateMatchLvlTimeout);
+        clearInterval(this.updateHealthHealTimeout);
         Object.keys(this.Towers).forEach(id => this.Towers[id].destroy());
         Object.keys(this.Cripts).forEach(id => this.Cripts[id].destroy());
-        Object.keys(this.CPUs).forEach(id => this.CPUs[id].destroy());
+        Object.keys(this.Heroes).forEach(id => this.Heroes[id].destroy());
         // Object.keys(this.redTeam.players).forEach(id => this.redTeam.players[id].destroy());
         // Object.keys(this.blueTeam.players).forEach(id => this.blue.players[id].destroy());
     }
-};
-
-// прототип для живых игроков
-const palyerProto = {
-    init() {
-        this.public = {};
-        this.stat = copy(MATCH_CONSTANTS.stat.player);
-        this.updateStat();
-    },
-    updateStat: Tower.prototype.updateStat,
 };

@@ -13,17 +13,26 @@
     align-items: flex-start;
 }
 
-#player-panel-root .avatar{
-    border-radius: 50%;
-    border: 1px solid #444;
+.avatar-block {
     display: block;
     width: 30px;
     height: 30px;
 }
 
+#player-panel-root .avatar{
+    border-radius: 50%;
+    border: 1px solid #444;
+    width: 100%;
+    height: 100%;
+}
+
 #player-panel-root .my-avatar {
     width: 40px;
     height: 40px;
+}
+
+.avatar.is-dead{
+    opacity: .3;
 }
 
 .line-hp, .line-exp {
@@ -44,4 +53,60 @@
 
 .line-hp-exp{
     width: 120px;
+}
+
+
+.respawn-timer{
+    border-radius: 50%;
+    background-color: rgba(0,0,0, .7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+}
+.my-timer{
+    width: 40px;
+    height: 40px;
+}
+
+.lvl-block{
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #0097A7;
+    position: absolute;
+    left: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+}
+.lvl-me{
+    left: 32px;
+}
+
+
+/* ENEMY */
+.enemy-team-block{
+    width: 100px;
+    top: 4px;
+    right: 4px;
+    position: fixed;
+}
+
+.enemy-team-block .row{
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.enemy-nik {
+    text-align: right;
+    margin-right: 8px;
+}
+.enemy-team-block .lvl-block{
+left: auto;
+right: 20;
 }

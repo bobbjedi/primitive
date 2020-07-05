@@ -1,20 +1,55 @@
 <div id="player-panel-root">
-    <span>
-        <!-- Список команды -->
-        <div class="row player-row" v-if="me">
-            <img class="avatar my-avatar" :src="'assets/img/avatar.jpg'">
-            <div class="line-hp-exp">
-                <div :class="'center txt-' + me.side">{{user.login}}</div>
-                <div class="line-hp">{{me.health}} / {{me.stat.health}}</div>
-                <div class="line-exp">{{me.health}} / {{me.stat.health}}</div>
+    <span v-if="me">
+        <!-- My team -->
+        <div class="my-team-block">
+            <!-- me -->
+            <div class="row player-row">
+                <div class="avatar-block  my-avatar">
+                    <div class="lvl-block lvl-me">{{me.lvl}}</div>
+                    <div class="respawn-timer my-timer txt-yellow big" v-if="me.isDead">
+                        {{(me.stat.respawnTime - (serverTime - me.nextRespawnTime) / 1000 || 0).toFixed(0)}}</div>
+                    <img class="avatar" :class="{'is-dead': me.isDead}" :src="'assets/img/avatar.jpg'">
+                </div>
+
+                <div class="line-hp-exp">
+                    <div :class="'center txt-' + me.side">{{user.login}}</div>
+                    <div class="line-hp" :style="progressBarStyle(me.health, me.stat.health, 'tomato')">{{Math.round(me.health)}} / {{me.stat.health}}</div>
+                    <div class="line-exp" :style="progressBarStyle(me.exp, me.nextLvlExp, 'teal')">{{me.exp}} / {{me.nextLvlExp}}</div>
+                </div>
+            </div>
+            <!-- my command -->
+            <div class="row" v-for="nik, i in myTeam.playersName" v-if="nik !== me.id">
+                <div class="avatar-block">
+                    <div class="lvl-block">{{myTeam.players[nik].lvl}}</div>
+                    <div class="respawn-timer txt-yellow big" v-if="myTeam.players[nik].isDead">
+                        {{(myTeam.players[nik].stat.respawnTime - (serverTime - myTeam.players[nik].nextRespawnTime) / 1000 || 0).toFixed(0)}}
+                    </div>
+                    <img class="avatar" :src="'assets/img/avatar.jpg'">
+                </div>
+                <div class="line-hp-exp">
+                    <div :class="'center txt-' + me.side">{{nik}}</div>
+                    <div class="line-hp" :style="progressBarStyle(myTeam.players[nik].health, myTeam.players[nik].stat.health, 'tomato')">{{Math.round(myTeam.players[nik].health)}} / {{myTeam.players[nik].stat.health}}</div>
+                </div>
             </div>
         </div>
-        <div class="row" v-for="nik, i in myTeam.playersName" v-if="nik !== me.id">
-            <img class="avatar" :src="'assets/img/avatar.jpg'">
-            <div class="line-hp-exp">
-                <div :class="'center txt-' + me.side">{{nik}}</div>
-                <div class="line-hp">{{myTeam.players[nik].health}} / {{myTeam.players[nik].stat.health}}</div>
+
+
+
+        <!-- Enemy team -->
+        <div class="enemy-team-block">
+            <div class="row" v-for="nik, i in oppositeTeam.playersName">
+                <div :class="'enemy-nik txt-' + oppositeSide">{{nik}}</div>
+                <div class="avatar-block">
+                    <div class="lvl-block">{{oppositeTeam.players[nik].lvl}}</div>
+                    <div class="respawn-timer txt-yellow big" v-if="oppositeTeam.players[nik].isDead">
+                        {{(oppositeTeam.players[nik].stat.respawnTime - (serverTime - oppositeTeam.players[nik].nextRespawnTime) / 1000 || 0).toFixed(0)}}
+                    </div>
+                    <img class="avatar" :src="'assets/img/avatar.jpg'">
+                </div>
             </div>
         </div>
+
+
+        <div id="fire-button" onclick="fire()" ontouchstart="fire()" v-if="!me.isDead"></div>
     </span>
 </div>
