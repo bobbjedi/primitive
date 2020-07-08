@@ -38,7 +38,7 @@ module.exports = class extends Cript {
             returnPosition.z = defender.position.z;
             returnPosition.x = defender.position.x + _.random(-.5, .5);
             if (defender.type === 'tower') {
-                if (this.inTargetId && this.health > this.stat.health / 5) {
+                if (this.inTargetId && this.health > this.stat.health / 6) {
                     // shot if is target
                     return;
                 }
@@ -98,7 +98,7 @@ module.exports = class extends Cript {
         this.damage = Math.round(this.damage * 1.2);
         this.speedPerSecond = Math.round(this.speedPerSecond * 1.1);
         this.health = this.stat.health;
-        console.log('LVL UP', this.public);
+        // console.log('LVL UP', this.public);
     }
 
 

@@ -92,24 +92,13 @@ module.exports = {
             ]
         }
 
-    }
+    },
+    respawnTimeRB: 180,
+    RBs: [
+        {
+            id: 'rb-1',
+            position: { x: 0, y: 1, z: -95 },
+            zone: { maxX: 0, minX: 0, maxZ: 0, minZ: 0 }
+        }
+    ]
 };
-
-
-// function nextPosition({from, to, dist}){
-//     console.log('IN:', {from, to, dist});
-//     const dX = from.x - to.x;
-//     const dZ = from.z - to.z;
-//     const deg = Math.atan(dX / dZ) * 57.29;
-//     console.log(deg);
-
-//      const dXn = Math.cos(deg) * dist;
-//     const dYn = Math.sin(deg) * dist;
-//     console.log({dXn, dYn});
-//     }
-
-//     const from =  {x: -2, y: 1.2, z: -80 }; // респ
-//     const to ={x: -12, y: 1.2, z: -71}; // выход через бок
-//     const dist = 1;
-
-//     nextPosition({from, to, dist});

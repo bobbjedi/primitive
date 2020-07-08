@@ -256,7 +256,7 @@ module.exports = class {
             tower.def *= 1.05;
             tower.damage *= 1.05;
             tower.stat.basePrizeExp *= 1.1;
-            console.log('TOWER LVL UP', tower.public);
+            // console.log('TOWER LVL UP', tower.public);
         });
     }
 
