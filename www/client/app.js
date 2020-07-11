@@ -8,13 +8,16 @@ import "./components/forward.component";
 import "./components/remove-in-seconds.component";
 import "./components/collider.component";
 import "./components/hard-body-sensitive";
-import "./components/touch-control";
-import "./components/touch-wasd-control";
 import "./components/target-id.component";
 import "./components/envroinment.component.js";
 import "./logic/tower";
 import "./listeners";
 import "./sockets";
+
+// Controls
+import "./components/touch-control";
+import "./components/look-controls-x";
+import "./components/touch-wasd-control";
 
 
 // On mobile remove elements that are resource heavy
