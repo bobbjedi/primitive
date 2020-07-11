@@ -23,8 +23,8 @@ window.onload = () => {
     document.getElementsByTagName('a-scene')[0].setAttribute('networked-scene', `room: ${matchId}; debug: true;`);
     const isMobile = AFRAME.utils.device.isMobile();
     // document.getElementById('player').setAttribute(isMobile ? 'touch-controls' : 'look-controls', '');
-    document.getElementById('player').setAttribute('look-controls', '');
-    document.getElementById('player').setAttribute('touch-controls', '');
+    // document.getElementById('player').setAttribute('look-controls', '');
+    // document.getElementById('player').setAttribute('touch-controls', '');
 };
 
 
