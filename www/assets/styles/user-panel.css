@@ -10,7 +10,8 @@
 .row {
     width: 100%;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+
 }
 
 .avatar-block {

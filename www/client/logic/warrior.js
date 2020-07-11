@@ -18,7 +18,7 @@ export const destroyWarrior = data=>{
     console.log('Destroy warrior', data.id);
     const warriorEl = warriorsEls[data.id];
     delete warriorsEls[data.id];
-    warriorsEls.realColor = 'black';
+    warriorEl.realColor = 'black';
     warriorEl.querySelector('.colorized-pain').setAttribute('material', 'color:', 'black');
     warriorEl.parentNode.removeChild(warriorEl);
 };
@@ -29,10 +29,12 @@ export const renderWarrior = data => {
         if (data.id === Store.user.login) {
             return;
         }
-        // console.log(data);
         const warriorEl = warriorsEls[data.id] || createWarrior(data);
-        const pos = data.position;
-        warriorEl.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: ${data.delayReportClient}; easing: linear;`);
+        if (data.type !== 'rb') {
+            const pos = data.position;
+            warriorEl.setAttribute('animation', 'to', `${pos.x} ${pos.y} ${pos.z}`);
+        };
+
         let rotationTargetEl = data.nextPoint;
         if (data.inTargetId){
             const target = data.inTargetId === Store.user.login ? 'player' : data.inTargetId;
@@ -63,11 +65,19 @@ const createWarrior = data => {
     el.id = data.id;
     const pos = data.position;
     el.setAttribute('position', pos);
-    el.setAttribute('template', (data.type === 'player' ? 'avatar-template' : 'cript-template'));
+    let tplName = '';
+    if (data.type === 'player') {
+        tplName = 'avatar-template';
+    } else if (data.type === 'rb') {
+        tplName = 'rb-template';
+    } else {
+        tplName = 'cript-template';
+    }
+    el.setAttribute('template', tplName);
     el.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: 300; easing: linear;`);
     document.querySelector('a-scene').appendChild(el);
     warriorsEls[data.id] = el;
-
+    console.log(data.type, pos);
     requestAnimationFrame(() => {
         const colorized = el.querySelector('.colorized-pain');
         colorized.setAttribute('material', 'color:' + data.side);

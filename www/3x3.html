@@ -24,35 +24,11 @@
 
                 <!-- map -->
                 <a-assets>
-    <!-- <img id="boxTexture" src="https://i.imgur.com/mYmmbrp.jpg"> -->
     <img id="boxTexture" src="assets/img/stone-wall_g.jpg">
     <img id="plants" src="assets/img/stones.jpg">
     <img id="wine" src="assets/img/texture-wine.jpg">
     <img id="breck" src="assets/img/stone-wall_.jpg">
-
-    <!-- <template id="hard">
-        <a-entity scale="0.001 0.001 0.001" geometry="primitive: box" material="color: red"></a-entity>
-    </template>
-
-    <a-mixin id="hard-body-el" template="hard" color="blue"></a-mixin> -->
-
 </a-assets>
-
-<!-- <a-box height="10" color="red" position="0 5 0" opacity="0.5"></a-box> -->
-<a-entity height="10" position="0 5 0" opacity="0.5">
-
-</a-entity>
-
-<!-- Башни -->
-
-<!-- <a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
-<a-entity class="tower" id="tower-red-2" position="-12 1 -73" template="tower" tower="red"></a-entity>
-<a-entity class="tower" id="tower-red-3" position="12 1 -73" template="tower" tower="red"></a-entity>
-
-<a-entity id="tower-blue-1" position="0 1 30" template="tower" tower="blue"></a-entity>
-<a-entity id="tower-blue-2" position="-12 1 73" template="tower" tower="blue"></a-entity>
-<a-entity id="tower-blue-3" position="12 1 73" template="tower" tower="blue"></a-entity> -->
-
 
 <!-- Боковые стены -->
 <!-- задняя -->
@@ -192,7 +168,7 @@
         
                 <!-- avatar -->
                 
-<img id="avatar-texture" src="assets/img/png-avatar.jpg">
+<img id="avatar-texture" src="assets/img/face.jpg">
 
 <template id="avatar-template">
     <a-entity class="avatar">
@@ -271,7 +247,7 @@
     </a-entity>
 </template> -->
 
-<img id="cript-texture" src="assets/img/cript-texture.jpg">
+<img id="cript-texture" src="assets/img/robo.jpg">
 <template id="cript-template">
     <a-entity class="cript" scale=".8 .8 .8">
     <!-- <a-sphere radius=".45" class="cript-head colorized-pain"
@@ -282,11 +258,11 @@
     </a-sphere> -->
 
 
-      <a-sphere src="#cript-texture" scale="0.5 1 0.5" radius="1" class="cript-head colorized-pain" opacity="1">
+      <a-sphere src="#cript-texture" offset="-0.2 0" scale="0.5 1 0.5" radius="1" class="cript-head colorized-pain" opacity="1">
       </a-sphere>
-      <a-cylinder color="black" radius="0.1" height="0.1" rotation="90 0 0" position="-0.1 0.4 -.5"></a-cylinder>
+      <!-- <a-cylinder color="black" radius="0.1" height="0.1" rotation="90 0 0" position="-0.1 0.4 -.5"></a-cylinder>
       <a-cylinder color="black" radius="0.1" height="0.1" rotation="90 0 0" position="0.1 0.4 -.5"></a-cylinder>
-      <a-box color="black" height="0.1" width=".3" depth=".15" rotation="90 0 0" position="0 0.1 -.5"></a-cylinder>
+      <a-box color="black" height="0.1" width=".3" depth=".15" rotation="90 0 0" position="0 0.1 -.5"></a-cylinder> -->
 
       <!-- <a-cylinder src="#cript-texture" height="1.2" radius="0.3" class="cript-head colorized-pain">
         <a-cylinder color="black" radius="0.1" height="0.1" rotation="90 0 0" position="-0.1 0.4 -0.25"></a-cylinder>
@@ -298,9 +274,20 @@
   </template>
 
         
+                <!-- rb -->
+                <img id="rb-texture" src="assets/img/rb-face.jpg">
+<template id="rb-template">
+    <a-entity class="rb" scale="1.2 1.2 1.2">
+        <a-sphere src="#rb-texture" offset="-0.2 0" material="color: green;" scale="0.5 1 0.5" radius="1"
+            class="cript-head colorized-pain" opacity="1">
+        </a-sphere>
+    </a-entity>
+</template>
+
+        
                 <!-- tower -->
                 <a-asset-item id="sculpture" src="assets/models/sculpture.glb"></a-asset-item>
-<img id="tower-texture" src="assets/img/tower-texture.jpg"></img>
+<img id="tower-texture" src="assets/img/en.jpg"></img>
 <template id="tower">
     <a-box class="hard-body collide-body tower" height="5" width="4" depth="4" opacity="0">
         <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
@@ -327,7 +314,7 @@
     touch-wasd-controls="acceleration:30"
     gun="bulletTemplate:#bullet-template"
 >
-
+    <!-- <a-curvedimage ></a-curvedimage> -->
     <a-box
         class="head colorized-pain"
         hard-body-sensitive = 'elementPosition: #player'
@@ -433,6 +420,7 @@
 
 <!-- CLIENT VUE -->
 <div id="player-panel"></div>
+
 
 <style>
 

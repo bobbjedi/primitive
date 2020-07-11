@@ -80,6 +80,8 @@ export default ()=>{
                 this.myTeam = result[this.mySide + 'Team'];
                 this.oppositeTeam = result[this.oppositeSide + 'Team'];
                 this.serverTime = result.serverTime;
+                const {rbs} = result;
+                Object.keys(rbs).forEach(n => renderWarrior(rbs[n]));
             },
             progressBarStyle(current, max, color) {
                 const persent = current / max * 100;

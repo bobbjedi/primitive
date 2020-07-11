@@ -24,6 +24,12 @@ module.exports = {
             exp_1lvl: 300,
             respawnTime: 30,
             expCoef: 1
+        },
+        rb: {
+            basePrizeExp: 200,
+            health: 100,
+            def: 25,
+            damage: 80
         }
 
     },
@@ -66,6 +72,7 @@ module.exports = {
         red: {
             points: [
                 {x: -4, y: 1.2, z: -80 }, // респ
+                // {x: 66, y: 1, z: -80 }, // респ рб
                 {x: -9, y: 1.2, z: -71}, // выход через бок
                 {x: -3, y: 1.2, z: -65}, // к центральной дороге
                 { x: -3, y: 1.2, z: 40 }, // к центральной дороге на стороне противника
@@ -96,9 +103,11 @@ module.exports = {
     respawnTimeRB: 180,
     RBs: [
         {
-            id: 'rb-1',
-            position: { x: 0, y: 1, z: -95 },
-            zone: { maxX: 0, minX: 0, maxZ: 0, minZ: 0 }
+            id: 'rb-1', // зеленая зона со стороны красных
+            color: 'green',
+            position: { x: 66, y: 1.3, z: -88 },
+            zone: { maxX: 75, minX: 57, maxZ: -65, minZ: -100 },
+            nextPoint: {x: 66, y: 1.2, z: 80} // поворот по дефолту
         }
     ]
 };

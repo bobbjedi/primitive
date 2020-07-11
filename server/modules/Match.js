@@ -3,6 +3,7 @@ const Store = require('./Store');
 const $u = require('../helpers/utils');
 const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
 const Tower = require('./Tower');
+const Rb = require('./Rb');
 const Cript = require('./Cript');
 const CpuPlayer = require('./CpuPlayer');
 const config_ = require('../../config_');
@@ -13,6 +14,8 @@ module.exports = class {
         lobbyRoom.matchId = this.matchId = _.uniqueId('match_');
         this.lobbyRoom = lobbyRoom;
         this.Towers = {};
+        this.RBs = {};
+        this.rbs = {}; // чистые обьекты
         this.Cripts = {};
         this.Heroes = {};
 
@@ -39,6 +42,7 @@ module.exports = class {
         };
         this.createTowers();
         this.createCripts();
+        setTimeout(() => this.createRbs(), 8000);
         this.divisionPlayers();
         Store.matches[this.matchId] = this;
         this.cripCreateTimeout = setInterval(() => this.createCripts(), 60000);
@@ -53,6 +57,7 @@ module.exports = class {
             serverTime: $u.unix(),
             redTeam: this.redTeam,
             blueTeam: this.blueTeam,
+            rbs: this.rbs
         };
     }
     /**
@@ -145,6 +150,7 @@ module.exports = class {
             if (player.isDead) {
                 return console.log('isDead and move', player.id); // перемещение убитого
             }
+            console.log(data.position);
             player.position = data.position;
             player.rotation = data.rotation;
             Store.io.to(this.matchId).emit('warrior-info', player);
@@ -195,6 +201,23 @@ module.exports = class {
         setTimeout(create, 2000);
     }
 
+    createRbs() {
+        const create = params => {
+            const rb = {
+                id: 'rb_' + _.uniqueId(),
+                position: params.position,
+                matchId: this.matchId,
+                side: params.color,
+                zone: params.zone,
+                type: 'rb',
+                nextPoint: params.nextPoint
+            };
+            this.rbs[rb.id] = rb;
+            this.RBs[rb.id] = new Rb(rb);
+        };
+        MATCH_CONSTANTS.RBs.forEach(create);
+    }
+
     /**
     * Выстрел моба или башни - генерация на сервере
     */
@@ -212,23 +235,23 @@ module.exports = class {
      */
     damageShot(data){
         try {
-            const damager = this.Heroes[data.creator] || this.Towers[data.creator] || this.Cripts[data.creator];
-            const target = this.Heroes[data.target] || this.Towers[data.target] || this.Cripts[data.target];
+            const damager = this.Heroes[data.creator] || this.Towers[data.creator] || this.Cripts[data.creator] || this.RBs[data.creator];
+            const target = this.Heroes[data.target] || this.Towers[data.target] || this.Cripts[data.target] || this.RBs[data.target];
             if (!target || target.public.isDead) {
                 return console.log(data.target, 'не найден или мертв!');
             }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
             target.isCPU && target.uGetDamage(damager); // говорим CPU от кого получил дамаг и надо на него переключиться
-            // console.log(target.id, target.health);
+            console.log(damager.id, target.id, target.health);
             if (target.health <= 0) {
                 target.health = 0;
                 console.log(target.id, target.side, 'УБИТ, prize:', target.public.lvl, target.prizeExpForKillMe);
-
-                const team = this[target.side + 'Team'];
-
-                delete this.Towers[target.id];
-                delete this.Cripts[target.id];
-                delete team.cripts[target.id]; // криптов сносим окончательно
+                if (target.type !== 'rb') {
+                    const team = this[target.side + 'Team'];
+                    delete this.Towers[target.id];
+                    delete this.Cripts[target.id];
+                    delete team.cripts[target.id]; // криптов сносим окончательно
+                }
 
                 Store.io.to(this.matchId).emit('destroy', target.public);
                 target.destroy(damager.id);

@@ -59,31 +59,34 @@ module.exports = class {
     }
     // Попытка выстрелить
     checkShot() {
-        if (this.bullets <= 0 || this.isBlockShot) { // пустая обойма
-            return;
-        }
-        const enemys = this.getEnemyInTargetZone();
-        if (!enemys.length){
-            this.inTargetId = false;
-            return;
-        }
-        let enemyId;
-        if (this.inTargetId){ // проверяем кто в фокусе
-            const stillFocusEnemy = enemys.find(e => e.id === this.inTargetId);
-            if (stillFocusEnemy){ // все еще доступен
-                enemyId = stillFocusEnemy.id;
+        try {
+            if (this.bullets <= 0 || this.isBlockShot) { // пустая обойма
+                return;
             }
-        }
-        // если сбежал или не было, то выбираем мишень
-        if (!enemyId) {
-            enemyId = (
-                enemys.find(e => e.type === 'tower')
+            const enemys = this.getEnemyInTargetZone();
+            if (!enemys.length){
+                this.inTargetId = false;
+                return;
+            }
+            let enemyId;
+            if (this.inTargetId){ // проверяем кто в фокусе
+                const stillFocusEnemy = enemys.find(e => e.id === this.inTargetId);
+                if (stillFocusEnemy){ // все еще доступен
+                    enemyId = stillFocusEnemy.id;
+                }
+            }
+            // если сбежал или не было, то выбираем мишень
+            if (!enemyId) {
+                enemyId = (
+                    enemys.find(e => e.type === 'tower')
                 || enemys.find(e => e.type === 'cript')
                 || enemys.find(e => e.type === 'player')
-            ).id;
+                ).id;
+            }
+            return this.makeShot(enemyId);
+        } catch (e) {
+            console.log('Error checkShot:', e);
         }
-        return this.makeShot(enemyId);
-
         // console.log(this.id, this.targets);
         // проверяем чужих игроков и криптов в округе
     }
@@ -157,7 +160,9 @@ module.exports = class {
     get prizeExpForKillMe(){
         return this.stat.basePrizeExp * this.public.lvl;
     }
-
+    get type(){
+        return this.public.type;
+    }
     set health(v){
         this.public.health = v;
     }
