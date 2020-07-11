@@ -28,7 +28,7 @@ AFRAME.registerComponent('touch-controls', {
         this.position = {};
         this.rotation = {};
 
-        this.setupMouseControls();
+        this.setupControls();
         this.setupHMDControls();
         this.bindMethods();
 
@@ -80,25 +80,22 @@ AFRAME.registerComponent('touch-controls', {
     },
 
     bindMethods: function () {
-        // this.onMouseDown = bind(this.onMouseDown, this);
-        // this.onMouseMove = bind(this.onMouseMove, this);
-        // this.onMouseUp = bind(this.onMouseUp, this);
         this.onTouchStart = bind(this.onTouchStart, this);
         this.onTouchMove = bind(this.onTouchMove, this);
         this.onTouchEnd = bind(this.onTouchEnd, this);
-        // this.onExitVR = bind(this.onExitVR, this);
+        this.onExitVR = bind(this.onExitVR, this);
     },
 
     /**
      * Set up states and Object3Ds needed to store rotation data.
      */
-    // setupMouseControls: function () {
-    //     this.mouseDown = false;
-    //     this.pitchObject = new THREE.Object3D();
-    //     this.yawObject = new THREE.Object3D();
-    //     this.yawObject.position.y = 10;
-    //     this.yawObject.add(this.pitchObject);
-    // },
+    setupControls: function () {
+        this.mouseDown = false;
+        this.pitchObject = new THREE.Object3D();
+        this.yawObject = new THREE.Object3D();
+        this.yawObject.position.y = 10;
+        this.yawObject.add(this.pitchObject);
+    },
 
     /**
      * Set up VR controls that will copy data to the dolly.
@@ -122,12 +119,6 @@ AFRAME.registerComponent('touch-controls', {
             sceneEl.addEventListener('render-target-loaded', bind(this.addEventListeners, this));
             return;
         }
-
-        // Mouse events.
-        // canvasEl.addEventListener('mousedown', this.onMouseDown, false);
-        // canvasEl.addEventListener('mousemove', this.onMouseMove, false);
-        // canvasEl.addEventListener('mouseup', this.onMouseUp, false);
-
         // Touch events.
         canvasEl.addEventListener('touchstart', this.onTouchStart);
         canvasEl.addEventListener('touchmove', this.onTouchMove);
@@ -143,12 +134,6 @@ AFRAME.registerComponent('touch-controls', {
         var canvasEl = sceneEl && sceneEl.canvas;
 
         if (!canvasEl) { return; }
-
-        // Mouse events.
-        // canvasEl.removeEventListener('mousedown', this.onMouseDown);
-        // canvasEl.removeEventListener('mousemove', this.onMouseMove);
-        // canvasEl.removeEventListener('mouseup', this.onMouseUp);
-        // canvasEl.removeEventListener('mouseout', this.onMouseUp);
 
         // Touch events.
         canvasEl.removeEventListener('touchstart', this.onTouchStart);
@@ -267,58 +252,6 @@ AFRAME.registerComponent('touch-controls', {
             return position;
         };
     })(),
-
-    /**
-     * Translate mouse drag into rotation.
-     *
-     * Dragging up and down rotates the camera around the X-axis (yaw).
-     * Dragging left and right rotates the camera around the Y-axis (pitch).
-     */
-    // onMouseMove: function (event) {
-    //     var pitchObject = this.pitchObject;
-    //     var yawObject = this.yawObject;
-    //     var previousMouseEvent = this.previousMouseEvent;
-    //     var movementX;
-    //     var movementY;
-
-    //     // Not dragging or not enabled.
-    //     if (!this.mouseDown || !this.data.enabled) { return; }
-
-    //     // Calculate delta.
-    //     movementX = event.movementX || event.mozMovementX;
-    //     movementY = event.movementY || event.mozMovementY;
-    //     if (movementX === undefined || movementY === undefined) {
-    //         movementX = event.screenX - previousMouseEvent.screenX;
-    //         movementY = event.screenY - previousMouseEvent.screenY;
-    //     }
-    //     this.previousMouseEvent = event;
-
-    //     // Calculate rotation.
-    //     yawObject.rotation.y -= movementX * 0.002;
-    //     pitchObject.rotation.x -= movementY * 0.002;
-    //     pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, pitchObject.rotation.x));
-    // },
-
-    /**
-     * Register mouse down to detect mouse drag.
-     */
-    // onMouseDown: function (evt) {
-    //     if (!this.data.enabled) { return; }
-    //     // Handle only primary button.
-    //     if (evt.button !== 0) { return; }
-    //     this.mouseDown = true;
-    //     this.previousMouseEvent = evt;
-    //     document.body.classList.add(GRABBING_CLASS);
-    // },
-
-    // /**
-    //  * Register mouse up to detect release of mouse drag.
-    //  */
-    // onMouseUp: function () {
-    //     this.mouseDown = false;
-    //     document.body.classList.remove(GRABBING_CLASS);
-    // },
-
     /**
      * Register touch down to detect touch drag.
      */
