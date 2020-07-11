@@ -10,6 +10,7 @@ import "./components/collider.component";
 import "./components/hard-body-sensitive";
 import "./components/touch-control";
 import "./components/touch-wasd-control";
+import "./components/look-control-always";
 import "./components/target-id.component";
 import "./components/envroinment.component.js";
 import "./logic/tower";
