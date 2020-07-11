@@ -1,6 +1,6 @@
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
+// import 'aframe-html-shader';
 import '../vue-app';
-import 'aframe-html-shader';
 import "./components/randomiser.component";
 import "./components/spawn-in-circle.component";
 import "./components/gun.component";
@@ -24,6 +24,7 @@ window.onload = () => {
     const isMobile = AFRAME.utils.device.isMobile();
     // document.getElementById('player').setAttribute(isMobile ? 'touch-controls' : 'look-controls', '');
     document.getElementById('player').setAttribute('look-controls', '');
+    document.getElementById('player').setAttribute('touch-controls', '');
 };
 
 
