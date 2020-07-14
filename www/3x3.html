@@ -7,7 +7,9 @@
     <title>Primitive World FPS MOBA</title>
     <meta name="description" content="Primitive World First-person Shooter Multiplayer Online Battle Arena">
     <link href="./assets/styles/common.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/styles/lobby.css" rel="stylesheet" type="text/css" />
     <link href="./assets/styles/user-panel.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/fonts/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <script src="./assets/libs/aframe.1.0.3.min.js"></script>
     <script src="./assets/libs/build.js"></script>
 
@@ -19,7 +21,6 @@
 </head>
 
 <body>
-    <!-- <div id="_log" style="height: 300px; overflow-y:auto; position:fixed; top: 200px; left: 0; color: red;z-index: 100000000000000000;"></div> -->
 
 
 <a-scene physics="debug: true;gravity:-10; friction: 100;">
@@ -451,14 +452,14 @@
     }
 
     #fire-button{
-        border-radius:50%;
+        border-radius: 50%;
         position: fixed;
-        right: 20;
+        right: 72px;
         bottom: 60;
-        height: 50px;
-        width: 50px;
-        background-color:red;
-        border:1px solid white;
+        height: 65px;
+        width: 65px;
+        background-color: red;
+        border: 1px solid white;
     }
     #mask-pain{
         display: none;

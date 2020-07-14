@@ -41,7 +41,8 @@ let templateHtmlBullet;
 const renderBullet = (data) => {
     const {position, rotation, target} = data;
     const el = document.createElement('a-entity');
-    el.innerHTML = templateHtmlBullet;
+    // el.innerHTML = templateHtmlBullet;
+    el.setAttribute('template', 'bullet-template');
     el.setAttribute('remove-in-seconds', .2);
     el.setAttribute('forward', 'speed:100');
     el.setAttribute('position', position);
@@ -73,7 +74,7 @@ const renderInTarget = (data) => {
 };
 
 document.addEventListener('socketOnRedy', () => {
-    templateHtmlBullet = document.getElementById('bullet-template').innerHTML;
+    // templateHtmlBullet = document.getElementById('bullet-template').innerHTML;
 
     globalSocket.on('render-bullet', data => {
         try {

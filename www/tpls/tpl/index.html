@@ -1,9 +1,18 @@
 <!-- {{head}} -->
-<!-- {{lobby}} -->
+<a-scene networked-scene="room: lobby; debug: true;">
+    <!-- {{entity}} -->
+    <!-- {{map}} -->
 
-<div id="player"><div class="head"></div></div>
+    <a-entity id="player"
+        camera
+        position="0 3 0"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear;"
+        >
+        <div class="head"></div>
+    </a-entity>
+</a-scene>
+
+<div id="lobby" style="position:fixed;top:0;"></div>
 
 </body>
-
 </html>
-

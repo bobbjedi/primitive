@@ -116,7 +116,7 @@ module.exports = class {
             // return;
 
             if (playersCount === 1) {
-                createPlayer(players.shift(), 'red');
+                createPlayer(players.shift(), 'blue');
             }
             else if (playersCount === 2) {
                 createPlayer(players.shift(), 'red');

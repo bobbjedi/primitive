@@ -117,7 +117,7 @@ module.exports = {
         }
     },
     emitUpdateRooms(){
-        // console.log('updateRoomsInfo', this.lobbyRooms);
+        console.log('updateRoomsInfo', this.lobbyRooms);
         io.in('lobby').emit('updateRoomsInfo', this.lobbyRooms);
     }
 };

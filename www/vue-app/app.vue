@@ -1,17 +1,23 @@
 <template>
-<div style="position:fixed;top:0;">
+<div>
     <div v-if="!Store.isLoad">Preloader</div>
-    <span v-else class="lobby">
+    <div v-else class="login-block">
         <login v-if="!Store.isLogged"></login>
-        <span v-else>
-            Hello {{Store.user.login}}! <span class="txt-red" @click="Store.logOut">Exit</span><br>
+        <div v-else class="w100p mt15 center">
+            <div class="bigbig logo"><i class="fa fa-cube" aria-hidden="true"></i> PRIMITIVE WORLD</div>
+            <div class="center user-nik-block big mt10">Hello {{Store.user.login}}!
+                <i @click="Store.logOut" class="fa fa-sign-out txt-red" aria-hidden="true"></i>
+            </div>
             <rooms-list></rooms-list>
-        </span>
-    </span>
+        </div>
+    </div>
+    <notifications />
 </div>
 </template>
 
 <script>
+import Notifications from 'vue-notification';
+Vue.use(Notifications);
 import Vue from 'vue';
 import Store from '../core/Store';
 import roomsList from './rooms-list.vue';
@@ -26,8 +32,8 @@ export default {
             rooms: []
         }
     },
-    computed:{
-        Store:()=> Store
+    computed: {
+        Store: () => Store
     }
 }
 </script>

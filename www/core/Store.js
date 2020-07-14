@@ -80,11 +80,8 @@ export default new Vue({
                     this.user.token = null;
                 }
                 document.querySelector('#player .head').setAttribute('target-id', 'id:' + this.user.login);
-            });
+            }, 1);
         },
-        $notify(o){
-            console.log(o);
-        }
     },
     watch: {
         'user.token'() {
