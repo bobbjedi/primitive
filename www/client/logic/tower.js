@@ -13,7 +13,7 @@ AFRAME.registerComponent('tower', {
 });
 
 //<a-entity class="tower" id="tower-red-1" position="0 1 -30" template="tower" tower="red"></a-entity>
-const towersEls = {};
+window.towersEls = {};
 export const renderTowers = teamsInfo => {
     ['red', 'blue'].forEach(s => {
         const { towers } = teamsInfo[s + 'Team'];
@@ -30,6 +30,7 @@ export const renderTowers = teamsInfo => {
             if (tower.health <= 0) {
                 setTimeout(() => destroyTower(tower), 1000);
             }
+            // requestAnimationFrame(() => el.getElementsByClassName('tooltip-warrior')[0].warriorId = tower.id); // пишем в статику для тултипа)
         }
     });
     // на всякий слуяай

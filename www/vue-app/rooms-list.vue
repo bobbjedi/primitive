@@ -56,7 +56,7 @@ export default {
             rooms: [],
             newRoom: {
                 roomName: 'room ' + Store.user.login,
-                playersCount: 2
+                playersCount: 1
             }
         }
     },

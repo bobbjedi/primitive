@@ -2,6 +2,7 @@ import template from './tpl.html';
 import Vue from 'vue';
 import Store from '../../core/Store';
 import api from '../../core/api';
+import $u from '../logic/utills';
 import config from '../../../config';
 import { renderTowers, destroyTower } from '../logic/tower';
 import { renderWarrior, destroyWarrior } from '../logic/warrior';
@@ -82,6 +83,19 @@ export default ()=>{
                 this.serverTime = result.serverTime;
                 const {rbs} = result;
                 Object.keys(rbs).forEach(n => renderWarrior(rbs[n]));
+
+                // Поворачиваем тултипы
+                // requestAnimationFrame(()=>{
+                //     const cameraPosition = document.getElementById('player').getAttribute('position');
+                //     Array.prototype.forEach.call(document.getElementsByClassName('tooltip-warrior'), tt => {
+                //         const {warriorId} = tt;
+                //         const parent = window.warriorsEls[warriorId] || window.towersEls[warriorId];
+                //         const rotationFromParent = $u.mathRotationToTarget(parent.getAttribute('position'), cameraPosition);
+                //         const parentRotation = parent.getAttribute('rotation');
+                //         tt.includes('rb') && console.log(tt, parentRotation);
+                //         tt.setAttribute('rotation', rotationFromParent);
+                //     });
+                // });
             },
             progressBarStyle(current, max, color) {
                 const persent = current / max * 100;

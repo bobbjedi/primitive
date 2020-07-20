@@ -2,7 +2,7 @@
     camera
     position="0 1.8 0"
     gun="bulletTemplate:#bullet-template"
-    touch-wasd-controls="acceleration:30"
+    touch-wasd-controls="acceleration:60"
     look-controls-x
 >
     <!-- <a-curvedimage ></a-curvedimage> -->
@@ -20,6 +20,7 @@
         position="0 0 -1"
         geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
         material="color: black; shader: flat"
+        raycaster="objects: .colorized-pain"
         id="cursor">
     </a-entity>
 

@@ -36,4 +36,10 @@ module.exports = class extends Tower {
 
         return enemies;
     }
+    destroy() {
+        // super.destroy();
+        setTimeout(() => {
+
+        }, 30 * 1000);
+    }
 };

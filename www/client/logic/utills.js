@@ -34,7 +34,6 @@ export default {
 
     mathRotation(point, target){
         const sin = (target.x - point.x) / (target.y - point.y);
-        console.log(sin);
     },
 
     mathRotationToTarget(position, targetPos){

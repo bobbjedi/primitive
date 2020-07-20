@@ -85,6 +85,8 @@
     align-items: center;
     border: 1px solid white;
 }
+
+
 .lvl-me{
     left: 32px;
 }
@@ -110,4 +112,15 @@
 .enemy-team-block .lvl-block{
 left: auto;
 right: 20;
+}
+
+
+.toolltip-info-block{
+    width: 75px;
+}
+
+.tooltip-lvl{
+    position: static;
+    width: 20px;
+    height: 20px;
 }

@@ -13,8 +13,10 @@
 
                 <div class="line-hp-exp">
                     <div :class="'center txt-' + me.side">{{user.login}}</div>
-                    <div class="line-hp" :style="progressBarStyle(me.health, me.stat.health, 'tomato')">{{Math.round(me.health)}} / {{me.stat.health}}</div>
-                    <div class="line-exp" :style="progressBarStyle(me.exp, me.nextLvlExp, 'teal')">{{me.exp}} / {{me.nextLvlExp}}</div>
+                    <div class="line-hp" :style="progressBarStyle(me.health, me.stat.health, 'tomato')">
+                        {{Math.round(me.health)}} / {{me.stat.health}}</div>
+                    <div class="line-exp" :style="progressBarStyle(me.exp, me.nextLvlExp, 'teal')">{{me.exp}} /
+                        {{me.nextLvlExp}}</div>
                 </div>
             </div>
             <!-- my command -->
@@ -28,8 +30,22 @@
                 </div>
                 <div class="line-hp-exp">
                     <div :class="'center txt-' + me.side">{{nik}}</div>
-                    <div class="line-hp" :style="progressBarStyle(myTeam.players[nik].health, myTeam.players[nik].stat.health, 'tomato')">{{Math.round(myTeam.players[nik].health)}} / {{myTeam.players[nik].stat.health}}</div>
+                    <div class="line-hp"
+                        :style="progressBarStyle(myTeam.players[nik].health, myTeam.players[nik].stat.health, 'tomato')">
+                        {{Math.round(myTeam.players[nik].health)}} / {{myTeam.players[nik].stat.health}}</div>
                 </div>
+<!--
+                <div class="block-from-toolltip" :id="'vue-tooltip-' + nik">
+                    <div class="row">
+                        <div :class="'lvl-block tooltip-lvl big bg-' + me.side">{{myTeam.players[nik].lvl}}</div>
+                        <div class="toolltip-info-block">
+                            <div class="center big">{{nik}}</div>
+                            <div class="line-hp"
+                                :style="progressBarStyle(myTeam.players[nik].health, myTeam.players[nik].stat.health, 'tomato')">
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
         </div>
 

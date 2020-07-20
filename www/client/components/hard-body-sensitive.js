@@ -15,7 +15,7 @@ AFRAME.registerComponent('hard-body-sensitive', {
         this.el.addEventListener('collide', (e) => {
             if (e.detail.el.classList.contains('hard-body')) {
                 isBlockedSave = true;
-                console.log('HARD!', this.validPositions[0]);
+                // console.log('HARD!', this.validPositions[0]);
                 this.validPositions.length && element.setAttribute('position', this.validPositions[0]);
             }
         });

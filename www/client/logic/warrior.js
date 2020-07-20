@@ -3,7 +3,7 @@ import Store from '../../core/Store';
 import * as _ from 'underscore';
 import copy from 'deep-copy';
 
-const warriorsEls = {}; // кеш
+window.warriorsEls = {}; // кеш
 export const renderWarriors = _.throttle(teamsInfo => {
     ['red', 'blue'].forEach(s => {
         const { warriors } = teamsInfo[s + 'Team'];
@@ -26,9 +26,10 @@ export const destroyWarrior = data=>{
 
 export const renderWarrior = data => {
     try {
-        if (data.id === Store.user.login) {
+        if (data.id === Store.user.login || data.health <= 0) {
             return;
         }
+
         const warriorEl = warriorsEls[data.id] || createWarrior(data);
         if (data.type !== 'rb') {
             const pos = data.position;
@@ -55,12 +56,15 @@ export const renderWarrior = data => {
 
         warriorEl.setAttribute('rotation', rotation);
     } catch (e) {
-        console.log('FOR warrior', data.inTargetId, e);
+        console.log('FOR warrior', data.id, e);
     }
 };
 
 
 const createWarrior = data => {
+    if(data.type === 'rb' && data.health <= 0){
+        return console.log('RB is dead');
+    }
     const el = document.createElement('a-entity');
     el.id = data.id;
     const pos = data.position;
@@ -77,14 +81,14 @@ const createWarrior = data => {
     el.setAttribute('animation', `property: position; to: ${pos.x} ${pos.y} ${pos.z}; dur: 300; easing: linear;`);
     document.querySelector('a-scene').appendChild(el);
     warriorsEls[data.id] = el;
-    console.log(data.type, pos);
+
     requestAnimationFrame(() => {
         const colorized = el.querySelector('.colorized-pain');
         colorized.setAttribute('material', 'color:' + data.side);
         colorized.realColor = data.side;
         colorized.targetId = data.id;
-        console.log(data.id, Store.mySide !== data.side);
         Store.mySide !== data.side && colorized.setAttribute('cursor-listener', ''); // определяем что противник и можно целиться
+           // el.getElementsByClassName('tooltip-warrior')[0].warriorId = data.id; // пишем в статику для тултипа
     });
 
     return el;

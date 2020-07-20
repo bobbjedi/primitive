@@ -171,54 +171,24 @@
 
         
                 <!-- avatar -->
-                
-<img id="avatar-texture" src="assets/img/face.jpg">
+                <img id="avatar-texture" src="assets/img/face.jpg">
 
 <template id="avatar-template">
     <a-entity class="avatar">
-    <a-sphere class="head colorized-pain collide-body"
-        src="#avatar-texture"
-        offset="-0.2 0"
-        scale="0.45 0.5 0.4"
-      ></a-sphere>
-      <!-- <a-entity class="face"
-        position="0 0.05 0"
-      > -->
-        <!-- <a-sphere class="eye"
-          color="#efefef"
-          position="0.16 0.1 -0.35"
-          scale="0.12 0.12 0.12"
-        >
-          <a-sphere class="pupil"
-            color="#000"
-            position="0 0 -1"
-            scale="0.2 0.2 0.2"
-          ></a-sphere>
-        </a-sphere> -->
-        <!-- <a-sphere class="eye"
-          color="#efefef"
-          position="-0.16 0.1 -0.35"
-          scale="0.12 0.12 0.12"
-        >
-          <a-sphere class="pupil"
-            color="#000"
-            position="0 0 -1"
-            scale="0.2 0.2 0.2"
-          ></a-sphere>
-        </a-sphere> -->
-      <!-- </a-entity> -->
-      <a-entity class="gun">
-        <a-box
-          position="0.51 -0.13 -0.29"
-          scale="0.19 0.23 0.67"
-          color="#000"
-        ></a-box>
-        <a-entity class="gun-tip"
-          position="0.51 -0.10 -0.64"
-        ></a-entity>
-      </a-entity>
+        <a-sphere class="head colorized-pain collide-body" src="#avatar-texture" offset="-0.2 0" scale="0.45 0.5 0.4">
+        </a-sphere>
+
+        <!-- <a-entity class="tooltip-warrior" position="0 .8 0">
+            <a-text text="value: Devidson_best; align:center; wrapCount: 15; color:#dbdbea" height=".5" width="2" position="0 0 0"></a-text>
+            <a-text text="color: red; value: 15; align:left; wrapCount: 4;" height=".5" width=".5" position="-0.3 0 0"></a-text>
+        </a-entity> -->
+
+        <a-entity class="gun">
+            <a-box position="0.51 -0.13 -0.29" scale="0.19 0.23 0.67" color="#000"></a-box>
+            <a-entity class="gun-tip" position="0.51 -0.10 -0.64"></a-entity>
+        </a-entity>
     </a-entity>
-  </template>
+</template>
 
         
                 <!-- bullet -->
@@ -253,6 +223,11 @@
 
 <img id="cript-texture" src="assets/img/robo.jpg">
 <template id="cript-template">
+<!--
+    <a-entity class="tooltip-warrior" position="0 1 0">
+        <a-text text="value: Devidson_best; align:center; wrapCount: 15; color:#dbdbea; side: double" height=".5" width="2" position="0 0 0"></a-text>
+    </a-entity> -->
+
     <a-entity class="cript" scale=".8 .8 .8">
     <!-- <a-sphere radius=".45" class="cript-head colorized-pain"
         scale="1 0.9 1"
@@ -281,6 +256,9 @@
                 <!-- rb -->
                 <img id="rb-texture" src="assets/img/rb-face.jpg">
 <template id="rb-template">
+    <!-- <a-entity class="tooltip-warrior" position="0 1 0">
+        <a-text text="value: Devidson_best; align:center; wrapCount: 15; color:#dbdbea" height=".5" width="2" position="0 0 0"></a-text>
+    </a-entity> -->
     <a-entity class="rb" scale="1.2 1.2 1.2">
         <a-sphere src="#rb-texture" offset="-0.2 0" material="color: green;" scale="0.5 1 0.5" radius="1"
             class="cript-head colorized-pain" opacity="1">
@@ -293,6 +271,7 @@
                 <a-asset-item id="sculpture" src="assets/models/sculpture.glb"></a-asset-item>
 <img id="tower-texture" src="assets/img/en.jpg"></img>
 <template id="tower">
+    <!-- <a-entity class="tooltip-warrior" position="0 .8 0"></a-entity> -->
     <a-box class="hard-body collide-body tower" height="5" width="4" depth="4" opacity="0">
         <a-gltf-model src="#sculpture" rotation="0 45 0"></a-gltf-model>
         <a-gltf-model src="#sculpture" rotation="0 45 0" position="0 2 0"></a-gltf-model>
@@ -316,7 +295,7 @@
     camera
     position="0 1.8 0"
     gun="bulletTemplate:#bullet-template"
-    touch-wasd-controls="acceleration:30"
+    touch-wasd-controls="acceleration:60"
     look-controls-x
 >
     <!-- <a-curvedimage ></a-curvedimage> -->
@@ -334,6 +313,7 @@
         position="0 0 -1"
         geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
         material="color: black; shader: flat"
+        raycaster="objects: .colorized-pain"
         id="cursor">
     </a-entity>
 
