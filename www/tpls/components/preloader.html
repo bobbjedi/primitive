@@ -1,0 +1,31 @@
+<div id="preloader" class="bigbig">
+    <div class="logo" style="margin:auto;"><i class="fa fa-cube" aria-hidden="true"></i> PRIMITIVE WORLD</div>
+</div>
+<style>
+    #preloader {
+        display:flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999999999999;
+        background-color: rgb(78, 80, 80);
+        transition: 0.3s;
+    }
+</style>
+<script>
+    (() => {
+        const style = document.getElementById('preloader').style;
+        window.preloader.hide = () => {
+            style.opacity = 0;
+            setTimeout(() => {
+                style.display = 'none'
+            }, 500);
+        };
+        window.preloader.show = () => {
+            style.opacity = 1;
+            style.display = 'block';
+        };
+    })();
+</script>

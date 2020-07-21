@@ -41,14 +41,17 @@ export default ()=>{
                         globalSocket.on('u-was-respawn', d => this.respawn(d));
 
                         globalSocket.on('destroy', data => {
-                            // console.log('DESTROY on', data);
                             if (data.type === 'tower') {
                                 destroyTower(data);
                             } else {
                                 destroyWarrior(data);
                             }
                         });
+                        setTimeout(()=>window.preloader.hide(), 3000);
                     });
+                } else {
+                    console.log('not in match');
+                    location.href = 'index.html';
                 };
             });
             broadcaster();
@@ -97,10 +100,11 @@ export default ()=>{
                 //     });
                 // });
             },
+            teleport(){
+                globalSocket.emit('i-teleport');
+            },
             progressBarStyle(current, max, color) {
                 const persent = current / max * 100;
-
-
                 return {
                     background: `linear-gradient(to right, #444 0, ${color} ${persent}%, rgba(0,0,0,-0) ${persent}%)`
                 };

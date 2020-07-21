@@ -50,7 +50,12 @@ module.exports = socket =>{
                 break;
 
             case ('getMatchInfo'):
-                cb(success(Store.matches[socket.roomName].matchInfo));
+                if (Store.matches[socket.roomName]){
+                    cb(success(Store.matches[socket.roomName].matchInfo));
+                } else {
+                    cb(error(false));
+                }
+                
                 break;
 
             default:

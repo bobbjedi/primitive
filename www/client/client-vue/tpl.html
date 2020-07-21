@@ -7,7 +7,7 @@
                 <div class="avatar-block  my-avatar">
                     <div class="lvl-block lvl-me">{{me.lvl}}</div>
                     <div class="respawn-timer my-timer txt-yellow big" v-if="me.isDead">
-                        {{(me.stat.respawnTime - (serverTime - me.nextRespawnTime) / 1000 || 0).toFixed(0)}}</div>
+                        {{(me.timeOutRespawn - (serverTime - me.nextRespawnTime) / 1000 || 0).toFixed(0)}}</div>
                     <img class="avatar" :class="{'is-dead': me.isDead}" :src="'assets/img/avatar.jpg'">
                 </div>
 
@@ -24,7 +24,7 @@
                 <div class="avatar-block">
                     <div class="lvl-block">{{myTeam.players[nik].lvl}}</div>
                     <div class="respawn-timer txt-yellow big" v-if="myTeam.players[nik].isDead">
-                        {{(myTeam.players[nik].stat.respawnTime - (serverTime - myTeam.players[nik].nextRespawnTime) / 1000 || 0).toFixed(0)}}
+                        {{(myTeam.players[nik].timeOutRespawn - (serverTime - myTeam.players[nik].nextRespawnTime) / 1000 || 0).toFixed(0)}}
                     </div>
                     <img class="avatar" :src="'assets/img/avatar.jpg'">
                 </div>
@@ -58,7 +58,7 @@
                 <div class="avatar-block">
                     <div class="lvl-block">{{oppositeTeam.players[nik].lvl}}</div>
                     <div class="respawn-timer txt-yellow big" v-if="oppositeTeam.players[nik].isDead">
-                        {{(oppositeTeam.players[nik].stat.respawnTime - (serverTime - oppositeTeam.players[nik].nextRespawnTime) / 1000 || 0).toFixed(0)}}
+                        {{(oppositeTeam.players[nik].timeOutRespawn - (serverTime - oppositeTeam.players[nik].nextRespawnTime) / 1000 || 0).toFixed(0)}}
                     </div>
                     <img class="avatar" :src="'assets/img/avatar.jpg'">
                 </div>
@@ -69,7 +69,9 @@
             </div>
         </div>
 
-
-        <div id="fire-button" onclick="fire()" ontouchstart="fire()" v-if="!me.isDead"></div>
+        <span class="buttons" v-show="!me.isDead">
+            <div id="tp-button" @click="teleport" v-show="!me.isTpActivated"></div>
+            <div id="fire-button" onclick="fire()" ontouchstart="fire()" ></div>
+        </span>
     </span>
 </div>

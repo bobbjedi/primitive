@@ -73,7 +73,8 @@ io.on("connection", socket => {
         socket.to(curRoom).broadcast.emit("broadcast", data);
     });
 
-    socket.on('my-data', data => Store.updatePlayerMatchData(socket.userName, curRoom, data)); // апдейт данных
+    socket.on('my-data', data => Store.updatePlayerMatchData(socket.userName, curRoom, data)); // апдейт данных от клиента
+    socket.on('i-teleport', () => Store.matches[curRoom] && Store.matches[curRoom].playerUseTeleport(socket.userName)); 
 
     socket.on("disconnect", () => {
         console.log('disconnected: ', socket.id, curRoom);
@@ -93,10 +94,15 @@ io.on("connection", socket => {
         socket.userName && delete Store.socketsByName[socket.userName];
     });
 
-    // console.log(Object.keys(Store.io.sockets));
-    // console.log(Store.io.sockets);
     // Своя логика лобби
     socket.on('getRoomsList', cb => cb(Store.lobbyRooms));
+    socket.on('check-in-match', cb => { // проверка есть ли активный матч при входе в лобби
+        const match = socket.userName && Store.getMatchByPlayerName(socket.userName);
+        if (!match){
+            return cb(false);
+        }
+        cb('/' + match.lobbyRoom.format + '.html?match-id=' + match.matchId);
+    });
     socket.on('my-token', async token => {
         const user = await $u.getUserFromQ({token});
         if (user) {

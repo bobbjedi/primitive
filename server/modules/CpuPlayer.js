@@ -61,6 +61,7 @@ module.exports = class extends Cript {
         this.sendPrizeForMyDead(kilerId);
         const timeOut = this.stat.respawnTime + this.public.lvl * 5;
         this.public.nextRespawnTime = $u.unix() + timeOut;
+        this.public.timeOutRespawn = timeOut;
         setTimeout(() => this.respawn(), timeOut * 1000);
         if (!this.public.isCPU) {
             this.public.position = this.myTeam.spawnPosition;
@@ -71,9 +72,13 @@ module.exports = class extends Cript {
     }
 
     respawn(){
-        this.public.isDead = false;
-        this.health = this.stat.health;
-        !this.public.isCPU && Store.socketsByName[this.public.id].emit('u-was-respawn', { position: this.myTeam.spawnPosition});
+        try {
+            this.public.isDead = false;
+            this.health = this.stat.health;
+            !this.public.isCPU && Store.socketsByName[this.public.id].emit('u-was-respawn', { position: this.myTeam.spawnPosition});
+        } catch (e){
+            console.log('Error respawn CPU: ' + e, e);
+        }
     }
 
     // Получил экспу

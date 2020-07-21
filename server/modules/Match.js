@@ -147,10 +147,10 @@ module.exports = class {
     updateFromUser(userName, data){
         try {
             const player = this.gePlayerByName(userName);
-            if (player.isDead) {
+            if (player.isDead || player.isBlockMove) {
                 return console.log('isDead and move', player.id); // перемещение убитого
             }
-            console.log(data.position)
+            // console.log(data.position)
             player.position = data.position;
             player.rotation = data.rotation;
             Store.io.to(this.matchId).emit('warrior-info', player);
@@ -303,11 +303,32 @@ module.exports = class {
             const rb = this.RBs[rbId];
             rb.health = rb.health + rb.stat.health * 0.01;
             rb.health = Math.min(rb.health, rb.stat.health);
-            if(rb.nextRespawnTime && rb.nextRespawnTime <= u){
+            if (rb.nextRespawnTime && rb.nextRespawnTime <= u){
                 console.log(rbId, 'RB RESPAWN');
                 rb.init();
             }
         });
+    }
+    playerStartTeleport(userName){
+        try {
+            this.gePlayerByName(userName).isBlockMove = true;
+            Store.io.to(this.matchId).emit('palyer-start-teleport', userName);
+        } catch (e){
+            console.log('ERROR playerUseTeleport: ' + e, e);
+        }
+    }
+    playerStopTeleport(userName){
+        try {
+            const player = this.gePlayerByName(userName);
+            if (!player.isBlockMove){ // видимо каст был сбит
+                return;
+            }
+            player.isBlockMove = false;
+            Store.io.to(this.matchId).emit('palyer-start-teleport', userName);
+            !player.isCPU && Store.socketsByName[player.id].emit('u-was-respawn', { position: this.myTeam.spawnPosition});
+        } catch (e){
+            console.log('ERROR playerUseTeleport: ' + e, e);
+        }
     }
     finalMatch(loseTeam) {
         console.log('LoseTeam!', loseTeam);

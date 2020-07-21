@@ -13,14 +13,14 @@ AFRAME.registerComponent('hard-body-sensitive', {
         const element = this.data.elementPosition === 'none' ? this.el : document.querySelector(this.data.elementPosition);
         this.el.setAttribute('aabb-collider', '');
         this.el.addEventListener('collide', (e) => {
-            if (e.detail.el.classList.contains('hard-body')) {
-                isBlockedSave = true;
-                // console.log('HARD!', this.validPositions[0]);
-                this.validPositions.length && element.setAttribute('position', this.validPositions[0]);
-            }
+            // if (e.detail.el.classList.contains('hard-body')) {
+            isBlockedSave = true;
+            // console.log('HARD!', this.validPositions[0]);
+            this.validPositions.length && element.setAttribute('position', this.validPositions[0]);
+            // }
         });
         // const self = this;
-        this.el.addEventListener('notcollide', _.throttle(e => {
+        this.el.addEventListener('notcollide', _.throttle(() => {
             !isBlockedSave && this.registerValidPosition();
             isBlockedSave = false;
         }, 50));
@@ -28,8 +28,8 @@ AFRAME.registerComponent('hard-body-sensitive', {
     // храним 3 последние валидные и откатываемся на первую
     registerValidPosition() {
         this.validPositions.push($u.getElPosition(this.el));
-        if (this.validPositions.length > 3) {
-            this.validPositions = this.validPositions.splice(-2);
+        if (this.validPositions.length > 2) {
+            this.validPositions = this.validPositions.splice(-1);
         }
     }
 });

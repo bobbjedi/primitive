@@ -24,6 +24,11 @@ export default new Vue({
         this.players = window._aPlayers;
 
         document.addEventListener('socketOnRedy', () => {
+            globalSocket.on('disconnect', ()=> {
+                console.log('disconnect');
+                this.isDisconnected = true;
+            });
+            console.log('On ready');
             if (this.isMatch && config.isDev) {
                 location.href = '/';
             }
@@ -38,12 +43,8 @@ export default new Vue({
             if (this.isMatch) {
                 clientVue();
             } else {
-                globalSocket.on('go-match', link => {
-                    if (location.href.includes('index')) { // .apk
-                        return location.href = location.href.replace('/index.html', link);
-                    }
-                    location.assign(link);
-                });
+                globalSocket.on('go-match', goToMatch); // подписка на отправку в матч
+                globalSocket.emit('check-in-match', goToMatch); // просим проверить мб мы в матче и редирект
             }
         });
     },
@@ -59,9 +60,6 @@ export default new Vue({
         me(){
             return this.myTeam.players && this.myTeam.players[this.user.login];
         }
-        // mySide(){
-        //     return this.matchInfo.redTeam && (this.matchInfo.redTeam.playersName.includes(this.user.login) ? 'red' : 'blue');
-        // }
     },
     methods: {
         logOut() {
@@ -79,7 +77,7 @@ export default new Vue({
                 } else {
                     this.user.token = null;
                 }
-                document.querySelector('#player .head').setAttribute('target-id', 'id:' + this.user.login);
+                // document.querySelector('#player .head').setAttribute('target-id', 'id:' + this.user.login);
             }, 1);
         },
     },
@@ -89,6 +87,20 @@ export default new Vue({
         }
     }
 });
+
+const goToMatch = link => {
+    if (!link){
+        // скрыли прелоадер для лобби
+        console.log('Скрыли для лобби');
+        window.preloader.hide();
+        return;
+    }
+    window.preloader.show();
+    if (location.href.includes('index')) { // .apk
+        return location.href = location.href.replace('/index.html', link);
+    }
+    location.assign(link);
+};
 
 //КОСТЫЛЬ
 setInterval(()=>{

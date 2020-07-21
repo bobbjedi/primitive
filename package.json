@@ -101,7 +101,7 @@
     "web-components",
     "webvr"
   ],
-  "babel": {
+  "babel_": {
     "presets": [
       "@babel/preset-env"
     ]

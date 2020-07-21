@@ -12,6 +12,7 @@ import _ from 'underscore';
  *
  */
 
+
 AFRAME.registerComponent('aabb-collider', {
     schema: {
         objects: { default: '.collide-body' },
@@ -24,25 +25,29 @@ AFRAME.registerComponent('aabb-collider', {
         this.elMax = new THREE.Vector3();
         this.elMin = new THREE.Vector3();
         this.lastValidPosition = null;
+        this.updateEls();
         document.addEventListener('updateCollideElements', ()=> this.update());
     },
-
+    updateEls(){
+        this.els = Array.prototype.slice.call(this.el.sceneEl.querySelectorAll(this.data.objects));
+        setTimeout(()=>this.updateEls(), 10000);
+    },
     /**
      * Update list of entities to test for collision.
      */
     update: function () {
-        var data = this.data;
-        var objectEls;
+        // var data = this.data;
+        // var objectEls;
 
-        // Push entities into list of els to intersect.
-        if (data.objects) {
-            objectEls = this.el.sceneEl.querySelectorAll(data.objects);
-        } else {
-            // If objects not defined, intersect with everything.
-            objectEls = this.el.sceneEl.children;
-        }
+        // // Push entities into list of els to intersect.
+        // if (data.objects) {
+        //     objectEls = this.el.sceneEl.querySelectorAll(data.objects);
+        // } else {
+        //     // If objects not defined, intersect with everything.
+        //     objectEls = this.el.sceneEl.children;
+        // }
         // Convert from NodeList to Array
-        this.els = Array.prototype.slice.call(objectEls);
+        // this.els = Array.prototype.slice.call(objectEls);
         // console.log('Update collide');
     },
 
@@ -108,5 +113,5 @@ AFRAME.registerComponent('aabb-collider', {
                 self.elMax.copy(boundingBox.max);
             }
         };
-    }, 330))()
+    }, 100))()
 });

@@ -9,7 +9,7 @@
     <link href="./assets/styles/common.css" rel="stylesheet" type="text/css" />
     <link href="./assets/styles/lobby.css" rel="stylesheet" type="text/css" />
     <link href="./assets/styles/user-panel.css" rel="stylesheet" type="text/css" />
-    <link href="./assets/fonts/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/fonts/css/font-awesome.min.css" rel="stylesheet" type="text/css" />      
     <script src="./assets/libs/aframe.1.0.3.min.js"></script>
     <script src="./assets/libs/build.js"></script>
 
@@ -21,6 +21,39 @@
 </head>
 
 <body>
+
+                <!-- preloader -->
+                <div id="preloader" class="bigbig">
+    <div class="logo" style="margin:auto;"><i class="fa fa-cube" aria-hidden="true"></i> PRIMITIVE WORLD</div>
+</div>
+<style>
+    #preloader {
+        display:flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99999999999999;
+        background-color: rgb(78, 80, 80);
+        transition: 0.3s;
+    }
+</style>
+<script>
+    (() => {
+        const style = document.getElementById('preloader').style;
+        window.preloader.hide = () => {
+            style.opacity = 0;
+            setTimeout(() => {
+                style.display = 'none'
+            }, 500);
+        };
+        window.preloader.show = () => {
+            style.opacity = 1;
+            style.display = 'block';
+        };
+    })();
+</script>        
 
 
 <a-scene physics="debug: true;gravity:-10; friction: 100;">
@@ -293,9 +326,9 @@
                 <!-- player -->
                 <a-entity id="player"
     camera
-    position="0 1.8 0"
+    position="0 1.6 0"
     gun="bulletTemplate:#bullet-template"
-    touch-wasd-controls="acceleration:60"
+    touch-wasd-controls="acceleration:20"
     look-controls-x
 >
     <!-- <a-curvedimage ></a-curvedimage> -->
@@ -313,7 +346,7 @@
         position="0 0 -1"
         geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
         material="color: black; shader: flat"
-        raycaster="objects: .colorized-pain"
+        raycaster="objects: .colorized-pain, .collide-body"
         id="cursor">
     </a-entity>
 
@@ -442,17 +475,18 @@
         border: 1px solid white;
     }
     #mask-pain{
+        background: linear-gradient(to top, rgba(0,0,0,0) 0px, tomato 100%, rgba(0, 0, 0, 0) 100%);
+        opacity: .6;
         display: none;
         width: 100%;
-        height: 10px;
+        height: 25%;
         position: fixed;
         top: 0;
         left: 0;
-        background-color: brown;
-        opacity: .2;
         transition: .3s;
     }
 </style>
+
 </body>
 
 </html>

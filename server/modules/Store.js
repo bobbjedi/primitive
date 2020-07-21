@@ -56,8 +56,8 @@ module.exports = {
     /**
      *  @param {String} name
      */
-    getMatchByName(name){
-        return this.matches.find(r => r.joined.includes(name));
+    getMatchByPlayerName(name){
+        return Object.keys(this.matches).map(k=>this.matches[k]).find(m => m.lobbyRoom.joined.includes(name));
     },
     /**
      * @param {String} name
@@ -73,6 +73,7 @@ module.exports = {
                 lobbyRoom.joined.push(name);
                 if (lobbyRoom.joined.length === lobbyRoom.playersCount){ // Стартуем Матч
                     new Match(lobbyRoom);
+                    this.rmLobbyRoom(lobbyRoom._id);
                 }
                 this.emitUpdateRooms();
             }
