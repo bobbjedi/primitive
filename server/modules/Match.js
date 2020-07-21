@@ -150,7 +150,7 @@ module.exports = class {
             if (player.isDead) {
                 return console.log('isDead and move', player.id); // перемещение убитого
             }
-            console.log(data.position);
+            console.log(data.position)
             player.position = data.position;
             player.rotation = data.rotation;
             Store.io.to(this.matchId).emit('warrior-info', player);
@@ -210,7 +210,8 @@ module.exports = class {
                 side: params.color,
                 zone: params.zone,
                 type: 'rb',
-                nextPoint: params.nextPoint
+                nextPoint: params.nextPoint,
+                respTime: params.respTime
             };
             this.rbs[rb.id] = rb;
             this.RBs[rb.id] = new Rb(rb);
@@ -242,7 +243,7 @@ module.exports = class {
             }
             target.health = Math.round((target.def * target.health - damager.damage) / target.def);
             target.isCPU && target.uGetDamage(damager); // говорим CPU от кого получил дамаг и надо на него переключиться
-            console.log(damager.id, target.id, target.health);
+            // console.log(damager.id, target.id, target.health);
             if (target.health <= 0) {
                 target.health = 0;
                 console.log(target.id, target.side, 'УБИТ, prize:', target.public.lvl, target.prizeExpForKillMe);
@@ -255,7 +256,7 @@ module.exports = class {
 
                 Store.io.to(this.matchId).emit('destroy', target.public);
                 target.destroy(damager.id);
-                this.isLose(target.side) && this.finalMatch(target.side); // проверяем снос всех башен и окончагие матча
+                target.public.type !== 'rb' && this.isLose(target.side) && this.finalMatch(target.side); // проверяем снос всех башен и окончагие матча
             }
         } catch (e) {
             console.log('damageShot:' + e, e);
@@ -281,12 +282,31 @@ module.exports = class {
             tower.stat.basePrizeExp *= 1.1;
             // console.log('TOWER LVL UP', tower.public);
         });
+        Object.keys(this.RBs).forEach(rbId => {
+            const rb = this.RBs[rbId];
+            rb.def *= 1.15;
+            rb.damage *= 1.15;
+            rb.stat.basePrizeExp *= 1.15;
+        });
     }
 
     updateHealthHeal(){
         Object.keys(this.Heroes).forEach(id => {
-            this.Heroes[id].health = this.Heroes[id].health + this.Heroes[id].stat.health * 0.008;
-            this.Heroes[id].health = Math.min(this.Heroes[id].health, this.Heroes[id].stat.health);
+            const hero = this.Heroes[id];
+            hero.health = hero.health + hero.stat.health * 0.008;
+            hero.health = Math.min(hero.health, hero.stat.health);
+        });
+
+        // Проверяем респ РБ
+        const u = $u.unix();
+        Object.keys(this.RBs).forEach(rbId => {
+            const rb = this.RBs[rbId];
+            rb.health = rb.health + rb.stat.health * 0.01;
+            rb.health = Math.min(rb.health, rb.stat.health);
+            if(rb.nextRespawnTime && rb.nextRespawnTime <= u){
+                console.log(rbId, 'RB RESPAWN');
+                rb.init();
+            }
         });
     }
     finalMatch(loseTeam) {

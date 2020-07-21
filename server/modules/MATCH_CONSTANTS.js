@@ -107,7 +107,64 @@ module.exports = {
             color: 'green',
             position: { x: 66, y: 1.3, z: -88 },
             zone: { maxX: 75, minX: 57, maxZ: -65, minZ: -100 },
-            nextPoint: {x: 66, y: 1.2, z: 80} // поворот по дефолту
+            nextPoint: {x: 66, y: 1.2, z: 80}, // поворот по дефолту
+            respTime: 3 // время одживания в min
+        },
+        {
+            id: 'rb-2', // зеленая зона со стороны красных
+            color: 'green',
+            position: { x: 66, y: 1.3, z: 88 },
+            zone: { maxX: 75, minX: 60, maxZ: 100, minZ: 60 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 3 // время одживания в min
+        },
+        {
+            id: 'rb-3', // зеленая зона со стороны красных
+            color: 'yellow',
+            position: { x: -63, y: 1.3, z: 80 },
+            zone: { maxX: -59, minX: -75, maxZ: 100, minZ: 60 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 3 // время одживания в min
+        },
+        {
+            id: 'rb-4', // зеленая зона со стороны красных
+            color: 'yellow',
+            position: { x: -67, y: 1.3, z: -85 },
+            zone: { maxX: -55, minX: -75, maxZ: -60, minZ: -100 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 3 // время одживания в min
+        },
+        {
+            id: 'rb-5', // зеленая зона со стороны красных
+            color: 'orange',
+            position: { x: 62, y: 1.4, z: 8 },
+            zone: { maxX: 61, minX: 45, maxZ: 12, minZ: -22 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 5 // время одживания в min
+        },
+        {
+            id: 'rb-6', // зеленая зона со стороны красных
+            color: 'orange',
+            position: { x: -68, y: 1.4, z: 0 },
+            zone: { maxX: -45, minX: -71, maxZ: 15, minZ: -15 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 5 // время одживания в min
+        },
+        {
+            id: 'rb-7', // зеленая зона со стороны красных
+            color: 'orange',
+            position: { x: -70, y: 1.4, z: 3 },
+            zone: { maxX: -45, minX: -71, maxZ: 15, minZ: -15 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 5 // время одживания в min
+        },
+        {
+            id: 'rb-8', // зеленая зона со стороны красных
+            color: 'orange',
+            position: { x: -70, y: 1.4, z: -3 },
+            zone: { maxX: -45, minX: -71, maxZ: 15, minZ: -15 },
+            nextPoint: {x: 66, y: 1.2, z: -80}, // поворот по дефолту
+            respTime: 5 // время одживания в min
         }
     ]
 };

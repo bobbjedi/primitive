@@ -1,4 +1,5 @@
 const Tower = require('./Tower');
+const $u = require('../helpers/utils');
 const math = require('../helpers/math');
 const config = require('../../config_');
 const Store = require('./Store');
@@ -8,9 +9,11 @@ const MATCH_CONSTANTS = require('./MATCH_CONSTANTS');
 
 module.exports = class extends Tower {
     init(){
+        this.public.isDead = false;
+        this.health = this.stat.health;
+        this.nextRespawnTime = false; // время сл респавна
         this.reaLY = 1.2;
         super.init();
-        console.log('RB INIT');
     }
 
     get targets(){
@@ -36,10 +39,9 @@ module.exports = class extends Tower {
 
         return enemies;
     }
-    destroy() {
-        // super.destroy();
-        setTimeout(() => {
-
-        }, 30 * 1000);
+    destroy(killerId) {
+        super.destroy(killerId);
+        console.log('>>>>', this.public.respTime);
+        this.nextRespawnTime = $u.unix() + this.public.respTime * 60 * 1000;
     }
 };
